@@ -1,0 +1,11 @@
+version: 1.0.{build}
+environment:
+  NuGetOrgApiKey: 
+    secure: u8JpW5kkti8pMi+ra2QcXTJPhkHCA8pkKSiiZOJbcS/vFVHNvF3W8qw1Fy2If6a7
+  PUBLIC_NUGET_FEED_NAME: nuget.org
+  PUBLIC_NUGET_FEED_SOURCE: https://www.nuget.org/
+build_script:
+- cmd: ./build.cmd
+test: off
+artifacts:
+- path: ./artifacts/*

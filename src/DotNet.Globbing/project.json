@@ -1,0 +1,50 @@
+﻿{
+  "version": "1.0.0-*",
+  "title": "A fast globbing library for .NET applications. Provides glob pattern matching.",
+  "authors": [
+    "Darrell Tunnell <darrell.tunnell@googlemail.com>"
+  ],
+  "packOptions": {
+    "projectUrl": "https://github.com/dazinator/DotNet.Glob",
+    "licenseUrl": "https://github.com/dazinator/DotNet.Glob/blob/master/LICENSE",
+    "owners": [
+      "Darrell Tunnell <darrell.tunnell@googlemail.com>"
+    ],
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/dazinator/DotNet.Glob"
+    },
+    "summary": "A fast globbing library for .NET applications. Provides glob pattern matching.",
+    "tags": [
+      "glob",
+      "globbing",
+      "dotnet",
+      "pattern"
+    ],
+    "releaseNotes": ""
+  },
+  "dependencies": {},
+  "frameworks": {
+    "netstandard1.1": {
+      "dependencies": {
+        "System.Linq": "*",
+        "System.IO": "4.3.0",
+        "System.Collections": "*"
+      }
+    },
+    "net40": {},
+    "net45": {
+      "dependencies": {
+        "System.IO": "4.3.0"
+      }
+    },
+    "net46": {
+      "dependencies": {
+        "System.IO": "4.3.0"
+      }
+    }
+  },
+  "buildOptions": {
+    "debugType": "portable"
+  }
+}
