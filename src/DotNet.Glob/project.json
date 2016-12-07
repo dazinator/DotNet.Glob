@@ -1,7 +1,7 @@
 ﻿{
   "version": "1.0.0-*",
   "projectUrl": "https://github.com/dazinator/DotNet.Glob",
-  "description": "A fast globbing library for .NET applications.",
+  "description": "A fast globbing library for .NET applications, including .net core. Doesn't use Regex.",
   "title": "DotNet Glob",
   "authors": [
     "Darrell Tunnell <darrell.tunnell@googlemail.com>"
@@ -16,14 +16,14 @@
       "type": "git",
       "url": "https://github.com/dazinator/DotNet.Glob"
     },
-    "summary": "A fast globbing library for .NET applications. Provides glob pattern matching.",
+    "summary": "A fast globbing library for .NET applications. Does not use Regex.",
     "tags": [
       "glob",
       "globbing",
       "dotnet",
       "pattern"
     ],
-    "releaseNotes": ""
+    "releaseNotes": "First stable release."
   },
   "dependencies": {},
   "frameworks": {
