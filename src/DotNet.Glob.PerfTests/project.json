@@ -6,7 +6,8 @@
     "NETStandard.Library": "1.6.0",
     "dotnet-test-xunit": "2.2.0-*",
     "xunit": "2.2.0-*",
-    "DotNet.Glob": "1.0.0-*"    
+    "DotNet.Glob": "1.0.0-*",
+    "Glob": "0.3.0"
   },
   "frameworks": {
     "netcoreapp1.0": {
