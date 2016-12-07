@@ -1,5 +1,6 @@
 ﻿{
   "version": "1.0.0-*",
+  "projectUrl": "https://github.com/dazinator/DotNet.Glob",
   "title": "A fast globbing library for .NET applications. Provides glob pattern matching.",
   "authors": [
     "Darrell Tunnell <darrell.tunnell@googlemail.com>"

@@ -159,7 +159,7 @@ namespace DotNet.Globbing
             var value = GetBufferAndReset();
             if (isCharList)
             {
-                result = new CharacterListToken(value.ToCharArray());
+                result = new CharacterListToken(value.ToCharArray(), isNegated);
             }
             else if (isLetterRange)
             {

@@ -9,25 +9,9 @@ namespace DotNet.Globbing
     {
         private IGlobToken[] _Tokens;
         private GlobStringReader _Reader;
-        // private bool IsWildcardActive = false;
-        // private int TokenIndex;
-
-        // public IGlobToken CurrentToken { get; set; }
-        //public int TokenIndex { get; set; }
-
-
         public Queue<IGlobToken> _TokenQueue;
 
         public List<GlobTokenMatch> MatchedTokens { get; set; }
-
-        //public GlobTokenEvaluator(IList<IGlobToken> tokens)
-        //{
-        //    // _Reader = reader;
-        //    _Tokens = tokens;
-
-        //    //  _TokenQueue = new Queue<IChangeToken>();
-        //    MatchedTokens = new List<GlobTokenMatch>(_Tokens.Count);
-        //}
 
         public GlobTokenEvaluator(IGlobToken[] tokens)
         {
@@ -57,41 +41,44 @@ namespace DotNet.Globbing
                 while (_TokenQueue.Any())
                 {
                     IGlobToken token = _TokenQueue.Dequeue();
-                    // We just won't get in here...
                     token.Accept(this);
                     if (!Success)
                     {
-                        return new MatchInfo()
-                        {
-                            Matches = MatchedTokens.ToArray(),
-                            Missed = token,
-                            Success = false,
-                            UnmatchedText = _Reader.ReadToEnd()
-                        };
+                        return FailedResult(token);
                     }
                 }
 
                 // if all tokens matched but still more text then fail!
                 if (_Reader.Peek() != -1)
                 {
-                    return new MatchInfo()
-                    {
-                        Matches = MatchedTokens.ToArray(),
-                        Missed = null,
-                        Success = false,
-                        UnmatchedText = _Reader.ReadToEnd()
-                    };
+                    return FailedResult(null);
                 }
 
                 // Success.
-                return new MatchInfo()
-                {
-                    Matches = MatchedTokens.ToArray(),
-                    Missed = null,
-                    Success = true,
-                    UnmatchedText = _Reader.ReadToEnd()
-                };
+                return SuccessfulResult();
             }
+        }
+
+        private MatchInfo SuccessfulResult()
+        {
+            return new MatchInfo()
+            {
+                Matches = MatchedTokens.ToArray(),
+                Missed = null,
+                Success = true,
+                UnmatchedText = _Reader.ReadToEnd()
+            };
+        }
+
+        private MatchInfo FailedResult(IGlobToken token)
+        {
+            return new MatchInfo()
+            {
+                Matches = MatchedTokens.ToArray(),
+                Missed = token,
+                Success = false,
+                UnmatchedText = _Reader.ReadToEnd()
+            };
         }
 
         public void Visit(PathSeperatorToken token)
@@ -223,22 +210,33 @@ namespace DotNet.Globbing
             var match = new GlobTokenMatch() { Token = token };
             AddMatch(match);
 
-            var remaining = _TokenQueue.ToArray();
-            var nestedEval = new GlobTokenEvaluator(remaining);
-            var pathSegments = new List<string>();
-
             var remainingText = _Reader.ReadToEnd();
             int endOfSegmentPos;
-
             using (var pathReader = new GlobStringReader(remainingText))
             {
                 var thisPath = pathReader.ReadPathSegment();
                 endOfSegmentPos = pathReader.CurrentIndex;
             }
 
+            var remaining = _TokenQueue.ToArray();
+            // if no more tokens remaining then just return as * matches the rest of the segment.
+            if (remaining.Length == 0)
+            {
+                this.Success = true;
+                match.Value = remainingText;
+                return;
+            }
+
+            // we have to attempt to match the remaining tokens, and if they dont all match,
+            // then consume a character, until we have matched the entirity of this segment.
             var matchedText = new StringBuilder(endOfSegmentPos);
+            var nestedEval = new GlobTokenEvaluator(remaining);
+            var pathSegments = new List<string>();
+
+            // we keep a record of text that this wildcard matched in order to satisfy the
+            // greatest number of child token matches.
             var bestMatchText = new StringBuilder(endOfSegmentPos);
-            IList<GlobTokenMatch> bestMatches = null;
+            IList<GlobTokenMatch> bestMatches = null; // the most tokens that were matched.
 
             for (int i = 0; i < endOfSegmentPos; i++)
             {
@@ -247,29 +245,32 @@ namespace DotNet.Globbing
                 {
                     break;
                 }
-                else
+
+                // match a single character
+                matchedText.Append(remainingText[0]);
+                // re-attempt matching of child tokens against this remaining string.
+                remainingText = remainingText.Substring(1);
+                // If we have come closer to matching, record our best results.
+                if ((bestMatches == null && matchInfo.Matches.Any()) || (bestMatches != null && bestMatches.Count < matchInfo.Matches.Length))
                 {
-                    matchedText.Append(remainingText[0]);
-                    remainingText = remainingText.Substring(1);
-                    // keep tabs on closest match.?
-                    if ((bestMatches == null && matchInfo.Matches.Any()) || (bestMatches != null && bestMatches.Count < matchInfo.Matches.Length))
-                    {
-                        bestMatches = matchInfo.Matches.ToArray();
-                        bestMatchText.Clear();
-                        bestMatchText.Append(matchedText.ToString());
-                    }
+                    bestMatches = matchInfo.Matches.ToArray();
+                    bestMatchText.Clear();
+                    bestMatchText.Append(matchedText.ToString());
                 }
+
             }
 
             this.Success = nestedEval.Success;
             if (nestedEval.Success)
             {
-                // add all submathces.
+                // add all child matches.
                 this.MatchedTokens.AddRange(nestedEval.MatchedTokens);
+
             }
             else
             {
-                if (bestMatches.Any())
+                // add the most tokens we managed to match.
+                if (bestMatches != null && bestMatches.Any())
                 {
                     this.MatchedTokens.AddRange(bestMatches);
                 }
@@ -288,10 +289,21 @@ namespace DotNet.Globbing
                 return;
             }
             var currentChar = (char)read;
-            if (currentChar < token.Start && currentChar > token.End)
+            if (currentChar >= token.Start && currentChar <= token.End)
             {
-                return;
+                if (token.IsNegated)
+                {
+                    return; // failed to match
+                }
             }
+            else
+            {
+                if (!token.IsNegated)
+                {
+                    return; // failed to match
+                }
+            }
+
             AddMatch(new GlobTokenMatch() { Token = token, Value = currentChar.ToString() });
         }
 
@@ -304,10 +316,22 @@ namespace DotNet.Globbing
                 return;
             }
             var currentChar = (char)read;
-            if (currentChar < token.Start || currentChar > token.End)
+            if (currentChar >= token.Start && currentChar <= token.End)
             {
-                return;
+                if (token.IsNegated)
+                {
+                    return; // failed to match
+                }
             }
+            else
+            {
+                if (!token.IsNegated)
+                {
+                    return; // failed to match
+                }
+            }
+
+
             AddMatch(new GlobTokenMatch() { Token = token, Value = currentChar.ToString() });
         }
 
@@ -320,9 +344,21 @@ namespace DotNet.Globbing
                 return;
             }
             var currentChar = (char)read;
-            if (!token.Characters.Contains(currentChar))
+            var contains = token.Characters.Contains(currentChar);
+
+            if (token.IsNegated)
             {
-                return;
+                if (contains)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (!contains)
+                {
+                    return;
+                }
             }
             AddMatch(new GlobTokenMatch() { Token = token, Value = currentChar.ToString() });
         }

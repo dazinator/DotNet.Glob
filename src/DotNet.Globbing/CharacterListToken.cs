@@ -4,9 +4,10 @@ namespace DotNet.Globbing
 {
     public class CharacterListToken : INegatableToken
     {
-        public CharacterListToken(char[] characters)
+        public CharacterListToken(char[] characters, bool isNegated)
         {
             Characters = characters;
+            IsNegated = isNegated;
         }
         public bool IsNegated { get; set; }
 
