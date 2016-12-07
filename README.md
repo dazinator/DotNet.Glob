@@ -20,8 +20,8 @@ A fast globbing library for .NET applications.
 
 # Patterns
 
-The following patterns are supported:
-
+The following patterns are supported ([from wikipedia](https://en.wikipedia.org/wiki/Glob_(programming))):
+> 
 | Wildcard  | Description | Example | Matches | Does not match |
 | --------  | ----------- | ------- | ------- | -------------- |
 | \* |  matches any number of any characters including none	| Law\*| Law, Laws, or Lawyer	|
