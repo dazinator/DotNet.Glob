@@ -1,7 +1,7 @@
 ﻿{
   "version": "1.0.0-*",
   "projectUrl": "https://github.com/dazinator/DotNet.Glob",
-  "description": "A fast globbing library for .NET applications.",
+  "description": "A fast globbing library for .NET applications, including .net core.",
   "title": "DotNet Glob",
   "authors": [
     "Darrell Tunnell <darrell.tunnell@googlemail.com>"
