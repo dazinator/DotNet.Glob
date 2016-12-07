@@ -16,7 +16,7 @@
       "type": "git",
       "url": "https://github.com/dazinator/DotNet.Glob"
     },
-    "summary": "A fast globbing library for .NET applications. Provides glob pattern matching.",
+    "summary": "A fast globbing library for .NET applications.",
     "tags": [
       "glob",
       "globbing",
