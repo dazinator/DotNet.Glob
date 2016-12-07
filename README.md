@@ -42,5 +42,5 @@ The `IsMatch` method just returns you a boolean. If you require more in-depth in
 
 ```
 
-Then you can then inspect the `MatchInfo` which holds all those useful details.
+You can then inspect the `MatchInfo` which holds all of those useful details.
 
