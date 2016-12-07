@@ -1,5 +1,6 @@
 # DotNet.Glob
 A fast globbing library for .NET applications.
+This library **does not** use Regex.
 
 
 | Branch  | Build Status | NuGet |
