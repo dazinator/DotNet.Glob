@@ -1,7 +1,7 @@
 ﻿{
   "version": "1.0.0-*",
   "projectUrl": "https://github.com/dazinator/DotNet.Glob",
-  "title": "A fast globbing library for .NET applications. Provides glob pattern matching.",
+  "title": "A fast globbing library for .NET applications.",
   "authors": [
     "Darrell Tunnell <darrell.tunnell@googlemail.com>"
   ],
@@ -36,12 +36,12 @@
     "net40": {},
     "net45": {
       "dependencies": {
-        "System.IO": "4.3.0"
+        "System.IO": "4.0.0.0"
       }
     },
     "net46": {
       "dependencies": {
-        "System.IO": "4.3.0"
+        "System.IO": "4.0.10.0"
       }
     }
   },
