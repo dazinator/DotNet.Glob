@@ -8,8 +8,10 @@ A fast globbing library for .NET applications.
 
 # Usage
 
-1. Install the NuGet package. "DotNet.Glob"
+1. Install the NuGet package. `Install-Package DotNet.Glob`
+
 2.
+
 ```
 using DotNet.Globbing;
 ```
