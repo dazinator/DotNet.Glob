@@ -16,7 +16,7 @@
       "type": "git",
       "url": "https://github.com/dazinator/DotNet.Glob"
     },
-    "summary": "A fast globbing library for .NET applications. Does not use Regex.",
+    "summary": "A fast globbing library for .NET applications. Beats Regex.",
     "tags": [
       "glob",
       "globbing",
