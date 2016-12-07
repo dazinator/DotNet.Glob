@@ -19,7 +19,7 @@ var configuration = Argument("configuration", "Release");
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 var artifactsDir = "./artifacts";
-var projectName = "DotNet.Globbing";
+var projectName = "DotNet.Glob";
 var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
