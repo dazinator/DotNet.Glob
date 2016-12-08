@@ -1,6 +1,6 @@
-namespace DotNet.Globbing
+﻿namespace DotNet.Globbing.Token
 {
-    public class SingleCharacterToken : IGlobToken
+    public class WildcardToken : IGlobToken
     {
         public void Accept(IGlobTokenVisitor Visitor)
         {

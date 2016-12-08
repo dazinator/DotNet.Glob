@@ -10,18 +10,18 @@ using Xunit.Abstractions;
 
 namespace DotNet.Glob.PerfTests
 {
-    public class GlobPerfTests
+    public class GlobPerfComparisonTests
     {
         private ITestOutputHelper _output;
 
-        public GlobPerfTests(ITestOutputHelper output)
+        public GlobPerfComparisonTests(ITestOutputHelper output)
         {
             _output = output;
         }
 
 
-        [Fact(Skip = "Performance Tests Run Manually When Needed")]
-        public void Glob_Matching_Performance()
+        [Fact()]
+        public void Performs_Faster_Than_Another_Glob_Library()
         {
             // warmup each parser.
             var dotnetGlob = DotNet.Globbing.Glob.Parse("p?th/*a[bcd].*");
@@ -30,15 +30,24 @@ namespace DotNet.Glob.PerfTests
             // create each parser from a pattern.
             var timer = new Stopwatch();
 
+          
+            TimeSpan comparisonTime;
             timer.Restart();
             comparisonGlob = new global::Glob.Glob("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", GlobOptions.Compiled);
             timer.Stop();
             _output.WriteLine(timer.Elapsed.ToString());
+            comparisonTime = timer.Elapsed;
 
+
+            TimeSpan thisTime;
             timer.Restart();
             dotnetGlob = DotNet.Globbing.Glob.Parse("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*");
             timer.Stop();
             _output.WriteLine(timer.Elapsed.ToString());
+            thisTime = timer.Elapsed;
+
+            // Fail if we are ever slower.
+            Assert.True(thisTime < comparisonTime);
 
             // match the same successful pattern over and over
             timer.Restart();
@@ -49,7 +58,7 @@ namespace DotNet.Glob.PerfTests
             }
             timer.Stop();
             _output.WriteLine(timer.Elapsed.ToString());
-
+            thisTime = timer.Elapsed;
 
             // match the same successful pattern over and over
             timer.Restart();
@@ -60,6 +69,10 @@ namespace DotNet.Glob.PerfTests
             }
             timer.Stop();
             _output.WriteLine(timer.Elapsed.ToString());
+            comparisonTime = timer.Elapsed;
+
+            // Fail if we are ever slower.
+            Assert.True(thisTime < comparisonTime);
 
         }
     }

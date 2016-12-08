@@ -1,4 +1,6 @@
-﻿namespace DotNet.Globbing
+﻿using DotNet.Globbing.Token;
+
+namespace DotNet.Globbing
 {
     public interface IGlobTokenVisitor
     {

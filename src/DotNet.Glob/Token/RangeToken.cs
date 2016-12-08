@@ -1,4 +1,4 @@
-﻿namespace DotNet.Globbing
+﻿namespace DotNet.Globbing.Token
 {
     public abstract class RangeToken<T> : INegatableToken
     {

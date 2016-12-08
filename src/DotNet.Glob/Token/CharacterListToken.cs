@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotNet.Globbing
+namespace DotNet.Globbing.Token
 {
     public class CharacterListToken : INegatableToken
     {
