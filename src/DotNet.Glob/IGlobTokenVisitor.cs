@@ -5,7 +5,7 @@ namespace DotNet.Globbing
     public interface IGlobTokenVisitor
     {
         void Visit(WildcardToken token);
-        void Visit(SingleCharacterToken token);
+        void Visit(AnyCharacterToken token);
         void Visit(LetterRangeToken token);
         void Visit(NumberRangeToken token);
         void Visit(CharacterListToken token);

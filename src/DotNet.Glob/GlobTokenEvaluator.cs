@@ -181,7 +181,7 @@ namespace DotNet.Globbing
 
         }
 
-        public void Visit(SingleCharacterToken token)
+        public void Visit(AnyCharacterToken token)
         {
             //WithWildcardProgression(() =>
             //{

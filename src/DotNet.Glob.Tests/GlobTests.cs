@@ -53,33 +53,16 @@ namespace DotNet.Globbing.Tests
             }
         }
 
-
         /// <summary>
         /// Tests for the InMemoryDirectory sub system.
         /// </summary>
-        [Theory]
-        [InlineData("literal", "literal")]
-        [InlineData("a/literal", "a/literal")]
-        [InlineData("path/*atstand", "path/fooatstand")]
-        [InlineData("path/hats*nd", "path/hatsforstand")]
-        [InlineData("path/?atstand", "path/hatstand")]
-        [InlineData("path/?atstand?", "path/hatstands")]
-        [InlineData("p?th/*a[bcd]", "pAth/fooooac")]
-        [InlineData("p?th/*a[bcd]b[e-g]a[1-4]", "pAth/fooooacbfa2")]
-        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz]", "pAth/fooooacbfa2v")]
-        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pAth/fooooacbfa2vd4.txt")]
-        public void Can_Match_Perf_Test(string pattern, params string[] testStrings)
+        [Fact]
+        public void To_String_Returns_Pattern()
         {
-            var timer = new Stopwatch();
-            timer.Start();
-
+            var pattern = "p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*";
             var glob = Glob.Parse(pattern);
-            foreach (var testString in testStrings)
-            {
-                var match = glob.Match(testString);
-
-                Assert.True(match.Success);
-            }
+            var resultPattern = glob.ToString();
+            Assert.Equal(pattern, resultPattern);
         }
 
     }

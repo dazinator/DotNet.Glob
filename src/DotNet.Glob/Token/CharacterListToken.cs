@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace DotNet.Globbing.Token
 {
@@ -17,5 +18,6 @@ namespace DotNet.Globbing.Token
         {
             Visitor.Visit(this);
         }
+      
     }
 }

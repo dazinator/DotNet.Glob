@@ -11,7 +11,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("path/hatstand", typeof(LiteralToken), typeof(PathSeperatorToken), typeof(LiteralToken))]
         [InlineData("p*th/ha?s[stu][s-z]and[1-3]/[!a-z]![1234Z]", 
             typeof(LiteralToken), typeof(WildcardToken), typeof(LiteralToken),typeof(PathSeperatorToken),
-            typeof(LiteralToken), typeof(SingleCharacterToken), typeof(LiteralToken), typeof(CharacterListToken), typeof(LetterRangeToken), typeof(LiteralToken), typeof(NumberRangeToken), typeof(PathSeperatorToken),
+            typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(CharacterListToken), typeof(LetterRangeToken), typeof(LiteralToken), typeof(NumberRangeToken), typeof(PathSeperatorToken),
             typeof(LetterRangeToken), typeof(CharacterListToken))]
         public void Can_Tokenise_Glob_Pattern(string testString, params Type[] expectedTokens)
         {
