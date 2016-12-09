@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "projectUrl": "https://github.com/dazinator/DotNet.Glob",
   "description": "A fast globbing library for .NET applications, including .net core. Doesn't use Regex.",
@@ -31,18 +31,21 @@
       "dependencies": {
         "System.Linq": "*",
         "System.IO": "4.3.0",
-        "System.Collections": "*"
+        "System.Collections": "*",
+        "System.Runtime.Extensions": "4.3.0"
       }
     },
     "net40": {},
     "net45": {
       "dependencies": {
-        "System.IO": "4.0.0.0"
+        "System.IO": "4.0.0.0",
+        "System.Runtime.Extensions": "4.3.0"
       }
     },
     "net46": {
       "dependencies": {
-        "System.IO": "4.0.10.0"
+        "System.IO": "4.0.10.0",
+        "System.Runtime.Extensions": "4.3.0"
       }
     }
   },

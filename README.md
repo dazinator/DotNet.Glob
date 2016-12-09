@@ -59,7 +59,25 @@ The following patterns are supported ([from wikipedia](https://en.wikipedia.org/
 
 
 
-# Advanced Usage
+# Advanced Usages
+
+## Match Generation
+Given a glob, you can generate random matches for that glog. This can be useful when testing etc.
+
+```
+  var dotnetGlob = Glob.Parse(pattern);
+  var generator = new GlobMatchStringGenerator(dotnetGlob.Tokens);
+
+  for (int i = 0; i < 10; i++)
+      {
+          var testString = generator.GenerateRandomMatch();
+          var result = dotnetGlob.IsMatch(testString);
+          // result is always true.
+      }
+
+```
+
+## Match Analysis
 
 The `IsMatch` method just returns you a boolean. If you require more in-depth information about the match including which tokens were matched, or failed to match, you can do this:
 
