@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace DotNet.Globbing.Token
@@ -7,17 +8,20 @@ namespace DotNet.Globbing.Token
     {
         public CharacterListToken(char[] characters, bool isNegated)
         {
-            Characters = characters;
+            Characters = new List<char>(characters);
+            //  Characters = characters; // 
             IsNegated = isNegated;
         }
         public bool IsNegated { get; set; }
 
-        public Char[] Characters { get; set; }
+        //  public Char[] Characters { get; set; }
+
+        public List<Char> Characters { get; set; }
 
         public void Accept(IGlobTokenVisitor Visitor)
         {
             Visitor.Visit(this);
         }
-      
+
     }
 }

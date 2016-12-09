@@ -50,6 +50,7 @@
     }
   },
   "buildOptions": {
-    "debugType": "portable"
+    "debugType": "portable",
+    "optimize": true
   }
 }

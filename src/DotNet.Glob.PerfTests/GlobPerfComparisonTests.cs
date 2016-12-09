@@ -16,7 +16,7 @@ namespace DotNet.Glob.PerfTests
         {
             _output = output;
         }
-        
+
         //[Fact()]
         //public void Performs_Faster_Than_Another_Glob_Library()
         //{
@@ -100,10 +100,11 @@ namespace DotNet.Glob.PerfTests
         //    Assert.True(thisTime < comparisonTime);
 
         //}
-
-        [Theory(Skip = "Needs work")]
-        [InlineData("p?th/a[bcd]b[e-g].txt", 100)]
-        [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 500)]
+        //[Theory()]
+        [Theory(Skip = "I run these manually..")]        
+        [InlineData("p?th/a[e-g].txt", 10000)]
+        [InlineData("p?th/a[bcd]b[e-g].txt", 10000)]
+        [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 100)]
         [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 10000)]
         public void Performs_Faster_Than_Another_Library(string pattern, int total)
         {
@@ -150,9 +151,9 @@ namespace DotNet.Glob.PerfTests
                 testStrings.Add(generator.GenerateRandomMatch());
             }
 
-            _output.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
-            GC.Collect();
-            _output.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
+            //_output.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
+            //GC.Collect();
+            //_output.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
 
             timer.Restart();
             foreach (var testString in testStrings)
@@ -183,8 +184,11 @@ namespace DotNet.Glob.PerfTests
             _output.WriteLine("comparisonGlob " + totalNumber + " matches took:" + timer.Elapsed.ToString());
             comparisonTime = timer.Elapsed;
 
-            // Fail if we are ever slower.
-            Assert.True(thisTime < comparisonTime, "comparison library was better by " + (thisTime - comparisonTime));
+            // Failing so can see xunit output!.
+            Assert.True(thisTime < comparisonTime, "comparison library was faster by " + (thisTime - comparisonTime));
+            Assert.True(thisTime > comparisonTime, "dotnet glob was faster by " + (comparisonTime - thisTime));
+
+           // _output.WriteLine("dotnetGlob was faster(yaay!) by " + (comparisonTime - thisTime).ToString());
 
         }
     }
