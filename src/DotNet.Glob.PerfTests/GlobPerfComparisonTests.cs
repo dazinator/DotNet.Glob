@@ -16,7 +16,7 @@ namespace DotNet.Glob.PerfTests
         {
             _output = output;
         }
-        
+
         //[Fact()]
         //public void Performs_Faster_Than_Another_Glob_Library()
         //{
@@ -100,9 +100,8 @@ namespace DotNet.Glob.PerfTests
         //    Assert.True(thisTime < comparisonTime);
 
         //}
-
-       // [Theory(Skip = "Needs work")]
-        [Theory()]
+        //[Theory()]
+        [Theory(Skip = "I run these manually..")]        
         [InlineData("p?th/a[e-g].txt", 10000)]
         [InlineData("p?th/a[bcd]b[e-g].txt", 10000)]
         [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 100)]
@@ -187,9 +186,9 @@ namespace DotNet.Glob.PerfTests
 
             // Failing so can see xunit output!.
             Assert.True(thisTime < comparisonTime, "comparison library was faster by " + (thisTime - comparisonTime));
-           // Assert.True(thisTime > comparisonTime, "dotnet glob was faster by " + (comparisonTime - thisTime));
+            Assert.True(thisTime > comparisonTime, "dotnet glob was faster by " + (comparisonTime - thisTime));
 
-            _output.WriteLine("dotnetGlob was faster(yaay!) by " + (comparisonTime - thisTime).ToString());
+           // _output.WriteLine("dotnetGlob was faster(yaay!) by " + (comparisonTime - thisTime).ToString());
 
         }
     }
