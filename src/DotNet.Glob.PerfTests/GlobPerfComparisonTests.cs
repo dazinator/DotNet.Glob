@@ -101,7 +101,9 @@ namespace DotNet.Glob.PerfTests
 
         //}
 
-        [Theory(Skip = "Needs work")]
+       // [Theory(Skip = "Needs work")]
+        [Theory()]
+        [InlineData("p?th/a[e-g].txt", 100)]
         [InlineData("p?th/a[bcd]b[e-g].txt", 100)]
         [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 500)]
         [InlineData("p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt", 10000)]
@@ -150,9 +152,9 @@ namespace DotNet.Glob.PerfTests
                 testStrings.Add(generator.GenerateRandomMatch());
             }
 
-            _output.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
-            GC.Collect();
-            _output.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
+            //_output.WriteLine("Memory used before collection:       {0:N0}", GC.GetTotalMemory(false));
+            //GC.Collect();
+            //_output.WriteLine("Memory used after full collection:   {0:N0}", GC.GetTotalMemory(true));
 
             timer.Restart();
             foreach (var testString in testStrings)
