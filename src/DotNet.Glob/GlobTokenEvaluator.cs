@@ -10,7 +10,7 @@ namespace DotNet.Globbing
     public class GlobIsMatchTokenEvaluator : IGlobTokenVisitor
     {
         private IGlobToken[] _Tokens;
-        private GlobStringReader _Reader;
+      //  private GlobStringReader _Reader;
         public Queue<IGlobToken> _TokenQueue;
         public string _text;
         private bool _finished = false;
@@ -42,7 +42,7 @@ namespace DotNet.Globbing
             _text = text;
             _currentCharIndex = 0;
 
-            IGlobToken token = null;
+           // IGlobToken token = null;
 
             //using (_Reader = new GlobStringReader(text))
             //{
@@ -52,10 +52,11 @@ namespace DotNet.Globbing
             //    _currentChar = text[_currentCharIndex];
 
             //}
-            while (_TokenQueue.Any())
+
+            foreach (var token in _Tokens)
             {
                 Success = false;
-                token = _TokenQueue.Dequeue();
+               // token = _TokenQueue.Dequeue();
                 token.Accept(this);
                 if (!Success)
                 {
@@ -66,6 +67,20 @@ namespace DotNet.Globbing
                     break;
                 }
             }
+            //while (_TokenQueue.Any())
+            //{
+            //    Success = false;
+            //    token = _TokenQueue.Dequeue();
+            //    token.Accept(this);
+            //    if (!Success)
+            //    {
+            //        return false;
+            //    }
+            //    if (_finished)
+            //    {
+            //        break;
+            //    }
+            //}
 
             // if all tokens matched but still more text then fail!
             if (_currentCharIndex < _text.Length)
@@ -84,14 +99,11 @@ namespace DotNet.Globbing
         }
 
         public char ReadChar()
-        {
-          
+        {          
             if (_currentCharIndex >= _text.Length)
             {
                 return Char.MinValue;
-            }
-
-          
+            }          
             var result = _text[_currentCharIndex];
             _currentCharIndex = _currentCharIndex + 1;
 
