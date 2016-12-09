@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Text;
 
-namespace DotNet.Globbing
+namespace DotNet.Globbing.Token
 {
     public class CharacterListToken : INegatableToken
     {
@@ -17,5 +18,6 @@ namespace DotNet.Globbing
         {
             Visitor.Visit(this);
         }
+      
     }
 }

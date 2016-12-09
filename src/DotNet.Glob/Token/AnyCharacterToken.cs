@@ -1,6 +1,6 @@
-﻿namespace DotNet.Globbing
+namespace DotNet.Globbing.Token
 {
-    public class PathSeperatorToken : IGlobToken
+    public class AnyCharacterToken : IGlobToken
     {
         public void Accept(IGlobTokenVisitor Visitor)
         {

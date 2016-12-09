@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
@@ -180,7 +181,7 @@ namespace DotNet.Globbing
 
         }
 
-        public void Visit(SingleCharacterToken token)
+        public void Visit(AnyCharacterToken token)
         {
             //WithWildcardProgression(() =>
             //{

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
@@ -36,7 +37,7 @@ namespace DotNet.Globbing
                     }
                     else if (reader.IsPathSeperator())
                     {
-                        tokens.Add(ReadPathSeperatorToken());
+                        tokens.Add(ReadPathSeperatorToken(reader));
                     }
                     else if (reader.IsValidLiteralCharacter())
                     {
@@ -165,13 +166,13 @@ namespace DotNet.Globbing
             {
                 var start = value[0];
                 var end = value[1];
-                result = new LetterRangeToken() { IsNegated = isNegated, Start = start, End = end };
+                result = new LetterRangeToken(start, end, isNegated);
             }
             else if (isNumberRange)
             {
                 var start = value[0]; // int.Parse(value[0].ToString());
                 var end = value[1]; // int.Parse(value[1].ToString());
-                result = new NumberRangeToken() { IsNegated = isNegated, Start = start, End = end };
+                result = new NumberRangeToken(start, end, isNegated);
             }
 
             return result;
@@ -179,9 +180,9 @@ namespace DotNet.Globbing
 
         }
 
-        private IGlobToken ReadPathSeperatorToken()
+        private IGlobToken ReadPathSeperatorToken(GlobStringReader reader)
         {
-            return new PathSeperatorToken();
+            return new PathSeperatorToken(reader.CurrentChar);
         }
 
         private IGlobToken ReadWildcardToken()
@@ -192,7 +193,7 @@ namespace DotNet.Globbing
         private IGlobToken ReadSingleCharacterMatchToken()
         {
             // this.Read();
-            return new SingleCharacterToken();
+            return new AnyCharacterToken();
         }
 
         private void AcceptChar(char character)

@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
     public class Glob
     {
-        public IGlobToken[] Tokens { get; set; }
+        public IGlobToken[] Tokens { get; }
+        private GlobTokenFormatter _Formatter;
+        private string _pattern;
 
-        public Glob(IGlobToken[] tokens)
+        public Glob(params IGlobToken[] tokens)
         {
             Tokens = tokens;
-        }
-
-        public Glob()
-        {
+            _Formatter = new GlobTokenFormatter();
         }
 
         public static Glob Parse(string pattern)
@@ -46,5 +46,13 @@ namespace DotNet.Globbing
             return matchInfo;
         }
 
+        public override string ToString()
+        {
+            if (_pattern == null)
+            {
+                _pattern = _Formatter.Format(Tokens);
+            }
+            return _pattern;
+        }
     }
 }

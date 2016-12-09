@@ -19,6 +19,31 @@ This library **does not** use Regex.
 
 ```
 
+# Build a glob fluently
+
+You can also use the `GlobBuilder` class if you wish to build up a glob using a fluent syntax.
+This is also more efficient as it avoids having to parse the glob from a string pattern.
+
+So to build the following glob pattern: `/foo?\\*[abc][!1-3].txt`:
+
+```csharp
+
+  var glob = new GlobBuilder()
+                .PathSeperator()
+                .Literal("foo")
+                .AnyCharacter()
+                .PathSeperator(PathSeperatorKind.BackwardSlash)
+                .Wildcard()
+                .OneOf('a', 'b', 'c')
+                .NumberNotInRange('1', '3')
+                .Literal(".txt")
+                .ToGlob();
+
+   var isMatch = glob.IsMatch(@"/fooa\\barrra4.txt"); // returns true.
+
+```
+
+
 # Patterns
 
 The following patterns are supported ([from wikipedia](https://en.wikipedia.org/wiki/Glob_(programming))):
@@ -33,7 +58,26 @@ The following patterns are supported ([from wikipedia](https://en.wikipedia.org/
 | [!a-z] | matches one character that is not from the range given in the bracket | Letter[!3-5] | Letter1, Letter2, Letter6 up to Letter9 and Letterx etc. | Letter3, Letter4, Letter5 or Letterxx |
 
 
-# Advanced Usage
+
+# Advanced Usages
+
+## Match Generation
+Given a glob, you can generate random matches for that glog. This can be useful when testing etc.
+
+```
+  var dotnetGlob = Glob.Parse(pattern);
+  var generator = new GlobMatchStringGenerator(dotnetGlob.Tokens);
+
+  for (int i = 0; i < 10; i++)
+      {
+          var testString = generator.GenerateRandomMatch();
+          var result = dotnetGlob.IsMatch(testString);
+          // result is always true.
+      }
+
+```
+
+## Match Analysis
 
 The `IsMatch` method just returns you a boolean. If you require more in-depth information about the match including which tokens were matched, or failed to match, you can do this:
 
