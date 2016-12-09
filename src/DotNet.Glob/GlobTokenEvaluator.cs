@@ -7,42 +7,331 @@ using DotNet.Globbing.Token;
 namespace DotNet.Globbing
 {
 
-    public class GlobIsMatchTokenEvaluator : IGlobTokenVisitor
+    public interface ITokenMatcher
+    {
+        bool IsMatch(string allChars, int currentPosition, out int newPosition);
+
+
+    }
+
+    //public class TokenMatcher : ITokenMatcher
+    //{
+    //    public virtual bool IsMatch(char character)
+    //    {
+
+    //    }
+    //}
+
+    public class PathSeperatorMatcher : ITokenMatcher
+    {
+        private readonly PathSeperatorToken _token;
+        public PathSeperatorMatcher(PathSeperatorToken token)
+        {
+            _token = token;
+            //ContinueMatch = false;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            var currentChar = allChars[currentPosition];
+            newPosition = currentPosition + 1;
+            return GlobStringReader.IsPathSeperator(currentChar);
+        }
+
+    }
+
+    public class LiteralTokenMatcher : ITokenMatcher
+    {
+        private readonly LiteralToken _token;
+
+        public LiteralTokenMatcher(LiteralToken token)
+        {
+            _token = token;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            newPosition = currentPosition;
+            int counter = 0;
+            while (newPosition < allChars.Length && counter < _token.Value.Length)
+            {
+                var compareChar = _token.Value[counter];
+                var currentChar = allChars[newPosition];
+
+                if (compareChar != currentChar)
+                {
+                    return false;
+                }
+
+                newPosition = newPosition + 1;
+                counter = counter + 1;
+            }
+
+            //foreach (var literalChar in _token.Value)
+            //{
+            //    var read = allChars[newPosition];
+            //    //if (read == Char.MinValue)
+            //    //{
+            //    //    return false;
+            //    //}
+            //    if (read != literalChar)
+            //    {
+            //        return false;
+            //    }
+            //    if(currentPosition == )
+            //    newPosition = newPosition + 1;
+
+            //}
+            return true;
+        }
+    }
+
+    public class AnyCharacterTokenMatcher : ITokenMatcher
+    {
+        private readonly AnyCharacterToken _token;
+
+        public AnyCharacterTokenMatcher(AnyCharacterToken token)
+        {
+            _token = token;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            newPosition = currentPosition + 1;
+            var currentChar = allChars[currentPosition];
+            //if (read == Char.MinValue)
+            //{
+            //    return;
+            //}
+            if (GlobStringReader.IsPathSeperator(currentChar))
+            {
+                return false;
+            }
+
+            return true;
+
+
+        }
+    }
+
+    public class LetterRangeTokenMatcher : ITokenMatcher
+    {
+        private readonly LetterRangeToken _token;
+
+        public LetterRangeTokenMatcher(LetterRangeToken token)
+        {
+            _token = token;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            var currentChar = allChars[currentPosition];
+            newPosition = currentPosition + 1;
+
+            //var currentChar = (char)read;
+            if (currentChar >= _token.Start && currentChar <= _token.End)
+            {
+                if (_token.IsNegated)
+                {
+                    return false; // failed to match
+                }
+            }
+            else
+            {
+                if (!_token.IsNegated)
+                {
+                    return false; // failed to match
+                }
+            }
+
+            return true;
+            // this.Success = true;
+
+
+        }
+    }
+
+    public class NumberRangeTokenMatcher : ITokenMatcher
+    {
+        private readonly NumberRangeToken _token;
+
+        public NumberRangeTokenMatcher(NumberRangeToken token)
+        {
+            _token = token;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            var currentChar = allChars[currentPosition];
+            newPosition = currentPosition + 1;
+
+            //var currentChar = (char)read;
+            if (currentChar >= _token.Start && currentChar <= _token.End)
+            {
+                if (_token.IsNegated)
+                {
+                    return false; // failed to match
+                }
+            }
+            else
+            {
+                if (!_token.IsNegated)
+                {
+                    return false; // failed to match
+                }
+            }
+
+            return true;
+            // this.Success = true;
+
+
+        }
+    }
+
+    public class CharacterListTokenMatcher : ITokenMatcher
+    {
+        private readonly CharacterListToken _token;
+
+        public CharacterListTokenMatcher(CharacterListToken token)
+        {
+            _token = token;
+        }
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            var currentChar = allChars[currentPosition];
+            newPosition = currentPosition + 1;
+
+            //var currentChar = (char)read;
+            var contains = _token.Characters.Contains(currentChar);
+            if (_token.IsNegated)
+            {
+                if (contains)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (!contains)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    //public class WildcardTokenMatcher : ITokenMatcher
+    //{
+    //    private readonly WildcardToken _token;
+
+    //    private readonly IGlobToken[] _childTokens;
+
+    //    public WildcardTokenMatcher(WildcardToken token, IGlobToken[] childTokens)
+    //    {
+    //        _token = token;
+    //        _childTokens = childTokens;
+
+
+    //    }
+
+    //    public bool IsMatch(char[] allChars, int currentPosition, out int newPosition)
+    //    {
+    //        var currentChar = allChars[currentPosition];
+    //        newPosition = currentPosition + 1;
+
+
+    //    }
+
+
+    //    public char ReadChar()
+    //    {
+    //        if (_currentCharIndex >= _text.Length)
+    //        {
+    //            return Char.MinValue;
+    //        }
+    //        var result = _text[_currentCharIndex];
+    //        _currentCharIndex = _currentCharIndex + 1;
+
+    //        return result;
+    //    }
+
+    //    public string ReadRemaining(out int positionOfNextPathSeperator)
+    //    {
+    //        var builder = new StringBuilder(_text.Length - _currentCharIndex);
+    //        var nextChar = ReadChar();
+    //        positionOfNextPathSeperator = 0;
+    //        while (nextChar != Char.MinValue)
+    //        {
+    //            builder.Append(nextChar);
+    //            if (nextChar == '/' || nextChar == '\\')
+    //            {
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                positionOfNextPathSeperator = positionOfNextPathSeperator + 1;
+    //            }
+    //            nextChar = ReadChar();
+    //        }           
+
+    //        return builder.ToString();
+
+    //    }
+
+    //}
+
+    public class GlobIsMatchTokenEvaluator : IGlobTokenVisitor, ITokenMatcher
     {
         private IGlobToken[] _Tokens;
-      //  private GlobStringReader _Reader;
-        public Queue<IGlobToken> _TokenQueue;
-        public string _text;
+        private List<ITokenMatcher> _Matchers;
+
+        //  public string _text;
         private bool _finished = false;
         public int _currentCharIndex;
+        public int _currentTokenIndex;
         public int _currentChar;
+        // private bool _isWildCard;
 
-        public int CurrentChar { get { return _text[_currentCharIndex]; } }
+        //public int CurrentChar { get { return _text[_currentCharIndex]; } }
 
         public GlobIsMatchTokenEvaluator(IGlobToken[] tokens)
         {
             // _Reader = reader;
             _Tokens = tokens;
-            var tokenCount = tokens.Length;
-            _TokenQueue = new Queue<IGlobToken>(tokenCount);
-        }
-
-        private void EnqueueTokens(IGlobToken[] tokens)
-        {
-            _TokenQueue.Clear();
-            foreach (var token in tokens)
+            _Matchers = new List<ITokenMatcher>();
+            _currentTokenIndex = 0;
+            foreach (var token in _Tokens)
             {
-                _TokenQueue.Enqueue(token);
+                token.Accept(this);
+                if (_finished)
+                { // stop visiting any more. Usually happens if encountering wildcard.
+                    break;
+                }
+                _currentTokenIndex = _currentTokenIndex + 1;
             }
         }
 
+        //private void EnqueueTokens(IGlobToken[] tokens)
+        //{
+        //    _TokenQueue.Clear();
+        //    foreach (var token in tokens)
+        //    {
+        //        _TokenQueue.Enqueue(token);
+        //    }
+        //}
+
         public bool IsMatch(string text)
         {
-            EnqueueTokens(_Tokens);
-            _text = text;
+            //  EnqueueTokens(_Tokens);
+            // _text = text;
             _currentCharIndex = 0;
 
-           // IGlobToken token = null;
+            foreach (var matcher in _Matchers)
+            {
+                if (!matcher.IsMatch(text, _currentCharIndex, out _currentCharIndex))
+                {
+                    return false;
+                }
+            }
+            //_currentTokenIndex = 0;
+            // IGlobToken token = null;
 
             //using (_Reader = new GlobStringReader(text))
             //{
@@ -53,20 +342,7 @@ namespace DotNet.Globbing
 
             //}
 
-            foreach (var token in _Tokens)
-            {
-                Success = false;
-               // token = _TokenQueue.Dequeue();
-                token.Accept(this);
-                if (!Success)
-                {
-                    return false;
-                }
-                if (_finished)
-                {
-                    break;
-                }
-            }
+
             //while (_TokenQueue.Any())
             //{
             //    Success = false;
@@ -83,7 +359,7 @@ namespace DotNet.Globbing
             //}
 
             // if all tokens matched but still more text then fail!
-            if (_currentCharIndex < _text.Length)
+            if (_currentCharIndex < text.Length)
             {
                 return false;
             }
@@ -98,144 +374,99 @@ namespace DotNet.Globbing
             // }
         }
 
-        public char ReadChar()
-        {          
-            if (_currentCharIndex >= _text.Length)
-            {
-                return Char.MinValue;
-            }          
-            var result = _text[_currentCharIndex];
-            _currentCharIndex = _currentCharIndex + 1;
-
-            return result;
-        }
-
-        public string ReadRemaining(out int positionOfNextPathSeperator)
-        {
-
-
-            var builder = new StringBuilder(_text.Length - _currentCharIndex);
-            var nextChar = ReadChar();
-            positionOfNextPathSeperator = 0;
-            while (nextChar != Char.MinValue)
-            {
-                builder.Append(nextChar);
-                if (nextChar == '/' || nextChar == '\\')
-                {
-                    //indexOfSeperator = _currentCharIndex;
-                }
-                else
-                {
-                    positionOfNextPathSeperator = positionOfNextPathSeperator + 1;
-                }
-                nextChar = ReadChar();
-            }
-            // var newStringLength = builder.Length;
-
-            return builder.ToString();
-
-
-            //positionOfNextPathSeperator = 0;
-            //_currentCharIndex = _currentCharIndex + 1;
-            //if (_currentCharIndex >= _text.Length)
-            //{
-            //    return null;
-            //}
-
-            //for (int i = _currentCharIndex; i < _text.Length; i++)
-            //{
-            //    var currentChar =
-            //    if (i == '/' || i == '\\')
-            //    {
-
-            //    }
-            //}
-
-            // return _text.Substring(_currentCharIndex);
-        }
-
 
         public void Visit(PathSeperatorToken token)
         {
-            var read = ReadChar();
-            if (read == Char.MinValue)
-            {
-                return;
-            }
-            if (!GlobStringReader.IsPathSeperator(read))
-            {
-                return;
-            }
-            this.Success = true;
+            _Matchers.Add(new PathSeperatorMatcher(token));
+
+            //var read = ReadChar();
+            //if (read == Char.MinValue)
+            //{
+            //    return;
+            //}
+            //if (!GlobStringReader.IsPathSeperator(read))
+            //{
+            //    return;
+            //}
+            //this.Success = true;
         }
 
         public void Visit(LiteralToken token)
         {
-            foreach (var literalChar in token.Value)
-            {
-                var read = ReadChar();
-                if (read == Char.MinValue)
-                {
-                    return;
-                }
-                if (read != literalChar)
-                {
-                    return;
-                }
-            }
-            this.Success = true;
+            _Matchers.Add(new LiteralTokenMatcher(token));
+            //foreach (var literalChar in token.Value)
+            //{
+            //    var read = ReadChar();
+            //    if (read == Char.MinValue)
+            //    {
+            //        return;
+            //    }
+            //    if (read != literalChar)
+            //    {
+            //        return;
+            //    }
+            //}
+            //this.Success = true;
         }
 
         public void Visit(AnyCharacterToken token)
         {
-            var read = ReadChar();
-            if (read == Char.MinValue)
-            {
-                return;
-            }
-            if (GlobStringReader.IsPathSeperator(read))
-            {
-                return;
-            }
-            this.Success = true;
+            _Matchers.Add(new AnyCharacterTokenMatcher(token));
+        }
+
+        public void Visit(LetterRangeToken token)
+        {
+            _Matchers.Add(new LetterRangeTokenMatcher(token));
+        }
+
+        public void Visit(NumberRangeToken token)
+        {
+            _Matchers.Add(new NumberRangeTokenMatcher(token));
+        }
+
+        public void Visit(CharacterListToken token)
+        {
+            _Matchers.Add(new CharacterListTokenMatcher(token));
         }
 
         public void Visit(WildcardToken token)
         {
+            int remainingCount = _Tokens.Length - (_currentTokenIndex + 1);
+            // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
+            if (remainingCount == 0)
+            {
+                return;
+            }
+
+            IGlobToken[] remaining = new IGlobToken[remainingCount];
+            Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
+            _Matchers.Add(new GlobIsMatchTokenEvaluator(remaining));
+            _finished = true; // stop visiting any further tokens as we have offloaded them to a child evaluator.
+        }
+
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+        {
+            newPosition = currentPosition;
             // When * encountered,
             // Dequees all remaining tokens and passes them to a nested Evaluator.
             // Keeps seing if the nested evaluator will match, and if it doesn't then
             // will consume / match against one character, and retry.
             // Exits when match successful, or when the end of the current path segment is reached.
             int endOfSegmentPos;
-            var remainingText = ReadRemaining(out endOfSegmentPos);
-            // int endOfSegmentPos;
-            //using (var pathReader = new GlobStringReader(remainingText))
-            //{
-            //    var thisPath = pathReader.ReadPathSegment();
-            //    endOfSegmentPos = pathReader.CurrentIndex;
-            //}
-
-            var remaining = _TokenQueue.ToArray();
-            // if no more tokens remaining then just return as * matches the rest of the segment.
-            if (remaining.Length == 0)
-            {
-                this.Success = true;
-                return;
-            }
+            var remainingText = ReadRemaining(allChars, out endOfSegmentPos);
 
             // we have to attempt to match the remaining tokens, and if they dont all match,
             // then consume a character, until we have matched the entirity of this segment.
             var matchedText = new StringBuilder(endOfSegmentPos);
-            var nestedEval = new GlobIsMatchTokenEvaluator(remaining);
+            // var nestedEval = new GlobIsMatchTokenEvaluator(tokens);
             // var pathSegments = new List<string>();
 
             for (int i = 0; i < endOfSegmentPos; i++)
             {
-                var isMatch = nestedEval.IsMatch(remainingText);
+                var isMatch = IsMatch(remainingText);
                 if (isMatch)
                 {
-                    break;
+                    return true;
                 }
 
                 // match a single character
@@ -245,88 +476,44 @@ namespace DotNet.Globbing
 
             }
 
-            this.Success = nestedEval.Success;
-            _finished = true;
+            return false;
         }
 
-        public void Visit(LetterRangeToken token)
+        public char ReadChar(string text)
         {
-            var read = ReadChar();
-            if (read == Char.MinValue)
+            if (_currentCharIndex >= text.Length)
             {
-                return;
+                return Char.MinValue;
             }
-            //var currentChar = (char)read;
-            if (read >= token.Start && read <= token.End)
-            {
-                if (token.IsNegated)
-                {
-                    return; // failed to match
-                }
-            }
-            else
-            {
-                if (!token.IsNegated)
-                {
-                    return; // failed to match
-                }
-            }
-            this.Success = true;
+            var result = text[_currentCharIndex];
+            _currentCharIndex = _currentCharIndex + 1;
+
+            return result;
         }
 
-        public void Visit(NumberRangeToken token)
+        public string ReadRemaining(string text, out int positionOfNextPathSeperator)
         {
-            var read = ReadChar();
-            if (read == Char.MinValue)
+            var builder = new StringBuilder(text.Length - _currentCharIndex);
+            var nextChar = ReadChar(text);
+            positionOfNextPathSeperator = 0;
+            while (nextChar != Char.MinValue)
             {
-                return;
-            }
-            if (read >= token.Start && read <= token.End)
-            {
-                if (token.IsNegated)
+                builder.Append(nextChar);
+                if (nextChar == '/' || nextChar == '\\')
                 {
-                    return; // failed to match
+                    break;
                 }
-            }
-            else
-            {
-                if (!token.IsNegated)
+                else
                 {
-                    return; // failed to match
+                    positionOfNextPathSeperator = positionOfNextPathSeperator + 1;
                 }
+                nextChar = ReadChar(text);
             }
 
-            this.Success = true;
+            return builder.ToString();
+
         }
 
-        public void Visit(CharacterListToken token)
-        {
-            var read = ReadChar();
-            if (read == Char.MinValue)
-            {
-                return;
-            }
-            //var currentChar = (char)read;
-            var contains = token.Characters.Contains(read);
-            if (token.IsNegated)
-            {
-                if (contains)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                if (!contains)
-                {
-                    return;
-                }
-            }
-
-            this.Success = true;
-        }
-
-        public bool Success { get; set; }
     }
 
     public class GlobTokenEvaluator : IGlobTokenVisitor
