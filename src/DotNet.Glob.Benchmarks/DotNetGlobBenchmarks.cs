@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Attributes.Columns;
 using BenchmarkDotNet.Attributes.Exporters;
 using BenchmarkDotNet.Attributes.Jobs;
 using DotNet.Globbing;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 namespace DotNet.Glob.PerfTests
 {
 
-    [ClrJob, CoreJob, MemoryDiagnoser, MarkdownExporter]
+    [ClrJob, CoreJob, MemoryDiagnoser, MarkdownExporter, MinColumn, MaxColumn]
     public class DotNetGlobBenchmarks
     {
 

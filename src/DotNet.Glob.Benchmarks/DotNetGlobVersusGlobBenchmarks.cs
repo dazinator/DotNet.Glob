@@ -8,11 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Glob;
 using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Attributes.Columns;
 
 namespace DotNet.Glob.PerfTests
 {
 
-    [ClrJob, CoreJob, MemoryDiagnoser]
+    [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
     public class DotNetGlobVersusGlobIsMatchBenchmarks
     {
 
