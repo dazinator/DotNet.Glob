@@ -11,14 +11,14 @@ namespace DotNet.Globbing
         public IGlobToken[] Tokens { get; }
         private GlobTokenFormatter _Formatter;
         private string _pattern;
-        private readonly CompositeEvaluator _isMatchEvaluator;
+        private readonly GlobTokenEvaluator _isMatchEvaluator;
         private readonly GlobTokenMatchAnalysisEvaluator _matchEvaluator; // provides more in depth analyis than IsMatch.
 
         public Glob(params IGlobToken[] tokens)
         {
             Tokens = tokens;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new CompositeEvaluator(Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);
             _matchEvaluator = new GlobTokenMatchAnalysisEvaluator(Tokens);
         }
 

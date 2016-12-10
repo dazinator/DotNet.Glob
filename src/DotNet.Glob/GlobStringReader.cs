@@ -189,7 +189,6 @@ namespace DotNet.Globbing
             return true;
         }
 
-
         public bool IsBeginningOfRangeOrList
         {
             get { return CurrentChar == OpenBracketChar; }
@@ -224,7 +223,12 @@ namespace DotNet.Globbing
 
         public bool IsWildcardCharacterMatch
         {
-            get { return CurrentChar == StarChar; }
+            get { return CurrentChar == StarChar && PeekChar() != StarChar; }
+        }
+
+        public bool IsBeginningOfDirectoryWildcard
+        {
+            get { return CurrentChar == StarChar && PeekChar() == StarChar; }
         }
 
         public static bool IsValidLiteralCharacter(char character)

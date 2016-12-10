@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -220,6 +221,90 @@ namespace DotNet.Globbing.Evaluation
             match.Value = matchedText.ToString();
             _TokenQueue.Clear();
         }
+
+        public void Visit(WildcardDirectoryToken token)
+        {
+            // When * encountered,
+            // Dequees all remaining tokens and passes them to a nested Evaluator.
+            // Keeps seing if the nested evaluator will match, and if it doesn't then
+            // will consume / match against one character, and retry.
+            // Exits when match successful, or when the end of the current path segment is reached.
+            GlobTokenMatch match = null;
+
+            match = new GlobTokenMatch() { Token = token };
+            AddMatch(match);
+
+
+            var remainingText = _Reader.ReadToEnd();
+            int endOfSegmentPos = remainingText.Length; //TODO: improve this.
+
+            //using (var pathReader = new GlobStringReader(remainingText))
+            //{
+            //    var thisPath = pathReader.ReadPathSegment();
+            //    endOfSegmentPos = pathReader.CurrentIndex;
+            //}
+
+            var remaining = _TokenQueue.ToArray();
+            // if no more tokens remaining then just return as * matches the rest of the segment.
+            if (remaining.Length == 0)
+            {
+                this.Success = true;
+                match.Value = remainingText;
+                return;
+            }
+
+            // we have to attempt to match the remaining tokens, and if they dont all match,
+            // then consume a character, until we have matched the entirity of this segment.
+            var matchedText = new StringBuilder(endOfSegmentPos);
+            var nestedEval = new GlobTokenMatchAnalysisEvaluator(remaining);
+            var pathSegments = new List<string>();
+
+            // we keep a record of text that this wildcard matched in order to satisfy the
+            // greatest number of child token matches.
+            var bestMatchText = new StringBuilder(endOfSegmentPos);
+            IList<GlobTokenMatch> bestMatches = null; // the most tokens that were matched.
+
+            for (int i = 0; i < endOfSegmentPos; i++)
+            {
+                var matchInfo = nestedEval.Evaluate(remainingText);
+                if (matchInfo.Success)
+                {
+                    break;
+                }
+
+                // match a single character
+                matchedText.Append(remainingText[0]);
+                // re-attempt matching of child tokens against this remaining string.
+                remainingText = remainingText.Substring(1);
+                // If we have come closer to matching, record our best results.
+                if ((bestMatches == null && matchInfo.Matches.Any()) || (bestMatches != null && bestMatches.Count < matchInfo.Matches.Length))
+                {
+                    bestMatches = matchInfo.Matches.ToArray();
+                    bestMatchText.Clear();
+                    bestMatchText.Append(matchedText.ToString());
+                }
+
+            }
+
+            this.Success = nestedEval.Success;
+            if (nestedEval.Success)
+            {
+                // add all child matches.
+                this.MatchedTokens.AddRange(nestedEval.MatchedTokens);
+
+            }
+            else
+            {
+                // add the most tokens we managed to match.
+                if (bestMatches != null && bestMatches.Any())
+                {
+                    this.MatchedTokens.AddRange(bestMatches);
+                }
+            }
+
+            match.Value = matchedText.ToString();
+            _TokenQueue.Clear();
+        }
         public void Visit(LetterRangeToken token)
         {
             Success = false;
@@ -315,5 +400,7 @@ namespace DotNet.Globbing.Evaluation
             this.MatchedTokens.Add(match);
             this.Success = true;
         }
+
+     
     }
 }

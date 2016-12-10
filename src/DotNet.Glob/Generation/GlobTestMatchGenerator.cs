@@ -83,5 +83,9 @@ namespace DotNet.Globbing.Generation
             _generators.Add(new WildcardTokenMatchGenerator(token, _random));
         }
 
+        public void Visit(WildcardDirectoryToken token)
+        {
+            _generators.Add(new WildcardDirectoryTokenMatchGenerator(token, _random));
+        }
     }
 }

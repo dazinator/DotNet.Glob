@@ -26,6 +26,11 @@ namespace DotNet.Globbing
             return _stringBuilder.ToString();
         }
 
+        public void Visit(WildcardDirectoryToken wildcardDirectoryToken)
+        {
+            _stringBuilder.Append("**");
+        }
+
         void IGlobTokenVisitor.Visit(CharacterListToken token)
         {
             _stringBuilder.Append('[');

@@ -13,6 +13,7 @@ namespace DotNet.Globbing.Tests
             typeof(LiteralToken), typeof(WildcardToken), typeof(LiteralToken),typeof(PathSeperatorToken),
             typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(CharacterListToken), typeof(LetterRangeToken), typeof(LiteralToken), typeof(NumberRangeToken), typeof(PathSeperatorToken),
             typeof(LetterRangeToken), typeof(CharacterListToken))]
+        [InlineData("path/**/*.*", typeof(LiteralToken), typeof(PathSeperatorToken), typeof(WildcardDirectoryToken), typeof(PathSeperatorToken), typeof(WildcardToken), typeof(LiteralToken), typeof(WildcardToken))]
         public void Can_Tokenise_Glob_Pattern(string testString, params Type[] expectedTokens)
         {
             // Arrange

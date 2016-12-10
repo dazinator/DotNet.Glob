@@ -1,4 +1,7 @@
-﻿namespace DotNet.Globbing
+﻿using DotNet.Globbing.Token;
+using System.Collections.Generic;
+
+namespace DotNet.Globbing
 {
     public interface IGlobBuilder
     {
@@ -6,6 +9,7 @@
         IGlobBuilder Literal(string text);
         IGlobBuilder AnyCharacter();
         IGlobBuilder Wildcard();
+        IGlobBuilder DirectoryWildcard();
         IGlobBuilder OneOf(params char[] characters);
         IGlobBuilder NotOneOf(params char[] characters);
         IGlobBuilder LetterInRange(char start, char end);
@@ -13,6 +17,7 @@
         IGlobBuilder NumberInRange(char start, char end);
         IGlobBuilder NumberNotInRange(char start, char end);
         Glob ToGlob();
-
+        List<IGlobToken> Tokens { get; }
     }
+
 }
