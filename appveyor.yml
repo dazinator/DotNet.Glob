@@ -9,4 +9,4 @@ build_script:
 test: off
 artifacts:
 - path: ./artifacts/*
-- path: **/*Artifacts/*.*
+- path: ./**/*Artifacts/*.*
