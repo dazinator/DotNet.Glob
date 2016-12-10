@@ -252,3 +252,4 @@ paket-files/
 *.sln.iml
 /src/BDN.Generated
 /tools
+/src/DotNet.Glob.Benchmarks/BenchmarkDotNet.Artifacts/results

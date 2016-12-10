@@ -23,7 +23,7 @@ var projectName = "DotNet.Glob";
 var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
-
+var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
 
 var isContinuousIntegrationBuild = !BuildSystem.IsLocalBuild;
 
@@ -134,7 +134,9 @@ Task("__Test")
 Task("__Benchmarks")
     .Does(() =>
 {
-    GetFiles("**/*Benchmarks/project.json")
+    if(benchMarksEnabled)
+    {
+        GetFiles("**/*Benchmarks/project.json")
         .ToList()
         .ForEach(projFile => 
         {           
@@ -153,6 +155,7 @@ Task("__Benchmarks")
                 WorkingDirectory = projectDir               
             });
         });
+    }    
 });
 
 Task("__UpdateProjectJsonVersion")
