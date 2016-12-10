@@ -66,6 +66,7 @@ Task("__Clean")
     .Does(() =>
 {
     CleanDirectory(artifactsDir);
+    CleanDirectories("./src/BDN.Generated");
     CleanDirectories("./src/**/bin");
     CleanDirectories("./src/**/obj");
 });
@@ -109,9 +110,9 @@ Task("__Build")
     .Does(() =>
 {
     DotNetCoreBuild("**/project.json", new DotNetCoreBuildSettings
-    {
+    {        
         Configuration = configuration
-    });
+    });   
 });
 
 Task("__Test")
@@ -137,8 +138,15 @@ Task("__Benchmarks")
         .ToList()
         .ForEach(projFile => 
         {           
+
+            DotNetCoreBuild(projFile.ToString(), new DotNetCoreBuildSettings
+            {
+                Framework = "netcoreapp1.1",
+                Configuration = configuration
+            });
+
             var projectDir = projFile.GetDirectory();
-            DotNetCoreRun(projFile.ToString(), new DotNetCoreRunSettings
+            DotNetCoreRun(projFile.ToString(), "--args", new DotNetCoreRunSettings
             {
                 Framework = "netcoreapp1.1",
                 Configuration = configuration,
