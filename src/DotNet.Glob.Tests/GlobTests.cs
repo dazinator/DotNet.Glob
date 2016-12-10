@@ -42,13 +42,13 @@ namespace DotNet.Globbing.Tests
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4]", "pAth/fooooacbfa2")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz]", "pAth/fooooacbfa2v")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pAth/fooooacbfa2vd4.txt")]
+        [InlineData("path/**/somefile.txt", "path/foo/bar/baz/somefile.txt")]
         public void Can_Match(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.Match(testString);
-
                 Assert.True(match.Success);
             }
         }

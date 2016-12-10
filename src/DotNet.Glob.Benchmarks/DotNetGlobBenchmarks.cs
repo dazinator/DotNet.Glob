@@ -42,23 +42,31 @@ namespace DotNet.Glob.PerfTests
         public string GlobPattern { get; set; }
 
         [Benchmark]
-        public void IsMatch()
+        public List<bool> IsMatch()
         {
+            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
+            var results = new List<bool>(NumberOfMatches);
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testData[i];
                 var result = _glob.IsMatch(testString);
+                results.Add(result);
             }
+            return results;
         }
 
         [Benchmark]
-        public void Match()
+        public List<MatchInfo> Match()
         {
+            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
+            var results = new List<MatchInfo>(NumberOfMatches);
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testData[i];
                 var result = _glob.Match(testString);
+                results.Add(result);
             }
+            return results;
         }
 
     }

@@ -10,8 +10,8 @@ namespace DotNet.Glob.PerfTests
     {
         public static void Main(string[] args)
         {
-            BenchmarkRunner.Run<DotNetGlobBenchmarks>();
-            BenchmarkRunner.Run<GlobBenchmarks>();
+            BenchmarkRunner.Run<DotNetGlobVersusGlobIsMatchBenchmarks>();
+            //BenchmarkRunner.Run<GlobBenchmarks>();
         }
     }
 }

@@ -7,16 +7,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Glob;
+using BenchmarkDotNet.Running;
 
 namespace DotNet.Glob.PerfTests
 {
 
     [ClrJob, CoreJob, MemoryDiagnoser]
-    public class GlobBenchmarks
+    public class DotNetGlobVersusGlobIsMatchBenchmarks
     {
 
         private global::Glob.Glob _glob;
-
+        private Globbing.Glob _dotnetGlob;
         private List<string> _testData;
 
         [Setup]
@@ -31,6 +32,7 @@ namespace DotNet.Glob.PerfTests
                 _testData.Add(generator.GenerateRandomMatch());
             }
 
+            _dotnetGlob = Globbing.Glob.Parse(GlobPattern);
             _glob = new global::Glob.Glob(GlobPattern);
         }
 
@@ -42,17 +44,12 @@ namespace DotNet.Glob.PerfTests
                 "p?th/a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].txt")]
         public string GlobPattern { get; set; }
 
-        //[Benchmark]
-        //public global::Glob.Glob Parse()
-        //{
-        //    return new global::Glob.Glob(GlobPattern, GlobOptions.Compiled);
-        //}
-
-        [Benchmark]
-        public List<bool> IsMatch()
+        [Benchmark(Baseline = true)]
+        public List<bool> GlobIsMatch()
         {
             // we collect all results in a list and return it to prevent dead code elimination (optimisation)
             var results = new List<bool>(NumberOfMatches);
+            //var glob = new global::Glob.Glob(GlobPattern, GlobOptions.Compiled);
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testData[i];
@@ -61,6 +58,22 @@ namespace DotNet.Glob.PerfTests
             }
             return results;
         }
+
+        [Benchmark()]
+        public List<bool> DotNetGlobIsMatch()
+        {
+            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
+            var results = new List<bool>(NumberOfMatches);
+            for (int i = 0; i < NumberOfMatches; i++)
+            {
+                var testString = _testData[i];
+                var result = _dotnetGlob.IsMatch(testString);
+                results.Add(result);
+
+            }
+            return results;
+        }
+       
 
     }
 }
