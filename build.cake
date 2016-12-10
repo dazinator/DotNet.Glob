@@ -57,6 +57,7 @@ Task("__Default")
     .IsDependentOn("__UpdateAssemblyVersionInformation")
     .IsDependentOn("__Build")
     .IsDependentOn("__Test")
+    .IsDependentOn("__Benchmarks")    
     .IsDependentOn("__UpdateProjectJsonVersion")
     .IsDependentOn("__Pack")    
     .IsDependentOn("__PublishNuGetPackages");
@@ -125,6 +126,23 @@ Task("__Test")
             {
                 Configuration = configuration,
                 WorkingDirectory = projectDir
+            });
+        });
+});
+
+Task("__Benchmarks")
+    .Does(() =>
+{
+    GetFiles("**/*Benchmarks/project.json")
+        .ToList()
+        .ForEach(projFile => 
+        {           
+            var projectDir = projFile.GetDirectory();
+            DotNetCoreRun(projFile.ToString(), new DotNetCoreRunSettings
+            {
+                Framework = "netcoreapp1.1",
+                Configuration = configuration,
+                WorkingDirectory = projectDir               
             });
         });
 });

@@ -17,7 +17,7 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNet.Glob", "DotNet.Glob\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNet.Glob.Tests", "DotNet.Glob.Tests\DotNet.Glob.Tests.xproj", "{D3B73528-6B21-472B-A680-905D2F477D72}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNet.Glob.PerfTests", "DotNet.Glob.PerfTests\DotNet.Glob.PerfTests.xproj", "{8F487A82-3788-43A3-BF3C-C690714B8FD7}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNet.Glob.Benchmarks", "DotNet.Glob.Benchmarks\DotNet.Glob.Benchmarks.xproj", "{8F487A82-3788-43A3-BF3C-C690714B8FD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
