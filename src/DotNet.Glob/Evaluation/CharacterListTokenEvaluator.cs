@@ -34,5 +34,15 @@ namespace DotNet.Globbing.Evaluation
 
             return true;
         }
+
+        public virtual int ConsumesMinLength
+        {
+            get { return 1; }
+        }
+
+        public bool ConsumesVariableLength
+        {
+            get { return false; }
+        }
     }
 }

@@ -4,6 +4,7 @@ namespace DotNet.Globbing.Evaluation
     {
         bool IsMatch(string allChars, int currentPosition, out int newPosition);
 
-
+        int ConsumesMinLength { get; }
+        bool ConsumesVariableLength { get; }
     }
 }

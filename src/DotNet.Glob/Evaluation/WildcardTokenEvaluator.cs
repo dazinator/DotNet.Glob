@@ -8,9 +8,9 @@ namespace DotNet.Globbing.Evaluation
     {
         private readonly WildcardToken _token;
         //private readonly IGlobToken[] _subTokens;
-        private readonly GlobTokenEvaluator _subEvaluator;
+        private readonly CompositeTokenEvaluator _subEvaluator;
 
-        public WildcardTokenEvaluator(WildcardToken token, GlobTokenEvaluator subEvaluator)
+        public WildcardTokenEvaluator(WildcardToken token, CompositeTokenEvaluator subEvaluator)
         {
             _token = token;
             _subEvaluator = subEvaluator;
@@ -20,75 +20,53 @@ namespace DotNet.Globbing.Evaluation
 
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
-            // When called as an evaluator, we act as a wildcard evaluator - we only return true,
-            // if all of our child evaluators return true.
-            // but as we are a wildcard, we keep advancing a character in the current path segment and retrying
-            // until we find a match or reach the end of the string.
+
             newPosition = currentPosition;
-            int endOfSegmentPos;
-            var remainingText = ReadRemaining(allChars, currentPosition, out endOfSegmentPos);
-
-            //  var matchedText = new StringBuilder(endOfSegmentPos);
-
-            for (int i = 0; i < endOfSegmentPos; i++)
+            if (!_subEvaluator.ConsumesVariableLength)
             {
-                var isMatch = _subEvaluator.IsMatch(remainingText);
-                if (isMatch)
+                // The remaining tokens match against a fixed length string, so wildcard **must** consume
+                // a known amount of characters in order for this to have a chance of successful match.
+                var isMatch = _subEvaluator.IsMatch(allChars, (allChars.Length - _subEvaluator.ConsumesMinLength), out newPosition);
+                return isMatch;
+            }
+
+
+            // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
+            // us past the min required length required by the sub evaluator tokens, and as we are not a directory wildcard, we
+            // can't go past a path seperator.
+
+            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
+            for (int i = currentPosition; i < maxPos; i++)
+            {
+                var currentChar = allChars[i];
+                if (currentChar == '/' || currentChar == '\\')
                 {
-                   // _subEvaluator._currentCharIndex
-                    newPosition = allChars.Length - 1;
-                    return true;
+                    return false;
                 }
 
-                // match a single character
-                //  matchedText.Append(remainingText[0]);
-                // re-attempt matching of child tokens against this remaining string.
-                newPosition = newPosition + 1;
-                remainingText = remainingText.Substring(1);
-
+                //int newSubPosition;
+                var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
+                if (isMatch)
+                {
+                    return true;
+                }
             }
 
             return false;
+          
+        }
+
+        public virtual int ConsumesMinLength
+        {
+            get { return 0; }
+        }
+
+        public bool ConsumesVariableLength
+        {
+            get { return true; }
         }
 
         #endregion
-
-        public char ReadChar(string text, int currentPosition)
-        {
-            if (currentPosition >= text.Length)
-            {
-                return Char.MinValue;
-            }
-            var result = text[currentPosition];
-            return result;
-        }
-
-        public string ReadRemaining(string text, int currentPosition, out int positionOfNextPathSeperator)
-        {
-           
-            var builder = new StringBuilder(text.Length - currentPosition);
-            var nextChar = ReadChar(text, currentPosition);
-            positionOfNextPathSeperator = 0;
-            positionOfNextPathSeperator = currentPosition;
-
-            while (nextChar != Char.MinValue)
-            {
-                builder.Append(nextChar);
-                if (nextChar == '/' || nextChar == '\\')
-                {
-                    break;
-                }
-                else
-                {
-                    positionOfNextPathSeperator = positionOfNextPathSeperator + 1;
-                }
-                currentPosition = currentPosition + 1;
-                nextChar = ReadChar(text, currentPosition);
-            }
-
-            return builder.ToString();
-
-        }
 
     }
 }

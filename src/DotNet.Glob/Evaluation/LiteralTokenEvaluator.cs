@@ -14,6 +14,7 @@ namespace DotNet.Globbing.Evaluation
         {
             newPosition = currentPosition;
             int counter = 0;
+
             while (newPosition < allChars.Length && counter < _token.Value.Length)
             {
                 var compareChar = _token.Value[counter];
@@ -26,6 +27,11 @@ namespace DotNet.Globbing.Evaluation
 
                 newPosition = newPosition + 1;
                 counter = counter + 1;
+            }
+
+            if (counter < _token.Value.Length)
+            {
+                return false;
             }
 
             //foreach (var literalChar in _token.Value)
@@ -44,6 +50,16 @@ namespace DotNet.Globbing.Evaluation
 
             //}
             return true;
+        }
+
+        public virtual int ConsumesMinLength
+        {
+            get { return _token.Value.Length; }
+        }
+
+        public bool ConsumesVariableLength
+        {
+            get { return false; }
         }
     }
 }
