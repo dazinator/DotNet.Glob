@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace DotNet.Globbing
@@ -18,8 +19,12 @@ namespace DotNet.Globbing
         public const char CloseBracketChar = ']';
         public const char DashChar = '-';
         public const char QuestionMarkChar = '?';
-        public const char DotChar = '.';
-        public const char SpaceChar = ' ';
+        //public const char DotChar = '.';
+        //public const char SpaceChar = ' ';
+        //public const char HashChar = '#';
+
+
+        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@' };
 
         /// <summary>
         /// The current delimiters
@@ -233,7 +238,7 @@ namespace DotNet.Globbing
 
         public static bool IsValidLiteralCharacter(char character)
         {
-            return Char.IsLetterOrDigit(character) || character == DotChar || character == SpaceChar;
+            return Char.IsLetterOrDigit(character) || AllowedNonAlphaNumericChars.Contains(character);
         }
 
         internal bool IsValidLiteralCharacter()

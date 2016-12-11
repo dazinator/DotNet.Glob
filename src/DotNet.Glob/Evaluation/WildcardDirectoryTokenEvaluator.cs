@@ -31,13 +31,18 @@ namespace DotNet.Globbing.Evaluation
                 return isMatch;
             }
 
+            // if we are at the end of the string, we match!
+            if (currentPosition >= allChars.Length)
+            {
+                return true;
+            }
 
             // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
             // us past the min required length required by the sub evaluator tokens, and as we are a directory wildcard, we
             // can go past a path seperators so no need to check for those, unlike the wildcard evaulator which must stop at them.
 
             var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
-            for (int i = currentPosition; i < maxPos; i++)
+            for (int i = currentPosition; i <= maxPos; i++)
             {
                 //int newSubPosition;
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);

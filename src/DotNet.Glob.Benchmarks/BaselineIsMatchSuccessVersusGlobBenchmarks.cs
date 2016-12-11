@@ -14,7 +14,7 @@ namespace DotNet.Glob.PerfTests
 {
 
     [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
-    public class DotNetGlobVersusGlobIsMatchBenchmarks
+    public class BaselineIsMatchSuccessVersusGlobBenchmarks
     {
 
         private global::Glob.Glob _glob;

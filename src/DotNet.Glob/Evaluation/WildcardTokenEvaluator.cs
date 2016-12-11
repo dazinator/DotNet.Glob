@@ -30,13 +30,17 @@ namespace DotNet.Globbing.Evaluation
                 return isMatch;
             }
 
-
+            // if we are at the end of the string, we match!
+            if (currentPosition >= allChars.Length)
+            {
+                return true;
+            }
             // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
             // us past the min required length required by the sub evaluator tokens, and as we are not a directory wildcard, we
             // can't go past a path seperator.
 
             var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
-            for (int i = currentPosition; i < maxPos; i++)
+            for (int i = currentPosition; i <= maxPos; i++)
             {
                 var currentChar = allChars[i];
                 if (currentChar == '/' || currentChar == '\\')
@@ -53,7 +57,7 @@ namespace DotNet.Globbing.Evaluation
             }
 
             return false;
-          
+
         }
 
         public virtual int ConsumesMinLength

@@ -15,11 +15,25 @@ namespace DotNet.Globbing.Generation
             this._random = _random;
         }
 
-        public void Append(StringBuilder builder)
+        public void AppendMatch(StringBuilder builder)
         {
             // append a random single literal char.
             builder.AppendRandomLiteralCharacter(_random);
         }
 
+        public void AppendNonMatch(StringBuilder builder)
+        {
+            // We can match any single character, 
+            // the only thing we wont match against is a directory seperator.
+            if (_random.Next(0, 1) == 0)
+            {
+                builder.Append('/');
+            }
+            else
+            {
+                builder.Append('\\');
+            }
+
+        }
     }
 }

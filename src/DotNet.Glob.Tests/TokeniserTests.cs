@@ -12,7 +12,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("p*th/ha?s[stu][s-z]and[1-3]/[!a-z]![1234Z]", 
             typeof(LiteralToken), typeof(WildcardToken), typeof(LiteralToken),typeof(PathSeperatorToken),
             typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(CharacterListToken), typeof(LetterRangeToken), typeof(LiteralToken), typeof(NumberRangeToken), typeof(PathSeperatorToken),
-            typeof(LetterRangeToken), typeof(CharacterListToken))]
+            typeof(LetterRangeToken), typeof(LiteralToken), typeof(CharacterListToken))]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*",
             typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(PathSeperatorToken),
             typeof(WildcardToken), typeof(LiteralToken), typeof(CharacterListToken), 

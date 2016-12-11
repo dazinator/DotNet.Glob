@@ -15,9 +15,14 @@ namespace DotNet.Globbing.Generation
             this._random = _random;
         }
 
-        public void Append(StringBuilder builder)
+        public void AppendMatch(StringBuilder builder)
         {
             builder.Append(token.Value);
+        }
+
+        public void AppendNonMatch(StringBuilder builder)
+        {
+            builder.AppendRandomLiteralCharacter(_random);
         }
     }
 }

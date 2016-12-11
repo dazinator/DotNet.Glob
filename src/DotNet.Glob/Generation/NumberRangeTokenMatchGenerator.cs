@@ -15,43 +15,30 @@ namespace DotNet.Globbing.Generation
             this._random = _random;
         }
 
-        public void Append(StringBuilder builder)
+        public void AppendMatch(StringBuilder builder)
         {
             if (token.IsNegated)
             {
-                builder.Append(GetRandomLiteralCharacterNotBetween(token.Start, token.End));
+                builder.AppendRandomNumberCharacterNotBetween(_random, token.Start, token.End);
+                //builder.Append(GetRandomLiteralCharacterNotBetween(token.Start, token.End));
             }
             else
             {
-                builder.Append(GetRandomCharacterBetween(token.Start, token.End));
+                builder.AppendRandomLiteralCharacterBetween(_random, token.Start, token.End);
             }
         }
 
-        public char GetRandomCharacterBetween(char start, char end)
+        public void AppendNonMatch(StringBuilder builder)
         {
-            return (char)_random.Next((int)start, (int)end);
-        }
-
-        public char GetRandomLiteralCharacterNotBetween(char start, char end)
-        {
-
-            var generateHigher = _random.NextDouble() > 0.5;
-            if ((int)end >= 'z')
+            if (token.IsNegated)
             {
-                generateHigher = false; // end char is already z or greater so attempt to generate lower.
+                builder.AppendRandomLiteralCharacterBetween(_random, token.Start, token.End);
+                //.Append(GetRandomCharacterBetween(token.Start, token.End));
             }
-            if (generateHigher)
+            else
             {
-                // generating a random letter thats higher than the end char.
-                return (char)_random.Next(end >= 'a' ? end : 'a', 'z');
+                builder.AppendRandomLiteralCharacterNotBetween(_random, token.Start, token.End);
             }
-            if ((int)start <= '0')
-            {
-                throw new NotImplementedException("Could not generate a random literal character that is outside the specified range: (start - end) = " + start + " - " + end);
-            }
-            // generating a random digit thats lower than the start char.
-            return (char)_random.Next('0', start <= '9' ? start : '9');
-
         }
     }
 }

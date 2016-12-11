@@ -18,18 +18,21 @@ namespace DotNet.Glob.PerfTests
 
         private Globbing.Glob _glob;
 
-        private List<string> _testData;
+        private List<string> _testMatchingStringsList;
+        private List<string> _testNonMatchingStringsList;
 
         [Setup]
         public void SetupData()
         {
-            _testData = new List<string>(NumberOfMatches);
+            _testMatchingStringsList = new List<string>(NumberOfMatches);
+            _testNonMatchingStringsList = new List<string>(NumberOfMatches);
             _glob = Globbing.Glob.Parse(GlobPattern);
             var generator = new GlobMatchStringGenerator(_glob.Tokens);
 
             for (int i = 0; i < 10000; i++)
             {
-                _testData.Add(generator.GenerateRandomMatch());
+                _testMatchingStringsList.Add(generator.GenerateRandomMatch());
+                _testNonMatchingStringsList.Add(generator.GenerateRandomNonMatch());
             }
 
         }
@@ -49,7 +52,21 @@ namespace DotNet.Glob.PerfTests
             var results = new List<bool>(NumberOfMatches);
             for (int i = 0; i < NumberOfMatches; i++)
             {
-                var testString = _testData[i];
+                var testString = _testMatchingStringsList[i];
+                var result = _glob.IsMatch(testString);
+                results.Add(result);
+            }
+            return results;
+        }
+
+        [Benchmark]
+        public List<bool> IsNonMatch()
+        {
+            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
+            var results = new List<bool>(NumberOfMatches);
+            for (int i = 0; i < NumberOfMatches; i++)
+            {
+                var testString = _testNonMatchingStringsList[i];
                 var result = _glob.IsMatch(testString);
                 results.Add(result);
             }
@@ -63,7 +80,7 @@ namespace DotNet.Glob.PerfTests
             var results = new List<MatchInfo>(NumberOfMatches);
             for (int i = 0; i < NumberOfMatches; i++)
             {
-                var testString = _testData[i];
+                var testString = _testMatchingStringsList[i];
                 var result = _glob.Match(testString);
                 results.Add(result);
             }

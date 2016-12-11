@@ -17,26 +17,40 @@ namespace DotNet.Globbing.Generation
         {
             _token = token;
             _random = random;
-            if (token.IsNegated)
+            PopulateNonMatchingCharList();
+        }
+
+        public void AppendMatch(StringBuilder builder)
+        {
+            if (_token.IsNegated)
             {
-                PopulateNonMatchingCharList();
                 if (!_nonMatches.Any())
                 {
                     throw new Exception("Could not generate characters that aren't in the character list!");
                 }
-            }
-        }
-
-        public void Append(StringBuilder builder)
-        {
-            if (_token.IsNegated)
-            {
                 builder.Append(_nonMatches[_random.Next(0, _nonMatches.Count - 1)]);
             }
             else
             {
                 builder.Append(_token.Characters[_random.Next(0, _token.Characters.Count() - 1)]);
             }
+        }
+
+        public void AppendNonMatch(StringBuilder builder)
+        {
+            if (_token.IsNegated)
+            {
+                builder.Append(_token.Characters[_random.Next(0, _token.Characters.Count() - 1)]);
+            }
+            else
+            {
+                if (!_nonMatches.Any())
+                {
+                    throw new Exception("Could not generate characters that aren't in the character list!");
+                }
+                builder.Append(_nonMatches[_random.Next(0, _nonMatches.Count - 1)]);
+            }
+
         }
 
         private void PopulateNonMatchingCharList()
