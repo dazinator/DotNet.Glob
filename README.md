@@ -1,6 +1,8 @@
 # DotNet.Glob
 A fast globbing library for .NET applications.
-This library **does not** use Regex.
+This library **does not** use Regex as the goal was to make it much faster.
+The latest benchmarks show that DotNet.Glob signficantly outperforms Regex.
+The benchmarks use [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) and can be located inside this repo. Just `dotnet run` them.
 
 
 | Branch  | Build Status | NuGet |
