@@ -135,21 +135,6 @@ namespace DotNet.Globbing.Evaluation
 
         public bool ConsumesVariableLength { get; protected set; }
 
-        //protected void CalculateLengthCosts()
-        //{
-        //    foreach (var evaluator in _Evaluators)
-        //    {
-        //        this.ConsumesMinLength = this.ConsumesMinLength + evaluator.ConsumesMinLength;
-        //        if (!ConsumesVariableLength)
-        //        {
-        //            if (evaluator.ConsumesVariableLength)
-        //            {
-        //                this.ConsumesVariableLength = true;
-        //            }
-        //        }
-        //    }
-        //}
-
         protected void AddEvaluator(IGlobTokenEvaluator evaluator)
         {
             _Evaluators.Add(evaluator);

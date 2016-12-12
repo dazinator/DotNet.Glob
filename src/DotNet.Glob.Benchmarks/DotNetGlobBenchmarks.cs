@@ -46,43 +46,38 @@ namespace DotNet.Glob.PerfTests
         public string GlobPattern { get; set; }
 
         [Benchmark]
-        public List<bool> IsMatch()
+        public bool IsMatch_True()
         {
             // we collect all results in a list and return it to prevent dead code elimination (optimisation)
-            var results = new List<bool>(NumberOfMatches);
+            var result = false;
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testMatchingStringsList[i];
-                var result = _glob.IsMatch(testString);
-                results.Add(result);
+                result ^= _glob.IsMatch(testString);
             }
-            return results;
+            return result;
         }
 
         [Benchmark]
-        public List<bool> IsNonMatch()
+        public bool IsMatch_False()
         {
-            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
-            var results = new List<bool>(NumberOfMatches);
+            var result = false;
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testNonMatchingStringsList[i];
-                var result = _glob.IsMatch(testString);
-                results.Add(result);
+                result ^= _glob.IsMatch(testString);
             }
-            return results;
+            return result;
         }
 
         [Benchmark]
         public List<MatchInfo> Match()
         {
-            // we collect all results in a list and return it to prevent dead code elimination (optimisation)
             var results = new List<MatchInfo>(NumberOfMatches);
             for (int i = 0; i < NumberOfMatches; i++)
             {
                 var testString = _testMatchingStringsList[i];
-                var result = _glob.Match(testString);
-                results.Add(result);
+                results.Add(_glob.Match(testString));
             }
             return results;
         }

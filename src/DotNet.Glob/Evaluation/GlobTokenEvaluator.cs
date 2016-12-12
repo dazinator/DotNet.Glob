@@ -21,24 +21,6 @@ namespace DotNet.Globbing.Evaluation
             int finalPosition = 0;
             var matched = _rootTokenEvaluator.IsMatch(text, 0, out finalPosition);
             return matched;
-            //if (!matched)
-            //{
-            //    return false;
-            //}
-            //foreach (var matcher in _Evaluators)
-            //{
-            //    if (!matcher.IsMatch(allChars, newPosition, out newPosition))
-            //    {
-            //        return false;
-            //    }
-            //}
-            //// if all tokens matched but still more text then fail!
-            //if (newPosition < allChars.Length)
-            //{
-            //    return false;
-            //}
-            // Success.
-            // return true;
         }
 
     }
