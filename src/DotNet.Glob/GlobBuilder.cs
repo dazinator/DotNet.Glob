@@ -56,9 +56,16 @@ namespace DotNet.Globbing
             _tokens.Add(new PathSeperatorToken(seperatorChar));
             return this;
         }
+
         public IGlobBuilder Wildcard()
         {
             _tokens.Add(new WildcardToken());
+            return this;
+        }
+
+        public IGlobBuilder DirectoryWildcard()
+        {
+            _tokens.Add(new WildcardDirectoryToken());
             return this;
         }
 
@@ -90,5 +97,12 @@ namespace DotNet.Globbing
         {
             return new Glob(this._tokens.ToArray());
         }
+
+        public List<IGlobToken> Tokens
+        {
+            get { return _tokens; }
+        }
+
+
     }
 }

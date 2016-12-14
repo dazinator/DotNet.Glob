@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNet.Globbing.Evaluation;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
@@ -10,15 +11,15 @@ namespace DotNet.Globbing
         public IGlobToken[] Tokens { get; }
         private GlobTokenFormatter _Formatter;
         private string _pattern;
-        private readonly GlobIsMatchTokenEvaluator _isMatchEvaluator;
-        private readonly GlobTokenEvaluator _matchEvaluator; // provides more in depth analyis than IsMatch.
+        private readonly GlobTokenEvaluator _isMatchEvaluator;
+        private readonly GlobTokenMatchAnalysisEvaluator _matchEvaluator; // provides more in depth analyis than IsMatch.
 
         public Glob(params IGlobToken[] tokens)
         {
             Tokens = tokens;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobIsMatchTokenEvaluator(Tokens);
-            _matchEvaluator = new GlobTokenEvaluator(Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);
+            _matchEvaluator = new GlobTokenMatchAnalysisEvaluator(Tokens);
         }
 
         public static Glob Parse(string pattern)

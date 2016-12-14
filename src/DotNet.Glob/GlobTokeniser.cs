@@ -39,6 +39,10 @@ namespace DotNet.Globbing
                     {
                         tokens.Add(ReadPathSeperatorToken(reader));
                     }
+                    else if (reader.IsBeginningOfDirectoryWildcard)
+                    {
+                        tokens.Add(ReadDirectoryWildcardToken(reader));
+                    }
                     else if (reader.IsValidLiteralCharacter())
                     {
                         // literal
@@ -51,6 +55,12 @@ namespace DotNet.Globbing
 
             return tokens;
 
+        }
+
+        private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader)
+        {
+            reader.ReadChar();
+            return new WildcardDirectoryToken();
         }
 
         private IGlobToken ReadLiteralToken(GlobStringReader reader)

@@ -23,7 +23,7 @@ var projectName = "DotNet.Glob";
 var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
-
+var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
 
 var isContinuousIntegrationBuild = !BuildSystem.IsLocalBuild;
 
@@ -57,6 +57,7 @@ Task("__Default")
     .IsDependentOn("__UpdateAssemblyVersionInformation")
     .IsDependentOn("__Build")
     .IsDependentOn("__Test")
+    .IsDependentOn("__Benchmarks")    
     .IsDependentOn("__UpdateProjectJsonVersion")
     .IsDependentOn("__Pack")    
     .IsDependentOn("__PublishNuGetPackages");
@@ -65,6 +66,7 @@ Task("__Clean")
     .Does(() =>
 {
     CleanDirectory(artifactsDir);
+    CleanDirectories("./src/BDN.Generated");
     CleanDirectories("./src/**/bin");
     CleanDirectories("./src/**/obj");
 });
@@ -108,9 +110,9 @@ Task("__Build")
     .Does(() =>
 {
     DotNetCoreBuild("**/project.json", new DotNetCoreBuildSettings
-    {
+    {        
         Configuration = configuration
-    });
+    });   
 });
 
 Task("__Test")
@@ -127,6 +129,33 @@ Task("__Test")
                 WorkingDirectory = projectDir
             });
         });
+});
+
+Task("__Benchmarks")
+    .Does(() =>
+{
+    if(benchMarksEnabled)
+    {
+        GetFiles("**/*Benchmarks/project.json")
+        .ToList()
+        .ForEach(projFile => 
+        {           
+
+            DotNetCoreBuild(projFile.ToString(), new DotNetCoreBuildSettings
+            {
+                Framework = "netcoreapp1.1",
+                Configuration = configuration
+            });
+
+            var projectDir = projFile.GetDirectory();
+            DotNetCoreRun(projFile.ToString(), "--args", new DotNetCoreRunSettings
+            {
+                Framework = "netcoreapp1.1",
+                Configuration = configuration,
+                WorkingDirectory = projectDir               
+            });
+        });
+    }    
 });
 
 Task("__UpdateProjectJsonVersion")

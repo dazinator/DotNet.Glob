@@ -16,14 +16,15 @@
       "type": "git",
       "url": "https://github.com/dazinator/DotNet.Glob"
     },
-    "summary": "A fast globbing library for .NET applications. Beats Regex.",
+    "summary": "Fast and effiecient glob pattern match library for .NET. Performs better than compiled Regex.",
     "tags": [
       "glob",
       "globbing",
       "dotnet",
-      "pattern"
+      "pattern",
+      "match"
     ],
-    "releaseNotes": "First stable release."
+    "releaseNotes": "This release focuses on speed and efficiency improvements baby. DotNet Glob now performs roughly 80% faster than a compiled regex. Performance benchmarks added."
   },
   "dependencies": {},
   "frameworks": {

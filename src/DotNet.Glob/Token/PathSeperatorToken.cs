@@ -1,4 +1,6 @@
-﻿namespace DotNet.Globbing.Token
+﻿using System;
+
+namespace DotNet.Globbing.Token
 {
     public class PathSeperatorToken : IGlobToken
     {
@@ -14,5 +16,6 @@
 
         public char Value { get; set; }
 
+      
     }
 }

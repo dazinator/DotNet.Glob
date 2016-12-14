@@ -4,6 +4,8 @@ namespace DotNet.Globbing.Generation
 {
     public interface IMatchGenerator
     {
-        void Append(StringBuilder builder);
+        void AppendMatch(StringBuilder builder);
+
+        void AppendNonMatch(StringBuilder builder);
     }
 }

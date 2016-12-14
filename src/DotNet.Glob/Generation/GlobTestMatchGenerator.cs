@@ -6,13 +6,13 @@ using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Generation
 {
-    public class GlobMatchStringGenerator : IGlobTokenVisitor
+    public class GlobMatchStringGenerator
     {
         private StringBuilder _stringBuilder;
         private Random _random;
         private MatchGenerationMode _mode;
 
-        private List<IMatchGenerator> _generators;
+        private CompositeTokenMatchGenerator _generator;
 
         private enum MatchGenerationMode
         {
@@ -25,63 +25,26 @@ namespace DotNet.Globbing.Generation
         {
             _stringBuilder = new StringBuilder();
             _random = new Random();
-            _generators = new List<IMatchGenerator>(tokens.Count());
-            foreach (var token in tokens)
-            {
-                token.Accept(this);
-            }
+            _generator = new CompositeTokenMatchGenerator(_random, tokens.ToArray());
+            // _generators = new List<IMatchGenerator>(tokens.Count());
         }
 
         public string GenerateRandomMatch()
         {
             //_mode = MatchGenerationMode.Match;
             _stringBuilder.Clear();
-            foreach (var generator in _generators)
-            {
-                generator.Append(_stringBuilder);
-            }
+            _generator.AppendMatch(_stringBuilder);
             return _stringBuilder.ToString();
         }
 
-        void IGlobTokenVisitor.Visit(CharacterListToken token)
+        public string GenerateRandomNonMatch()
         {
-            if (_mode != MatchGenerationMode.Match)
-            {
-                throw new NotImplementedException();
-            }
-
-            _generators.Add(new CharacterListTokenMatchGenerator(token, _random));
+            //_mode = MatchGenerationMode.Match;
+            _stringBuilder.Clear();
+            _generator.AppendNonMatch(_stringBuilder);
+            return _stringBuilder.ToString();
         }
 
-        void IGlobTokenVisitor.Visit(PathSeperatorToken token)
-        {
-            _generators.Add(new PathSeperatorMatchGenerator(token, _random));
-        }
-
-        void IGlobTokenVisitor.Visit(LiteralToken token)
-        {
-            _generators.Add(new LiteralTokenMatchGenerator(token, _random));
-        }
-
-        void IGlobTokenVisitor.Visit(LetterRangeToken token)
-        {
-            _generators.Add(new LetterRangeTokenMatchGenerator(token, _random));
-        }
-
-        void IGlobTokenVisitor.Visit(NumberRangeToken token)
-        {
-            _generators.Add(new NumberRangeTokenMatchGenerator(token, _random));
-        }
-
-        void IGlobTokenVisitor.Visit(AnyCharacterToken token)
-        {
-            _generators.Add(new AnyCharacterTokenMatchGenerator(token, _random));
-        }
-
-        void IGlobTokenVisitor.Visit(WildcardToken token)
-        {
-            _generators.Add(new WildcardTokenMatchGenerator(token, _random));
-        }
 
     }
 }

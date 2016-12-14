@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.DotNet.ProjectModel;
 using Xunit;
 
 namespace DotNet.Globbing.Tests
@@ -42,14 +43,15 @@ namespace DotNet.Globbing.Tests
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4]", "pAth/fooooacbfa2")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz]", "pAth/fooooacbfa2v")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pAth/fooooacbfa2vd4.txt")]
-        public void Can_Match(string pattern, params string[] testStrings)
+        [InlineData("path/**/somefile.txt", "path/foo/bar/baz/somefile.txt")]
+        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pGth/yGKNY6acbea3rm8.")]
+        public void Can_IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
-                var match = glob.Match(testString);
-
-                Assert.True(match.Success);
+                var match = glob.IsMatch(testString);
+                Assert.True(match);
             }
         }
 
@@ -63,6 +65,34 @@ namespace DotNet.Globbing.Tests
             var glob = Glob.Parse(pattern);
             var resultPattern = glob.ToString();
             Assert.Equal(pattern, resultPattern);
+        }
+
+
+
+        /// <summary>
+        /// Tests for the InMemoryDirectory sub system.
+        /// </summary>
+        [Theory]
+        [InlineData("literal", "literal")]
+        [InlineData("a/literal", "a/literal")]
+        [InlineData("path/*atstand", "path/fooatstand")]
+        [InlineData("path/hats*nd", "path/hatsforstand")]
+        [InlineData("path/?atstand", "path/hatstand")]
+        [InlineData("path/?atstand?", "path/hatstands")]
+        [InlineData("p?th/*a[bcd]", "pAth/fooooac")]
+        [InlineData("p?th/*a[bcd]b[e-g]a[1-4]", "pAth/fooooacbfa2")]
+        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz]", "pAth/fooooacbfa2v")]
+        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pAth/fooooacbfa2vd4.txt")]
+        [InlineData("path/**/somefile.txt", "path/foo/bar/baz/somefile.txt")]
+        [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pGth/yGKNY6acbea3rm8.")]
+        public void Glob_IsMatch(string pattern, params string[] testStrings)
+        {
+            var glob = new global::Glob.Glob(pattern);
+            foreach (var testString in testStrings)
+            {
+                var match = glob.IsMatch(testString);
+                Assert.True(match);
+            }
         }
 
     }
