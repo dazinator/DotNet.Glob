@@ -59,25 +59,38 @@ The following patterns are supported ([from wikipedia](https://en.wikipedia.org/
 | [!abc] | matches one character that is not given in the bracket | [!C]at | Bat, bat, or cat | Cat |
 | [!a-z] | matches one character that is not from the range given in the bracket | Letter[!3-5] | Letter1, Letter2, Letter6 up to Letter9 and Letterx etc. | Letter3, Letter4, Letter5 or Letterxx |
 
+In addition, DotNet Glob also supports:
+
+| Wildcard  | Description | Example | Matches | Does not match |
+| --------  | ----------- | ------- | ------- | -------------- |
+| `**` |  matches any number of path / directory segments. When used must be the only contents of a segment. | /**/some.* | /foo/bar/bah/some.txt, /some.txt, or /foo/some.txt	|
 
 
 # Advanced Usages
 
 ## Match Generation
-Given a glob, you can generate random matches for that glog. This can be useful when testing etc.
+Given a glob, you can generate random matches, or non matches, for that glob.
+For example, given the glob pattern `/f?o/bar/**/*.txt` you could generate matching strings like `/foo/bar/ajawd/awdaw/adw-ad.txt` or random non matching strings.
+
 
 ```
   var dotnetGlob = Glob.Parse(pattern);
   var generator = new GlobMatchStringGenerator(dotnetGlob.Tokens);
 
   for (int i = 0; i < 10; i++)
-      {
+  {
           var testString = generator.GenerateRandomMatch();
           var result = dotnetGlob.IsMatch(testString);
           // result is always true.
-      }
+
+          // generate a non match.
+          testString = generator.GenerateRandomNonMatch();
+          var result = dotnetGlob.IsMatch(testString);
+           // result is always false.
+  }
 
 ```
+
 
 ## Match Analysis
 
