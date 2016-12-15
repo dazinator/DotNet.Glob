@@ -16,7 +16,7 @@
       "type": "git",
       "url": "https://github.com/dazinator/DotNet.Glob"
     },
-    "summary": "Fast and effiecient glob pattern match library for .NET. Performs better than compiled Regex.",
+    "summary": "Fast and effiecient glob pattern matching library for .NET. Faster than compiled Regex.",
     "tags": [
       "glob",
       "globbing",
@@ -24,7 +24,7 @@
       "pattern",
       "match"
     ],
-    "releaseNotes": "This release focuses on speed and efficiency improvements baby. DotNet Glob now performs roughly 80% faster than a compiled regex. Performance benchmarks added."
+    "releaseNotes": "This release focuses on speed and efficiency improvements baby. Also now supports directory wildcards, i.e /**/foo.txt"
   },
   "dependencies": {},
   "frameworks": {
