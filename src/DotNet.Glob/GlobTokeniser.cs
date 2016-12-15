@@ -18,7 +18,7 @@ namespace DotNet.Globbing
         public IList<IGlobToken> Tokenise(string globText)
         {
             var tokens = new List<IGlobToken>();
-
+            string starstartpeak;
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())
@@ -34,7 +34,7 @@ namespace DotNet.Globbing
                     else if (reader.IsWildcardCharacterMatch)
                     {
                         tokens.Add(ReadWildcardToken());
-                    }
+                    }                   
                     else if (reader.IsPathSeperator())
                     {
                         tokens.Add(ReadPathSeperatorToken(reader));
@@ -60,7 +60,15 @@ namespace DotNet.Globbing
         private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader)
         {
             reader.ReadChar();
-            return new WildcardDirectoryToken();
+
+            if (GlobStringReader.IsPathSeperator(reader.PeekChar()))
+            {
+                reader.ReadChar();
+                return new WildcardDirectoryToken(reader.CurrentChar);
+            }
+
+            return new WildcardDirectoryToken(null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
+
         }
 
         private IGlobToken ReadLiteralToken(GlobStringReader reader)

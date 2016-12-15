@@ -23,8 +23,7 @@ namespace DotNet.Globbing.Tests
                                 new WildcardToken(),
                                 new CharacterListToken(new char[] { 'a', 'b', 'c' }, false),
                                 new PathSeperatorToken('/'),
-                                new WildcardDirectoryToken(),
-                                new PathSeperatorToken('/'),
+                                new WildcardDirectoryToken('/'),                              
                                 new NumberRangeToken('1', '3', true),
                                 new LiteralToken(".txt"));
 

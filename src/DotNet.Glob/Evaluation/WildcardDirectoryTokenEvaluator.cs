@@ -27,6 +27,14 @@ namespace DotNet.Globbing.Evaluation
             {
                 // The remaining tokens match against a fixed length string, so wildcard **must** consume
                 // a known amount of characters in order for this to have a chance of successful match.
+                // but can't consume past current position!
+                // var matchLength = (allChars.Length - _subEvaluator.ConsumesMinLength);
+                //if(matchLength < currentPosition)
+                //{
+                //    return false;
+                //}
+                //var isMatch = _subEvaluator.IsMatch(allChars, matchLength, out newPosition);
+                //return isMatch;
                 var isMatch = _subEvaluator.IsMatch(allChars, (allChars.Length - _subEvaluator.ConsumesMinLength), out newPosition);
                 return isMatch;
             }

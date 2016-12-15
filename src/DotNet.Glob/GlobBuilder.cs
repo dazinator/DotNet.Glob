@@ -63,9 +63,28 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public IGlobBuilder DirectoryWildcard()
+        public IGlobBuilder DirectoryWildcard(PathSeperatorKind? trailingSeperatorKind = PathSeperatorKind.ForwardSlash)
         {
-            _tokens.Add(new WildcardDirectoryToken());
+            if (trailingSeperatorKind == null)
+            {
+                _tokens.Add(new WildcardDirectoryToken(null));
+            }
+            else
+            {
+                switch (trailingSeperatorKind)
+                {
+                    case PathSeperatorKind.BackwardSlash:
+                        _tokens.Add(new WildcardDirectoryToken('\\'));
+                        break;
+                    case PathSeperatorKind.ForwardSlash:
+                        _tokens.Add(new WildcardDirectoryToken('/'));
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
             return this;
         }
 
