@@ -24,7 +24,7 @@
       "pattern",
       "match"
     ],
-    "releaseNotes": "This release focuses on speed and efficiency improvements baby. Also now supports directory wildcards, i.e /**/foo.txt"
+    "releaseNotes": "This release focuses on speed and efficiency improvements baby."
   },
   "dependencies": {},
   "frameworks": {

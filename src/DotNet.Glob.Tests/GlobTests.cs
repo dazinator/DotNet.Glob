@@ -20,6 +20,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("path/hats*nd", "path/hatsblahn", "path/hatsblahndt")]
         [InlineData("path/?atstand", "path/moatstand", "path/batstands")]
         [InlineData("/**/file.csv", "/file.txt")]
+        [InlineData("/*file.txt", "/folder")]
         public void Does_Not_Match(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
@@ -47,9 +48,11 @@ namespace DotNet.Globbing.Tests
         [InlineData("path/**/somefile.txt", "path/foo/bar/baz/somefile.txt")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pGth/yGKNY6acbea3rm8.")]
         [InlineData("/**/file.*", "/folder/file.csv")]
-        [InlineData("/**/file.*","/file.txt")]
+        [InlineData("/**/file.*", "/file.txt")]
         [InlineData("/**/file.*", "/file.txt")]
         [InlineData("**/file.*", "/file.txt")]
+        [InlineData("/*file.txt", "/file.txt")]
+     
         public void Can_IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
