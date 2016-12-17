@@ -66,7 +66,7 @@ namespace DotNet.Globbing.Evaluation
 
         public virtual int ConsumesMinLength
         {
-            get { return 0; }
+            get { return _subEvaluator.ConsumesMinLength; }
         }
 
         public bool ConsumesVariableLength
