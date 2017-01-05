@@ -24,7 +24,7 @@
       "pattern",
       "match"
     ],
-    "releaseNotes": "This release focuses on speed and efficiency improvements baby."
+    "releaseNotes": "This is a hotfix release to support tilde characters (~), thanks goes to @ming4883"
   },
   "dependencies": {},
   "frameworks": {
