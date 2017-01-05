@@ -11,10 +11,7 @@ namespace DotNet.Globbing.Tests
 {
     public class GlobTests
     {
-
-        /// <summary>
-        /// Tests for the InMemoryDirectory sub system.
-        /// </summary>
+       
         [Theory]
         [InlineData("literal", "fliteral", "foo/literal", "literals", "literals/foo")]
         [InlineData("path/hats*nd", "path/hatsblahn", "path/hatsblahndt")]
@@ -29,11 +26,7 @@ namespace DotNet.Globbing.Tests
                 Assert.False(glob.IsMatch(testString));
             }
         }
-
-
-        /// <summary>
-        /// Tests for the InMemoryDirectory sub system.
-        /// </summary>
+    
         [Theory]
         [InlineData("literal", "literal")]
         [InlineData("a/literal", "a/literal")]
@@ -52,7 +45,6 @@ namespace DotNet.Globbing.Tests
         [InlineData("/**/file.*", "/file.txt")]
         [InlineData("**/file.*", "/file.txt")]
         [InlineData("/*file.txt", "/file.txt")]
-     
         public void Can_IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
@@ -62,10 +54,7 @@ namespace DotNet.Globbing.Tests
                 Assert.True(match);
             }
         }
-
-        /// <summary>
-        /// Tests for the InMemoryDirectory sub system.
-        /// </summary>
+        
         [Fact]
         public void To_String_Returns_Pattern()
         {
@@ -74,13 +63,7 @@ namespace DotNet.Globbing.Tests
             var resultPattern = glob.ToString();
             Assert.Equal(pattern, resultPattern);
         }
-
-
-
-        /// <summary>
-        /// Tests for the InMemoryDirectory sub system.
-        /// </summary>
-        /// <Remarks>These tests are for another library that I am using to compare againts.</Remarks>       
+    
         [Theory]
         [InlineData("literal", "literal")]
         [InlineData("a/literal", "a/literal")]
@@ -98,16 +81,31 @@ namespace DotNet.Globbing.Tests
         //[InlineData("/**/file.*", "/file.txt")]
         //[InlineData("**/file.*", "/file.txt")]
         //[InlineData("/**/file.*", "/file.txt")]
+        //[InlineData("/**/f~le.*", "/f~le.txt")]
         public void Glob_IsMatch(string pattern, params string[] testStrings)
         {
             // This is a different glob library, I am seeing if it matches the same patterns as my library.
-            // The three tests above commented out show it currently has some limitations, that this library doesn't.
+            // The tests above commented out show it has some limitations, that I have addressed in this library.
             var glob = new global::Glob.Glob(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
                 Assert.True(match);
             }
+        }
+
+
+        /// <summary>
+        /// Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
+        /// </summary>
+        [Fact]
+        public void BugFix_Can_Read_Tilde()
+        {
+            // This is a different glob library, I am seeing if it matches the same patterns as my library.
+            // The three tests above commented out show it currently has some limitations, that this library doesn't.
+            var glob = Glob.Parse("~/*~3");
+            var isMatch = glob.IsMatch("~/abc123~3");
+            Assert.True(isMatch);
         }
 
     }
