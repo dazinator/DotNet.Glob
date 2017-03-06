@@ -180,7 +180,7 @@ namespace DotNet.Globbing.Evaluation
             var bestMatchText = new StringBuilder(endOfSegmentPos);
             IList<GlobTokenMatch> bestMatches = null; // the most tokens that were matched.
 
-            for (int i = 0; i < endOfSegmentPos; i++)
+            for (int i = 0; i <= endOfSegmentPos; i++)
             {
                 var matchInfo = nestedEval.Evaluate(remainingText);
                 if (matchInfo.Success)

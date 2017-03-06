@@ -80,10 +80,7 @@ namespace DotNet.Globbing.Evaluation
             for (int i = currentPosition; i <= maxPos; i++)
             {
                 var currentChar = allChars[i];
-                if (currentChar == '/' || currentChar == '\\')
-                {
-                    return false;
-                }                   
+                               
                   
 
                 //int newSubPosition;
@@ -91,6 +88,11 @@ namespace DotNet.Globbing.Evaluation
                 if (isMatch)
                 {
                     return true;
+                }
+
+                if (currentChar == '/' || currentChar == '\\')
+                {
+                    return false;
                 }
             }
 

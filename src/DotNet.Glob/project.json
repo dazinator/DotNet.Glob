@@ -45,7 +45,7 @@
     },
     "net46": {
       "dependencies": {
-        "System.IO": "4.0.10.0",
+        "System.IO": "4.0.10",
         "System.Runtime.Extensions": "4.3.0"
       }
     }

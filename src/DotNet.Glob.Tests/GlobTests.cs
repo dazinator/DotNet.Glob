@@ -45,25 +45,20 @@ namespace DotNet.Globbing.Tests
         [InlineData("/**/file.*", "/file.txt")]
         [InlineData("**/file.*", "/file.txt")]
         [InlineData("/*file.txt", "/file.txt")]
-        public void Can_IsMatch(string pattern, params string[] testStrings)
+        [InlineData("C:\\THIS_IS_A_DIR\\*", "C:\\THIS_IS_A_DIR\\somefile")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/20
+        [InlineData("/DIR1/*/*", "/DIR1/DIR2/file.txt")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/21
+        [InlineData("~/*~3", "~/abc123~3")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
+        public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
-                Assert.True(match);
+                Assert.True(match);                
+                           
             }
         }
-        
-        [Fact]
-        public void To_String_Returns_Pattern()
-        {
-            var pattern = "p?th/*a[bcd]b[e-g]/**/a[1-4][!wxyz][!a-c][!1-3].*";
-            var glob = Glob.Parse(pattern);
-            var resultPattern = glob.ToString();
-            Assert.Equal(pattern, resultPattern);
-        }
-    
+
         [Theory]
         [InlineData("literal", "literal")]
         [InlineData("a/literal", "a/literal")]
@@ -78,47 +73,36 @@ namespace DotNet.Globbing.Tests
         [InlineData("path/**/somefile.txt", "path/foo/bar/baz/somefile.txt")]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pGth/yGKNY6acbea3rm8.")]
         [InlineData("/**/file.*", "/folder/file.csv")]
-        //[InlineData("/**/file.*", "/file.txt")]
-        //[InlineData("**/file.*", "/file.txt")]
-        //[InlineData("/**/file.*", "/file.txt")]
-        //[InlineData("/**/f~le.*", "/f~le.txt")]
-        public void Glob_IsMatch(string pattern, params string[] testStrings)
+        [InlineData("/**/file.*", "/file.txt")]
+        [InlineData("/**/file.*", "/file.txt")]
+        [InlineData("**/file.*", "/file.txt")]
+        [InlineData("/*file.txt", "/file.txt")]
+        [InlineData("C:\\THIS_IS_A_DIR\\*", "C:\\THIS_IS_A_DIR\\somefile")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/20
+        [InlineData("/DIR1/*/*", "/DIR1/DIR2/file.txt")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/21
+        [InlineData("~/*~3", "~/abc123~3")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15  
+        public void Match(string pattern, params string[] testStrings)
         {
-            // This is a different glob library, I am seeing if it matches the same patterns as my library.
-            // The tests above commented out show it has some limitations, that I have addressed in this library.
-            var glob = new global::Glob.Glob(pattern);
+            var glob = Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
-                var match = glob.IsMatch(testString);
-                Assert.True(match);
+                var match = glob.Match(testString);
+                Assert.True(match.Success);
             }
         }
 
-
-        /// <summary>
-        /// Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
-        /// </summary>
         [Fact]
-        public void BugFix_Can_Read_Tilde()
+        public void To_String_Returns_Pattern()
         {
-            // This is a different glob library, I am seeing if it matches the same patterns as my library.
-            // The three tests above commented out show it currently has some limitations, that this library doesn't.
-            var glob = Glob.Parse("~/*~3");
-            var isMatch = glob.IsMatch("~/abc123~3");
-            Assert.True(isMatch);
-        }
+            var pattern = "p?th/*a[bcd]b[e-g]/**/a[1-4][!wxyz][!a-c][!1-3].*";
+            var glob = Glob.Parse(pattern);
+            var resultPattern = glob.ToString();
+            Assert.Equal(pattern, resultPattern);
+        }   
 
-        /// <summary>
-        /// Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
-        /// </summary>
-        [Fact]
-        public void BugFix_Issue_20_Can_Read_Colon_And_Underscore()
-        {
-            // This is a different glob library, I am seeing if it matches the same patterns as my library.
-            // The three tests above commented out show it currently has some limitations, that this library doesn't.
-            var glob = Glob.Parse("C:\\THIS_IS_A_DIR\\*");
-            var isMatch = glob.IsMatch("C:\\THIS_IS_A_DIR\\somefile");
-            Assert.True(isMatch);
-        }
+
+      
+
+
+      
     }
 }
