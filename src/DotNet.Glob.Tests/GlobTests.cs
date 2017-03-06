@@ -108,5 +108,17 @@ namespace DotNet.Globbing.Tests
             Assert.True(isMatch);
         }
 
+        /// <summary>
+        /// Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
+        /// </summary>
+        [Fact]
+        public void BugFix_Issue_20_Can_Read_Colon_And_Underscore()
+        {
+            // This is a different glob library, I am seeing if it matches the same patterns as my library.
+            // The three tests above commented out show it currently has some limitations, that this library doesn't.
+            var glob = Glob.Parse("C:\\THIS_IS_A_DIR\\*");
+            var isMatch = glob.IsMatch("C:\\THIS_IS_A_DIR\\somefile");
+            Assert.True(isMatch);
+        }
     }
 }
