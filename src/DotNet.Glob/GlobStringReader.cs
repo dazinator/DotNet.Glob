@@ -24,7 +24,7 @@ namespace DotNet.Globbing
         //public const char HashChar = '#';
 
 
-        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@', '~' };
+        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_',':' };
 
         /// <summary>
         /// The current delimiters

@@ -9,11 +9,13 @@ namespace DotNet.Globbing.Evaluation
         private readonly WildcardToken _token;
         //private readonly IGlobToken[] _subTokens;
         private readonly CompositeTokenEvaluator _subEvaluator;
+        private readonly bool _requiresSubEvaluation;
 
         public WildcardTokenEvaluator(WildcardToken token, CompositeTokenEvaluator subEvaluator)
         {
             _token = token;
             _subEvaluator = subEvaluator;
+            _requiresSubEvaluation = _subEvaluator.EvaluatorCount > 0;
         }
 
         #region IGlobTokenEvaluator
@@ -22,6 +24,33 @@ namespace DotNet.Globbing.Evaluation
         {
 
             newPosition = currentPosition;
+
+            // If the glob is last in a pattern, there is no remaining patterns that need matching.
+            // In that case we just match every thing until we reach a seperator, at which point we fail.
+
+            if (!_requiresSubEvaluation)
+            {
+                // if we are at the end of the string, we match!
+                if (currentPosition >= allChars.Length)
+                {
+                    return true;
+                }
+
+                for (int i = currentPosition; i <= allChars.Length -1; i++)
+                {
+                    var currentChar = allChars[i];
+                    if (currentChar == '/' || currentChar == '\\')
+                    {
+                        return false;
+                    }                   
+                }
+
+                newPosition = currentPosition + allChars.Length;
+                return true;
+
+            }
+
+            // We have remaining pattern to evaluate.
             if (!_subEvaluator.ConsumesVariableLength)
             {
                 // The remaining tokens match against a fixed length string, so wildcard **must** consume
@@ -54,7 +83,8 @@ namespace DotNet.Globbing.Evaluation
                 if (currentChar == '/' || currentChar == '\\')
                 {
                     return false;
-                }
+                }                   
+                  
 
                 //int newSubPosition;
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
