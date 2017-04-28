@@ -1,13 +1,7 @@
-﻿using DotNet.Globbing;
-using DotNet.Globbing.Generation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DotNet.Globbing.Generation;
 using Xunit;
 
-namespace DotNet.Globbing.Tests
+namespace DotNet.Glob.Tests
 {
     public class GeneratorTests
     {
@@ -25,7 +19,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("path/**/somefile.txt", 1000)]
         public void Can_Generate_Non_Matches(string pattern, int volume)
         {
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             var sut = new GlobMatchStringGenerator(glob.Tokens);
 
             for (int i = 0; i < volume; i++)
@@ -51,7 +45,7 @@ namespace DotNet.Globbing.Tests
         public void Can_Generate_Matches(string pattern, int volume)
         {
             //  var generatedStrings = new List<string>(testStrings);
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             var sut = new GlobMatchStringGenerator(glob.Tokens);
 
             for (int i = 0; i < volume; i++)

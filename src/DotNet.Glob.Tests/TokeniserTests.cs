@@ -1,8 +1,9 @@
-using DotNet.Globbing.Token;
 using System;
+using DotNet.Globbing;
+using DotNet.Globbing.Token;
 using Xunit;
 
-namespace DotNet.Globbing.Tests
+namespace DotNet.Glob.Tests
 {
     public class TokeniserTests
     {

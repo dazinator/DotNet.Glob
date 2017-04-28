@@ -1,9 +1,8 @@
+using DotNet.Globbing;
 using DotNet.Globbing.Token;
-using System;
-using System.Collections.Generic;
 using Xunit;
 
-namespace DotNet.Globbing.Tests
+namespace DotNet.Glob.Tests
 {
     public class FormatterTests
     {
@@ -15,7 +14,7 @@ namespace DotNet.Globbing.Tests
             // build the following glob pattern using tokens:
             //       /foo?\\*[abc][!1-3].txt
 
-            var glob = new Glob(new PathSeperatorToken('/'),
+            var glob = new Globbing.Glob(new PathSeperatorToken('/'),
                                 new LiteralToken("foo"),
                                 new AnyCharacterToken(),
                                 new PathSeperatorToken('\\'),

@@ -1,12 +1,6 @@
-﻿using DotNet.Globbing;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Xunit;
+﻿using Xunit;
 
-namespace DotNet.Globbing.Tests
+namespace DotNet.Glob.Tests
 {
     public class GlobTests
     {
@@ -19,7 +13,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("/*file.txt", "/folder")]
         public void Does_Not_Match(string pattern, params string[] testStrings)
         {
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 Assert.False(glob.IsMatch(testString));
@@ -49,7 +43,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("~/*~3", "~/abc123~3")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15
         public void IsMatch(string pattern, params string[] testStrings)
         {
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
@@ -81,7 +75,7 @@ namespace DotNet.Globbing.Tests
         [InlineData("~/*~3", "~/abc123~3")]  // Regression Test for https://github.com/dazinator/DotNet.Glob/pull/15  
         public void Match(string pattern, params string[] testStrings)
         {
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.Match(testString);
@@ -93,7 +87,7 @@ namespace DotNet.Globbing.Tests
         public void To_String_Returns_Pattern()
         {
             var pattern = "p?th/*a[bcd]b[e-g]/**/a[1-4][!wxyz][!a-c][!1-3].*";
-            var glob = Glob.Parse(pattern);
+            var glob = Globbing.Glob.Parse(pattern);
             var resultPattern = glob.ToString();
             Assert.Equal(pattern, resultPattern);
         }   
