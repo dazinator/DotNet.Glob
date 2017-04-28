@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.DotNet.ProjectModel;
 using Xunit;
 
 namespace DotNet.Globbing.Tests
