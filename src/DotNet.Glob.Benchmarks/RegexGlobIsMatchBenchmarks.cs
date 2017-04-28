@@ -1,12 +1,9 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
-using DotNet.Globbing;
-using DotNet.Globbing.Generation;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
+using BenchmarkDotNet.Attributes.Jobs;
 
-namespace DotNet.Glob.PerfTests
+namespace DotNet.Glob.Benchmarks
 {
 
     [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
