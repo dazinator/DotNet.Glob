@@ -17,8 +17,7 @@ namespace DotNet.Globbing
 
         public IList<IGlobToken> Tokenise(string globText)
         {
-            var tokens = new List<IGlobToken>();
-            string starstartpeak;
+            var tokens = new List<IGlobToken>();          
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())

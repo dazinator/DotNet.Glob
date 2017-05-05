@@ -1,17 +1,9 @@
-﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Jobs;
-using DotNet.Globbing;
-using System;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using Glob;
-using BenchmarkDotNet.Running;
+﻿using System.Text.RegularExpressions;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
-using System.Text.RegularExpressions;
+using BenchmarkDotNet.Attributes.Jobs;
 
-namespace DotNet.Glob.PerfTests
+namespace DotNet.Glob.Benchmarks
 {
     [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
     public class BaselineRegexIsMatchFalseBenchmarks : BaseGlobBenchMark

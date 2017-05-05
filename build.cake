@@ -24,6 +24,7 @@ var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
 var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
+var solutionPath = "./src/DotNetGlob.sln";
 
 var isContinuousIntegrationBuild = !BuildSystem.IsLocalBuild;
 
@@ -57,8 +58,7 @@ Task("__Default")
     .IsDependentOn("__UpdateAssemblyVersionInformation")
     .IsDependentOn("__Build")
     .IsDependentOn("__Test")
-    .IsDependentOn("__Benchmarks")    
-    .IsDependentOn("__UpdateProjectJsonVersion")
+    .IsDependentOn("__Benchmarks")       
     .IsDependentOn("__Pack")    
     .IsDependentOn("__PublishNuGetPackages");
 
@@ -90,7 +90,7 @@ Task("__SetAppVeyorBuildNumber")
 });
 
 Task("__Restore")
-    .Does(() => DotNetCoreRestore());
+    .Does(() => DotNetCoreRestore(solutionPath));
 
 Task("__UpdateAssemblyVersionInformation")
     .WithCriteria(isContinuousIntegrationBuild)
@@ -109,7 +109,7 @@ Task("__UpdateAssemblyVersionInformation")
 Task("__Build")
     .Does(() =>
 {
-    DotNetCoreBuild("**/project.json", new DotNetCoreBuildSettings
+    DotNetCoreBuild(solutionPath, new DotNetCoreBuildSettings
     {        
         Configuration = configuration
     });   
@@ -118,7 +118,7 @@ Task("__Build")
 Task("__Test")
     .Does(() =>
 {
-    GetFiles("**/*Tests/project.json")
+    GetFiles("**/*Tests/*.csproj")
         .ToList()
         .ForEach(testProjectFile => 
         {           
@@ -136,7 +136,7 @@ Task("__Benchmarks")
 {
     if(benchMarksEnabled)
     {
-        GetFiles("**/*Benchmarks/project.json")
+        GetFiles("**/*Benchmarks/*.csproj")
         .ToList()
         .ForEach(projFile => 
         {           
@@ -158,25 +158,16 @@ Task("__Benchmarks")
     }    
 });
 
-Task("__UpdateProjectJsonVersion")
-    .WithCriteria(isContinuousIntegrationBuild)
-    .Does(() =>
-{
-    var projectToPackagePackageJson = $"{projectToPackage}/project.json";
-    Information("Updating {0} version -> {1}", projectToPackagePackageJson, nugetVersion);
-
-    TransformConfig(projectToPackagePackageJson, projectToPackagePackageJson, new TransformationCollection {
-        { "version", nugetVersion }
-    });
-});
-
 Task("__Pack")
     .Does(() =>
 {
+
+    var versionarg = "/p:PackageVersion=" + nugetVersion;
     var settings = new DotNetCorePackSettings
     {
         Configuration = "Release",
-        OutputDirectory = $"{artifactsDir}"        
+        OutputDirectory = $"{artifactsDir}",
+		ArgumentCustomization = args=>args.Append(versionarg)
     };
             
     DotNetCorePack($"{projectToPackage}", settings);

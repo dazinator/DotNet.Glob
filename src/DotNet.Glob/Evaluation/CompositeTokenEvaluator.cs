@@ -115,6 +115,13 @@ namespace DotNet.Globbing.Evaluation
                 return false;
             }
 
+            //if (_Evaluators.Count == 0)
+            //{
+            //    // no sub evaluators in this composite.
+            //    // happens for wildcards that are at the end of a pattern.
+            //    return true;
+            //}
+
             foreach (var matcher in _Evaluators)
             {
                 if (!matcher.IsMatch(allChars, newPosition, out newPosition))
@@ -134,6 +141,8 @@ namespace DotNet.Globbing.Evaluation
         public int ConsumesMinLength { get; protected set; }
 
         public bool ConsumesVariableLength { get; protected set; }
+
+        public int EvaluatorCount { get { return _Evaluators.Count; } }
 
         protected void AddEvaluator(IGlobTokenEvaluator evaluator)
         {

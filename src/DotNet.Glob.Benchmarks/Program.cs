@@ -1,10 +1,6 @@
 ﻿using BenchmarkDotNet.Running;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace DotNet.Glob.PerfTests
+namespace DotNet.Glob.Benchmarks
 {
     public class Program
     {

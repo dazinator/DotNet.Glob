@@ -1,15 +1,12 @@
-﻿using BenchmarkDotNet.Attributes;
+﻿using System.Collections.Generic;
+using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Attributes.Columns;
 using BenchmarkDotNet.Attributes.Exporters;
 using BenchmarkDotNet.Attributes.Jobs;
 using DotNet.Globbing;
 using DotNet.Globbing.Generation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace DotNet.Glob.PerfTests
+namespace DotNet.Glob.Benchmarks
 {
 
     [ClrJob, CoreJob, MemoryDiagnoser, MarkdownExporter, MinColumn, MaxColumn]

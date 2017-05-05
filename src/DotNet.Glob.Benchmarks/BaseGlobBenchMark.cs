@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using DotNet.Glob.Benchmarks.Utils;
 using DotNet.Globbing;
-using DotNet.Globbing.Token;
 using DotNet.Globbing.Generation;
+using DotNet.Globbing.Token;
 
-namespace DotNet.Glob.PerfTests
+namespace DotNet.Glob.Benchmarks
 {
     public abstract class BaseGlobBenchMark
     {

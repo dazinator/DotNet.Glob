@@ -1,10 +1,8 @@
+using DotNet.Globbing;
 using DotNet.Globbing.Token;
-using System;
-using System.Collections.Generic;
-using Microsoft.DotNet.ProjectModel.FileSystemGlobbing.Internal.PathSegments;
 using Xunit;
 
-namespace DotNet.Globbing.Tests
+namespace DotNet.Glob.Tests
 {
     public class GlobBuilderTests
     {
