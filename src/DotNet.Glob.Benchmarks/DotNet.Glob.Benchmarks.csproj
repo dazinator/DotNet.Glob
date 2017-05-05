@@ -11,8 +11,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Glob" Version="0.3.3" />
+  <ItemGroup>   
     <PackageReference Include="BenchmarkDotNet" Version="0.10.5" />
   </ItemGroup>
 
