@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
-using DotNet.Globbing.Token;
 using System.Text.RegularExpressions;
+using DotNet.Globbing;
+using DotNet.Globbing.Token;
 
-namespace DotNet.Globbing
+namespace DotNet.Glob.Benchmarks.Utils
 {
     /// <summary>
     /// Formats a glob as a Regular expression string.
