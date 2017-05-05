@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;net451</TargetFrameworks>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
     <AssemblyName>DotNet.Glob.Tests</AssemblyName>
     <OutputType>Library</OutputType>
     <PackageId>DotNet.Glob.Tests</PackageId>
@@ -16,14 +16,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.0-beta1-build1309" />
-    <PackageReference Include="xunit" Version="2.3.0-beta1-build3642" />   
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />   
+  </ItemGroup>  
 
   <ItemGroup>
     <ProjectReference Include="..\DotNet.Glob\DotNet.Glob.csproj" />
