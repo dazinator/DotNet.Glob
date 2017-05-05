@@ -24,6 +24,7 @@ var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
 var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
+var solutionPath = "./src/DotNetGlob.sln";
 
 var isContinuousIntegrationBuild = !BuildSystem.IsLocalBuild;
 
@@ -90,7 +91,7 @@ Task("__SetAppVeyorBuildNumber")
 });
 
 Task("__Restore")
-    .Does(() => DotNetCoreRestore());
+    .Does(() => DotNetCoreRestore(solutionPath));
 
 Task("__UpdateAssemblyVersionInformation")
     .WithCriteria(isContinuousIntegrationBuild)
@@ -109,7 +110,7 @@ Task("__UpdateAssemblyVersionInformation")
 Task("__Build")
     .Does(() =>
 {
-    DotNetCoreBuild("**/project.json", new DotNetCoreBuildSettings
+    DotNetCoreBuild(solutionPath, new DotNetCoreBuildSettings
     {        
         Configuration = configuration
     });   
@@ -118,7 +119,7 @@ Task("__Build")
 Task("__Test")
     .Does(() =>
 {
-    GetFiles("**/*Tests/project.json")
+    GetFiles("**/*Tests/*.csproj")
         .ToList()
         .ForEach(testProjectFile => 
         {           
@@ -136,7 +137,7 @@ Task("__Benchmarks")
 {
     if(benchMarksEnabled)
     {
-        GetFiles("**/*Benchmarks/project.json")
+        GetFiles("**/*Benchmarks/*.csproj")
         .ToList()
         .ForEach(projFile => 
         {           
