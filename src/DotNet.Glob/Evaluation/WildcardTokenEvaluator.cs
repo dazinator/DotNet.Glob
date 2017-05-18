@@ -25,53 +25,62 @@ namespace DotNet.Globbing.Evaluation
 
             newPosition = currentPosition;
 
-            // If the glob is last in a pattern, there is no remaining patterns that need matching.
-            // In that case we just match every thing until we reach a seperator, at which point we fail.
 
-            if (!_requiresSubEvaluation)
+            if (!_requiresSubEvaluation) // We are the last token in the pattern
             {
-                // if we are at the end of the string, we match!
+                // If we have reached the end of the string, then we match.
                 if (currentPosition >= allChars.Length)
                 {
                     return true;
                 }
 
-                for (int i = currentPosition; i <= allChars.Length -1; i++)
+                // We dont match if the remaining string has seperators.
+                for (int i = currentPosition; i <= allChars.Length - 1; i++)
                 {
                     var currentChar = allChars[i];
                     if (currentChar == '/' || currentChar == '\\')
                     {
                         return false;
-                    }                   
+                    }
                 }
 
+                // we have matched upto the new position.
                 newPosition = currentPosition + allChars.Length;
                 return true;
 
             }
 
-            // We have remaining pattern to evaluate.
+            // We are not the last token in the pattern, and so the _subEvaluator representing the remaining pattern tokens must also match.
+            // Does the sub pattern match a fixed length string, or variable length string?
             if (!_subEvaluator.ConsumesVariableLength)
             {
-                // The remaining tokens match against a fixed length string, so wildcard **must** consume
-                // a known amount of characters in order for this to have a chance of successful match.
-                // but can't consume past / behind current position!
-                //var matchLength = (allChars.Length - _subEvaluator.ConsumesMinLength);
-                //if (matchLength < currentPosition)
+                // The remaining tokens match against a fixed length string, so we can infer that this wildcard **must** match
+                // a fixed amount of characters in order for the subevaluator to match its fixed amount of characters from the remaining portion
+                // of the string. 
+                // So we must match upto that position. We can't match seperators. 
+                var requiredMatchPosition = allChars.Length - _subEvaluator.ConsumesMinLength;
+                //if (requiredMatchPosition < currentPosition)
                 //{
                 //    return false;
                 //}
-                //var isMatch = _subEvaluator.IsMatch(allChars, matchLength, out newPosition);
-                //return isMatch;
-                var isMatch = _subEvaluator.IsMatch(allChars, (allChars.Length - _subEvaluator.ConsumesMinLength), out newPosition);
+                for (int i = currentPosition; i < requiredMatchPosition; i++)
+                {
+                    var currentChar = allChars[i];
+                    if (currentChar == '/' || currentChar == '\\')
+                    {
+                        return false;
+                    }
+                }
+                var isMatch = _subEvaluator.IsMatch(allChars, requiredMatchPosition, out newPosition);
                 return isMatch;
             }
 
+            // Sub pattern matches a variable length string.
             // if we are at the end of the string, we match!
-            if (currentPosition >= allChars.Length)
-            {
-                return true;
-            }
+            //if (currentPosition >= allChars.Length)
+            //{
+            //    return true;
+            //}
             // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
             // us past the min required length required by the sub evaluator tokens, and as we are not a directory wildcard, we
             // can't go past a path seperator.
@@ -80,8 +89,8 @@ namespace DotNet.Globbing.Evaluation
             for (int i = currentPosition; i <= maxPos; i++)
             {
                 var currentChar = allChars[i];
-                               
-                  
+
+
 
                 //int newSubPosition;
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
