@@ -9,7 +9,7 @@ namespace DotNet.Globbing
         IGlobBuilder Literal(string text);
         IGlobBuilder AnyCharacter();
         IGlobBuilder Wildcard();
-        IGlobBuilder DirectoryWildcard(PathSeperatorKind? trailingSeperatorKind = PathSeperatorKind.ForwardSlash);
+        IGlobBuilder DirectoryWildcard(PathSeperatorKind? leadingPathSeperatorKind = PathSeperatorKind.ForwardSlash, PathSeperatorKind ? trailingPathSeperatorKind = PathSeperatorKind.ForwardSlash);
         IGlobBuilder OneOf(params char[] characters);
         IGlobBuilder NotOneOf(params char[] characters);
         IGlobBuilder LetterInRange(char start, char end);

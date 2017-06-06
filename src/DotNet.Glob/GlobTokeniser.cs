@@ -17,7 +17,7 @@ namespace DotNet.Globbing
 
         public IList<IGlobToken> Tokenise(string globText)
         {
-            var tokens = new List<IGlobToken>();          
+            var tokens = new List<IGlobToken>();
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())
@@ -33,14 +33,28 @@ namespace DotNet.Globbing
                     else if (reader.IsWildcardCharacterMatch)
                     {
                         tokens.Add(ReadWildcardToken());
-                    }                   
+                    }
                     else if (reader.IsPathSeperator())
                     {
-                        tokens.Add(ReadPathSeperatorToken(reader));
+                        var sepToken = ReadPathSeperatorToken(reader);
+                        tokens.Add(sepToken);
+                       
                     }
                     else if (reader.IsBeginningOfDirectoryWildcard)
                     {
-                        tokens.Add(ReadDirectoryWildcardToken(reader));
+                        if (tokens.Count > 0)
+                        {
+                            var lastToken = tokens[tokens.Count - 1] as PathSeperatorToken;
+
+                            if (lastToken != null)
+                            {
+                                tokens.Remove(lastToken);
+                                tokens.Add(ReadDirectoryWildcardToken(reader, lastToken));
+                                continue;
+                            }
+                        }
+
+                        tokens.Add(ReadDirectoryWildcardToken(reader, null));
                     }
                     else if (reader.IsValidLiteralCharacter())
                     {
@@ -56,17 +70,18 @@ namespace DotNet.Globbing
 
         }
 
-        private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader)
+        private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader, PathSeperatorToken leadingPathSeperatorToken)
         {
             reader.ReadChar();
 
             if (GlobStringReader.IsPathSeperator(reader.PeekChar()))
             {
                 reader.ReadChar();
-                return new WildcardDirectoryToken(reader.CurrentChar);
+                var trailingSeperator = ReadPathSeperatorToken(reader);              
+                return new WildcardDirectoryToken(leadingPathSeperatorToken, trailingSeperator);
             }
 
-            return new WildcardDirectoryToken(null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
+            return new WildcardDirectoryToken(null, leadingPathSeperatorToken); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
 
         }
 
@@ -197,7 +212,7 @@ namespace DotNet.Globbing
 
         }
 
-        private IGlobToken ReadPathSeperatorToken(GlobStringReader reader)
+        private PathSeperatorToken ReadPathSeperatorToken(GlobStringReader reader)
         {
             return new PathSeperatorToken(reader.CurrentChar);
         }

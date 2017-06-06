@@ -16,6 +16,7 @@ namespace DotNet.Glob.Tests
         [InlineData("*ave*2", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
         [InlineData("*ave 12", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
         [InlineData("*ave 12", "wave 12/")]
+        [InlineData("C:\\THIS_IS_A_DIR\\**\\somefile.txt", "C:\\THIS_IS_A_DIR\\awesomefile.txt")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/27
         public void Does_Not_Match(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
@@ -49,6 +50,7 @@ namespace DotNet.Glob.Tests
         [InlineData("**\\Shock* 12", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
         [InlineData("**\\*ave*2", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]       
         [InlineData("**", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
+        [InlineData("**", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12.txt")]
         public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
