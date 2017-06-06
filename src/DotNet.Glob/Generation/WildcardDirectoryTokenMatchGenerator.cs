@@ -39,6 +39,11 @@ namespace DotNet.Globbing.Generation
             {
                 return false;
             }
+
+            if (token.LeadingPathSeperator != null)
+            {
+                builder.Append(token.LeadingPathSeperator.Value);
+            }
             if (numberOfSegments > 1)
             {
                 for (int i = 1; i <= (numberOfSegments - 1); i++)
@@ -56,6 +61,11 @@ namespace DotNet.Globbing.Generation
             }
 
             builder.AppendRandomLiteralString(_random, _maxLiteralLength);
+
+            if (token.TrailingPathSeperator != null)
+            {
+                builder.Append(token.TrailingPathSeperator.Value);
+            }
             return true;
         }
 

@@ -19,9 +19,8 @@ namespace DotNet.Glob.Tests
                                 new AnyCharacterToken(),
                                 new PathSeperatorToken('\\'),
                                 new WildcardToken(),
-                                new CharacterListToken(new char[] { 'a', 'b', 'c' }, false),
-                                new PathSeperatorToken('/'),
-                                new WildcardDirectoryToken('/'),                              
+                                new CharacterListToken(new char[] { 'a', 'b', 'c' }, false),                                
+                                new WildcardDirectoryToken(new PathSeperatorToken('/'), new PathSeperatorToken('/')),                              
                                 new NumberRangeToken('1', '3', true),
                                 new LiteralToken(".txt"));
 

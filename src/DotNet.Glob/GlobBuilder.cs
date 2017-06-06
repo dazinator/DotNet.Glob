@@ -63,26 +63,51 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public IGlobBuilder DirectoryWildcard(PathSeperatorKind? trailingSeperatorKind = PathSeperatorKind.ForwardSlash)
+        public IGlobBuilder DirectoryWildcard(PathSeperatorKind? leadingSeperatorKind = PathSeperatorKind.ForwardSlash, PathSeperatorKind? trailingSeperatorKind = PathSeperatorKind.ForwardSlash)
         {
+
+            PathSeperatorToken trailingSep = null;
+            PathSeperatorToken leadingSep = null;
+
             if (trailingSeperatorKind == null)
             {
-                _tokens.Add(new WildcardDirectoryToken(null));
+                trailingSep = null;
             }
             else
             {
                 switch (trailingSeperatorKind)
                 {
                     case PathSeperatorKind.BackwardSlash:
-                        _tokens.Add(new WildcardDirectoryToken('\\'));
+                        trailingSep = new PathSeperatorToken('\\');
                         break;
                     case PathSeperatorKind.ForwardSlash:
-                        _tokens.Add(new WildcardDirectoryToken('/'));
+                        trailingSep = new PathSeperatorToken('/');
                         break;
                     default:
                         break;
                 }
             }
+
+            if (leadingSeperatorKind == null)
+            {
+                leadingSep = null;
+            }
+            else
+            {
+                switch (leadingSeperatorKind)
+                {
+                    case PathSeperatorKind.BackwardSlash:
+                        leadingSep = new PathSeperatorToken('\\');
+                        break;
+                    case PathSeperatorKind.ForwardSlash:
+                        leadingSep = new PathSeperatorToken('/');
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            _tokens.Add(new WildcardDirectoryToken(trailingSep, leadingSep));
 
 
             return this;
