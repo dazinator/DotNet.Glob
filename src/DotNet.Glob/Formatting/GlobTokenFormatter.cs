@@ -28,10 +28,14 @@ namespace DotNet.Globbing
 
         public void Visit(WildcardDirectoryToken wildcardDirectoryToken)
         {
+            if (wildcardDirectoryToken.LeadingPathSeperator != null)
+            {
+                _stringBuilder.Append(wildcardDirectoryToken.LeadingPathSeperator.Value);
+            }
             _stringBuilder.Append("**");
             if(wildcardDirectoryToken.TrailingPathSeperator != null)
             {
-                _stringBuilder.Append(wildcardDirectoryToken.TrailingPathSeperator);
+                _stringBuilder.Append(wildcardDirectoryToken.TrailingPathSeperator.Value);
             }
         }
 
