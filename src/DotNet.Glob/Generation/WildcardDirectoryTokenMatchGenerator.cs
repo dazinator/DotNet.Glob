@@ -35,10 +35,10 @@ namespace DotNet.Globbing.Generation
             // append a random number of random literals, between 0 characters and 10 in length,
             // seperated by path seperators.
             var numberOfSegments = _random.Next(_minSegments, _maxSegments);
-            if (numberOfSegments == 0)
-            {
-                return false;
-            }
+            //if (numberOfSegments == 0)
+            //{
+            //    return false;
+            //}
 
             if (token.LeadingPathSeperator != null)
             {
