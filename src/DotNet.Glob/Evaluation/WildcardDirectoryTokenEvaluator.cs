@@ -33,25 +33,20 @@ namespace DotNet.Globbing.Evaluation
             }
 
 
-
-            // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
-            // us past the min required length required by the sub evaluator tokens, and as we are a directory wildcard, we
-            // can go past a path seperators but we can only match complete segments, not partial segments.
-
+            // The max pos we can match upto in the string, because of subtoken match requirements.
             var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
+            // we can only match full segments at a time, where as match pos could point to a char in the middle of a segment.
+
             if (!_subEvaluator.ConsumesVariableLength)
             {
-                // must match a fixed length of the string (upto max pos), and we only match entire segments, so for a successful
-                // match, the char before maxpos must either be current pos, or a seperator.
-                if (maxPos > currentPosition)
+                // must match a fixed length of the string (must match all to max pos), but we can only match entire segments, 
+                // so for a successful match, the char before maxpos must either be current pos (we match nothing), or a seperator.
+                if (maxPos -1 != currentPosition)
                 {
                     var precedingchar = allChars[maxPos - 1];
                     if (precedingchar != '/' && precedingchar != '\\')
                     {
-                        if (maxPos - 1 != currentPosition)
-                        {
-                            return false;
-                        }
+                        return false;                      
                     }
                 }
 
@@ -67,6 +62,14 @@ namespace DotNet.Globbing.Evaluation
 
                 var currentChar = allChars[pos];
 
+                var isSeprator = currentChar == '/' || currentChar == '\\';
+
+                if (this._token.LeadingPathSeperator != null && !isSeprator)
+                {
+                    // must begin with seperator.
+                    return false;
+                }
+
                 if (currentChar == '/' || currentChar == '\\')
                 {
                     if (pos == maxPos)
@@ -76,16 +79,17 @@ namespace DotNet.Globbing.Evaluation
                     pos = pos + 1;
                 }
 
+
                 while (pos <= maxPos)
                 {
-                   
+
 
                     isMatch = _subEvaluator.IsMatch(allChars, pos, out newPosition);
                     if (isMatch)
                     {
                         return isMatch;
                     }
-                    
+
                     currentChar = allChars[pos];
                     while (currentChar != '/' && currentChar != '\\' && pos + 1 < maxPos)
                     {

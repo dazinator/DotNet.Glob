@@ -107,7 +107,7 @@ namespace DotNet.Globbing
                 }
             }
 
-            _tokens.Add(new WildcardDirectoryToken(trailingSep, leadingSep));
+            _tokens.Add(new WildcardDirectoryToken(leadingSep, trailingSep));
 
 
             return this;

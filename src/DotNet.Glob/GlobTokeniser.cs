@@ -81,7 +81,7 @@ namespace DotNet.Globbing
                 return new WildcardDirectoryToken(leadingPathSeperatorToken, trailingSeperator);
             }
 
-            return new WildcardDirectoryToken(null, leadingPathSeperatorToken); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
+            return new WildcardDirectoryToken(leadingPathSeperatorToken, null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
 
         }
 
