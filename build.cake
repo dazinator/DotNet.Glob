@@ -5,7 +5,7 @@
 #tool "nuget:?package=GitReleaseNotes"
 #addin nuget:?package=Cake.Git
 #addin "Cake.ExtendedNuGet"
-#addin "nuget:?package=NuGet.Core&version=2.8.6"
+#addin "nuget:?package=NuGet.Core&version=2.14.0"
 #addin "MagicChunks"
 
 
