@@ -30,7 +30,7 @@ namespace DotNet.Glob.Benchmarks
             set
             {
                 _pattern = value;
-                var tokens = new GlobTokeniser().Tokenise(_pattern);
+                var tokens = new GlobTokeniser().Tokenise(_pattern, false);
                 _regexString = new GlobToRegexFormatter().Format(tokens);
             }
         }

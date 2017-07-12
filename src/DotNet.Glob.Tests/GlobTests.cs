@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using DotNet.Globbing;
+using Xunit;
 
 namespace DotNet.Glob.Tests
 {
@@ -52,8 +53,13 @@ namespace DotNet.Glob.Tests
         [InlineData("**\\*ave*2", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]       
         [InlineData("**", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
         [InlineData("**", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12.txt")]
+        [InlineData("Stuff, *", "Stuff, x")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/31
+        [InlineData("\"Stuff*", "\"Stuff")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/32
         public void IsMatch(string pattern, params string[] testStrings)
         {
+            DotNet.Globbing.Glob.Parse("\"Stuff*", new GlobParseOptions() { AllowInvalidPathCharacters = true }).IsMatch("\"Stuff"); // true; 
+
+        GlobParseOptions.Default.AllowInvalidPathCharacters = true;
             var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {

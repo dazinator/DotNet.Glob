@@ -23,8 +23,12 @@ namespace DotNet.Globbing
         //public const char SpaceChar = ' ';
         //public const char HashChar = '#';
 
+        /// <summary>
+        /// Tokens can start with the following characters.
+        /// </summary>
+        public static char[] BeginningOfTokenCharacters = new[] { ExclamationMarkChar, StarChar, OpenBracketChar, QuestionMarkChar };
 
-        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_',':' };
+        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_', ':' };
 
         /// <summary>
         /// The current delimiters
@@ -244,6 +248,11 @@ namespace DotNet.Globbing
         internal bool IsValidLiteralCharacter()
         {
             return IsValidLiteralCharacter(CurrentChar);
+        }
+
+        public static bool IsNotStartOfToken(char character)
+        {
+            return !BeginningOfTokenCharacters.Contains(character);
         }
     }
 }
