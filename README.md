@@ -26,7 +26,7 @@ By default, when your glob pattern is parsed, `DotNet.Glob` will only parse lite
 These are:
 
 1. Any Letter or Digit
-2. '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_', ':' };
+2. `.`, ` `, `!`, `#`, `-`, `;`, `=`, `@`, `~`, `_`, `:`
 
 This is optimised for matching against paths / directory strings.
 However starting in `1.6.4` you can override this behaviour so that you can match on arbitrary string containing other characters:
