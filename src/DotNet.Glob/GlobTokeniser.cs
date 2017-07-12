@@ -15,7 +15,7 @@ namespace DotNet.Globbing
             _currentBufferText = new StringBuilder();
         }
 
-        public IList<IGlobToken> Tokenise(string globText)
+        public IList<IGlobToken> Tokenise(string globText, bool allowInvalidPathCharcaters)
         {
             var tokens = new List<IGlobToken>();
             using (var reader = new GlobStringReader(globText))
@@ -38,7 +38,7 @@ namespace DotNet.Globbing
                     {
                         var sepToken = ReadPathSeperatorToken(reader);
                         tokens.Add(sepToken);
-                       
+
                     }
                     else if (reader.IsBeginningOfDirectoryWildcard)
                     {
@@ -56,10 +56,14 @@ namespace DotNet.Globbing
 
                         tokens.Add(ReadDirectoryWildcardToken(reader, null));
                     }
-                    else if (reader.IsValidLiteralCharacter())
+                    else
                     {
-                        // literal
-                        tokens.Add(ReadLiteralToken(reader));
+                        tokens.Add(ReadLiteralToken(reader, allowInvalidPathCharcaters));
+
+                        ////else if (reader.IsValidLiteralCharacter())
+                        ////{
+                        //// literal
+                        //tokens.Add(ReadLiteralToken(reader));
                     }
                 }
             }
@@ -77,7 +81,7 @@ namespace DotNet.Globbing
             if (GlobStringReader.IsPathSeperator(reader.PeekChar()))
             {
                 reader.ReadChar();
-                var trailingSeperator = ReadPathSeperatorToken(reader);              
+                var trailingSeperator = ReadPathSeperatorToken(reader);
                 return new WildcardDirectoryToken(leadingPathSeperatorToken, trailingSeperator);
             }
 
@@ -85,27 +89,61 @@ namespace DotNet.Globbing
 
         }
 
-        private IGlobToken ReadLiteralToken(GlobStringReader reader)
+        private IGlobToken ReadLiteralToken(GlobStringReader reader, bool allowAnyChracter)
         {
-            AcceptCurrentChar(reader);
-            while (!reader.HasReachedEnd)
+            bool isValid = allowAnyChracter;
+            if (!allowAnyChracter)
             {
-                if (GlobStringReader.IsValidLiteralCharacter(reader.PeekChar()))
+                isValid = GlobStringReader.IsValidLiteralCharacter(reader.CurrentChar);
+                if (!isValid)
                 {
-                    if (reader.ReadChar())
+                    throw new NotSupportedException($"{reader.CurrentChar} is not a supported character for a pattern.");
+                }
+            }
+            //else
+            //{
+            //    // dont need to check this because if this was start of token, token would havebeen parsed already, as parsing literal always called last.
+
+            //  //  isValid = GlobStringReader.IsNotStartOfToken(reader.CurrentChar);
+
+            //}
+
+            //if (isValid)
+            //{
+                AcceptCurrentChar(reader);
+
+                while (!reader.HasReachedEnd)
+                {
+                    var peekChar = reader.PeekChar();
+                    if (!allowAnyChracter)
                     {
-                        AcceptCurrentChar(reader);
+                        isValid = GlobStringReader.IsValidLiteralCharacter(peekChar);
                     }
                     else
                     {
+                        isValid = GlobStringReader.IsNotStartOfToken(peekChar);
+                    }
+
+                    if (isValid)
+                    {
+                        if (reader.ReadChar())
+                        {
+                            AcceptCurrentChar(reader);
+                        }
+                        else
+                        {
+                            // potentially hit end of string.
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        // we have hit a character that may not be a valid literal (could be unsupported, or start of a token for instance).
                         break;
                     }
                 }
-                else
-                {
-                    break;
-                }
-            }
+            
+
             return new LiteralToken(GetBufferAndReset());
         }
 
