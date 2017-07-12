@@ -27,7 +27,7 @@ namespace DotNet.Glob.Tests
             // Arrange
 
             var sut = new GlobTokeniser();
-            var tokens = sut.Tokenise(testString);
+            var tokens = sut.Tokenise(testString, false);
 
             Assert.True(tokens.Count == expectedTokens.Length);
             for (int i = 0; i < tokens.Count; i++)

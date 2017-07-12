@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DotNet.Globbing.Evaluation;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
+
     public class Glob
     {
         public IGlobToken[] Tokens { get; }
@@ -24,24 +24,30 @@ namespace DotNet.Globbing
 
         public static Glob Parse(string pattern)
         {
+            var options = GlobParseOptions.Default;
+            return Parse(pattern, options);
+        }
+
+        public static Glob Parse(string pattern, GlobParseOptions options)
+        {
             if (string.IsNullOrEmpty(pattern))
             {
                 throw new ArgumentNullException(pattern);
             }
             var tokeniser = new GlobTokeniser();
-            var tokens = tokeniser.Tokenise(pattern);
+            var tokens = tokeniser.Tokenise(pattern, options.AllowInvalidPathCharacters);
             return new Glob(tokens.ToArray());
         }
 
         public bool IsMatch(string subject)
-        {                    
-            return _isMatchEvaluator.IsMatch(subject);          
+        {
+            return _isMatchEvaluator.IsMatch(subject);
         }
 
         public MatchInfo Match(string subject)
         {
             // var segments = reader.ReadPathSegment();          
-            return _matchEvaluator.Evaluate(subject);           
+            return _matchEvaluator.Evaluate(subject);
         }
 
         public override string ToString()
