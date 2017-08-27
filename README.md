@@ -21,31 +21,6 @@ The benchmarks use [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) 
 
 ```
 
-## Parsing options.
-By default, when your glob pattern is parsed, `DotNet.Glob` will only parse literal characters which are valid for path / directory names.
-These are:
-
-1. Any Letter or Digit
-2. `.`, ` `, `!`, `#`, `-`, `;`, `=`, `@`, `~`, `_`, `:`
-
-This is optimised for matching against paths / directory strings.
-However starting in `1.6.4` you can override this behaviour so that you can match on arbitrary string containing other characters:
-
-```
-            // Overide the default options globally for all matche:
-            GlobParseOptions.Default.AllowInvalidPathCharacters = true;
-			DotNet.Globbing.Glob.Parse("\"Stuff*").IsMatch("\"Stuff"); // true;    
-```
-
-You can also just set this behaviour on a per match basis:
-
-```
-    var globParseOptions = new GlobParseOptions() { AllowInvalidPathCharacters = true };
-    DotNet.Globbing.Glob.Parse("\"Stuff*", globParseOptions).IsMatch("\"Stuff"); // true; 
-
-```
-
-
 # Build a glob fluently
 
 You can also use the `GlobBuilder` class if you wish to build up a glob using a fluent syntax.
@@ -94,6 +69,30 @@ In addition, DotNet Glob also supports:
 
 
 # Advanced Usages
+
+## Parsing options.
+By default, when your glob pattern is parsed, `DotNet.Glob` will only allow literals which are valid for path / directory names.
+These are:
+
+1. Any Letter (A-Z, a-z) or Digit
+2. `.`, ` `, `!`, `#`, `-`, `;`, `=`, `@`, `~`, `_`, `:`
+
+This is optimised for matching against paths / directory strings.
+However, introduced in version `1.6.4`, you can override this behaviour so that you can include arbitrary characters in your literals. For example, here is a pattern that matches the literal `"Stuff`:
+
+```csharp
+    // Overide the default options globally for all matche:
+    GlobParseOptions.Default.AllowInvalidPathCharacters = true;
+    DotNet.Globbing.Glob.Parse("\"Stuff*").IsMatch("\"Stuff"); // true;    
+```
+
+You can also just set these options on a per glob pattern basis:
+
+```csharp
+    var globParseOptions = new GlobParseOptions() { AllowInvalidPathCharacters = true };
+    DotNet.Globbing.Glob.Parse("\"Stuff*", globParseOptions).IsMatch("\"Stuff"); // true; 
+
+```
 
 ## Match Generation
 Given a glob, you can generate random matches, or non matches, for that glob.
