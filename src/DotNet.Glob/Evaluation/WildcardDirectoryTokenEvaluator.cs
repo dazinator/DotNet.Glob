@@ -21,85 +21,105 @@ namespace DotNet.Globbing.Evaluation
 
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
+            // We shortcut to success for a ** in some special cases:-
+            //  1. We are already at the end of the test string.
+            //  2. The ** token is the last token - in which case it will math all remaining text
+
+            // We shortcut to failure for a ** in some special cases:-
+            // A) The token was parsed with a leading seperator (i.e '/**' and the current charater we are matching from doesn't match that seperator.
 
             newPosition = currentPosition;
-            //if (!_subEvaluator.ConsumesVariableLength)
 
-
-            // if we are at the end of the string, we match!
+            // 1. Are we already at the end of the test string?
             if (currentPosition >= allChars.Length)
             {
                 return true;
             }
 
+            // A) If leading seperator then current character needs to be that seperator.
+            var currentChar = allChars[currentPosition];
+            if (this._token.LeadingPathSeperator != null)
+            {
+                if (currentChar != this._token.LeadingPathSeperator.Value)
+                {
+                    // expected seperator.
+                    return false;
+                }
+                // advance current position to match the leading seperator.
+                currentPosition = currentPosition + 1;
+            }
 
-            // The max pos we can match upto in the string, because of subtoken match requirements.
-            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
-            // we can only match full segments at a time, where as match pos could point to a char in the middle of a segment.
+            // 2. if no more tokens require matching (i.e ** is the last token) - we match.         
+            if (this._subEvaluator.EvaluatorCount == 0)
+            {
+                newPosition = allChars.Length;
+                return true;
+            }
 
+            // Because we know we have more tokens in the pattern (subevaluators) - those will require a minimum amount of characters to match (could be 0 too).
+            // We can therefore calculate a "max" character position that we can match to, as if we exceed that position the remaining tokens cant possibly match.
+            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength) - 1;
+
+            // If all of the remaining tokens have a precise length, we can calculate the exact character that we need to macth to in the string.
+            // Otherwise we have to test at multiple character positions until we find a match (less efficient)
             if (!_subEvaluator.ConsumesVariableLength)
             {
-                // must match a fixed length of the string (must match all to max pos), but we can only match entire segments, 
-                // so for a successful match, the char before maxpos must either be current pos (we match nothing), or a seperator.
-                if (maxPos -1 != currentPosition)
+                // Fixed length.
+                // As we can only match full segments, make sure this character is a seperator, 
+
+                var mustMatchUntilChar = allChars[maxPos];
+                if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
                 {
-                    var precedingchar = allChars[maxPos - 1];
-                    if (precedingchar != '/' && precedingchar != '\\')
-                    {
-                        return false;                      
-                    }
-                }
-
-                return _subEvaluator.IsMatch(allChars, maxPos, out newPosition);
-            }
-            else
-            {
-                // can match a variable length, but in compelte segments at a time, not past max pos.
-
-                int pos = currentPosition;
-
-                bool isMatch;
-
-                var currentChar = allChars[pos];
-
-                var isSeprator = currentChar == '/' || currentChar == '\\';
-
-                if (this._token.LeadingPathSeperator != null && !isSeprator)
-                {
-                    // must begin with seperator.
+                    // can only match full segments.
                     return false;
                 }
 
-                if (currentChar == '/' || currentChar == '\\')
+                // Advance position by one to match the seperator before we test.
+                currentPosition = maxPos + 1;
+
+
+                return _subEvaluator.IsMatch(allChars, currentPosition, out newPosition);
+            }
+            else
+            {
+                // Remaining tokens match a variable length of the test string.
+                // We iterate each position (within acceptable range) and test at each position.
+                bool isMatch;
+
+                currentChar = allChars[currentPosition];
+
+                // If the ** token was parsed with a trailing slash - i.e "**/" then we need to match past it before we test remainijng tokens.
+                if (_token.TrailingPathSeperator != null)
                 {
-                    if (pos == maxPos)
+                    if (currentChar == '/' || currentChar == '\\')
                     {
-                        return false;
+                        // match the seperator.
+                        currentPosition = currentPosition + 1;
                     }
-                    pos = pos + 1;
                 }
 
-
-                while (pos <= maxPos)
+                // Match until maxpos, is reached.
+                while (currentPosition <= maxPos)
                 {
-
-
-                    isMatch = _subEvaluator.IsMatch(allChars, pos, out newPosition);
+                    // Test at current position.
+                    isMatch = _subEvaluator.IsMatch(allChars, currentPosition, out newPosition);
                     if (isMatch)
                     {
                         return isMatch;
                     }
 
-                    currentChar = allChars[pos];
-                    while (currentChar != '/' && currentChar != '\\' && pos + 1 < maxPos)
+                    // Iterate until we hit a seperator or maxPos.
+                    while (currentPosition <= maxPos)
                     {
-                        pos = pos + 1;
-                        currentChar = allChars[pos];
+                        currentPosition = currentPosition + 1;
+                        currentChar = allChars[currentPosition];
+                        if (currentChar == '/' || currentChar == '\\')
+                        {
+                            // match the seperator.
+                            currentPosition = currentPosition + 1;
+                            break;
+                        }
                     }
-
-                    pos = pos + 1;
-
-
                 }
             }
 

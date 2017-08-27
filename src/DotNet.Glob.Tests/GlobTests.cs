@@ -57,6 +57,8 @@ namespace DotNet.Glob.Tests
         [InlineData("**", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12.txt")]
         [InlineData("Stuff, *", "Stuff, x")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/31
         [InlineData("\"Stuff*", "\"Stuff")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/32
+        [InlineData("path/**/somefile.txt", "path//somefile.txt")]
+         
         public void IsMatch(string pattern, params string[] testStrings)
         {
 
