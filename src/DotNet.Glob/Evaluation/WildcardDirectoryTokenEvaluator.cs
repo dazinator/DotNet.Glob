@@ -58,26 +58,24 @@ namespace DotNet.Globbing.Evaluation
 
             // Because we know we have more tokens in the pattern (subevaluators) - those will require a minimum amount of characters to match (could be 0 too).
             // We can therefore calculate a "max" character position that we can match to, as if we exceed that position the remaining tokens cant possibly match.
-            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength) - 1;
+            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
 
             // If all of the remaining tokens have a precise length, we can calculate the exact character that we need to macth to in the string.
             // Otherwise we have to test at multiple character positions until we find a match (less efficient)
             if (!_subEvaluator.ConsumesVariableLength)
             {
                 // Fixed length.
-                // As we can only match full segments, make sure this character is a seperator, 
+                // As we can only match full segments, make sure character before chacracter at max pos is a seperator, 
 
-                var mustMatchUntilChar = allChars[maxPos];
+                var mustMatchUntilChar = allChars[maxPos - 1];
                 if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
                 {
                     // can only match full segments.
                     return false;
                 }
 
-                // Advance position by one to match the seperator before we test.
-                currentPosition = maxPos + 1;
-
-
+                // Advance position to max pos.
+                currentPosition = maxPos;
                 return _subEvaluator.IsMatch(allChars, currentPosition, out newPosition);
             }
             else
@@ -109,13 +107,13 @@ namespace DotNet.Globbing.Evaluation
                     }
 
                     // Iterate until we hit a seperator or maxPos.
-                    while (currentPosition <= maxPos)
+                    while (currentPosition < maxPos)
                     {
                         currentPosition = currentPosition + 1;
                         currentChar = allChars[currentPosition];
                         if (currentChar == '/' || currentChar == '\\')
                         {
-                            // match the seperator.
+                            // advance past the seperator.
                             currentPosition = currentPosition + 1;
                             break;
                         }
