@@ -116,16 +116,3 @@ For example, given the glob pattern `/f?o/bar/**/*.txt` you could generate match
   }
 
 ```
-
-
-## Match Analysis
-
-The `IsMatch` method just returns you a boolean. If you require more in-depth information about the match including which tokens were matched, or failed to match, you can do this:
-
-```
- MatchInfo match = glob.Match(somestring);
-
-```
-
-You can then inspect the `MatchInfo` which holds all of those useful details.
-

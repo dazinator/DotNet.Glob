@@ -12,14 +12,12 @@ namespace DotNet.Globbing
         private GlobTokenFormatter _Formatter;
         private string _pattern;
         private readonly GlobTokenEvaluator _isMatchEvaluator;
-        private readonly GlobTokenMatchAnalysisEvaluator _matchEvaluator; // provides more in depth analyis than IsMatch.
-
+      
         public Glob(params IGlobToken[] tokens)
         {
             Tokens = tokens;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);
-            _matchEvaluator = new GlobTokenMatchAnalysisEvaluator(Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);        
         }
 
         public static Glob Parse(string pattern)
@@ -42,13 +40,7 @@ namespace DotNet.Globbing
         public bool IsMatch(string subject)
         {
             return _isMatchEvaluator.IsMatch(subject);
-        }
-
-        public MatchInfo Match(string subject)
-        {
-            // var segments = reader.ReadPathSegment();          
-            return _matchEvaluator.Evaluate(subject);
-        }
+        }      
 
         public override string ToString()
         {
