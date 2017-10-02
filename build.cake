@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 #tool "nuget:?package=GitVersion.CommandLine"
 #tool "nuget:?package=GitReleaseNotes"
-#addin nuget:?package=Cake.Git
+#addin "nuget:?package=Cake.Git&version=0.15.0"
 #addin "Cake.ExtendedNuGet"
 #addin "nuget:?package=NuGet.Core&version=2.14.0"
 #addin "MagicChunks"
