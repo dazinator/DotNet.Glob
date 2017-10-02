@@ -20,7 +20,7 @@ namespace DotNet.Glob.Tests
         [InlineData("C:\\THIS_IS_A_DIR\\**\\somefile.txt", false, "C:\\THIS_IS_A_DIR\\awesomefile.txt")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/27
         [InlineData("C:\\name\\**", false, "C:\\name.ext", "C:\\name_longer.ext")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/29
         [InlineData("Bumpy/**/AssemblyInfo.cs", false, "Bumpy.Test/Properties/AssemblyInfo.cs")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/33
-        [InlineData("C:\\sources\\COMPILE*\\MSVC120.DLL", false, "C:\\sources\\COMPILE\\ANTLR3.RUNTIME.DLL")]      // Attempted repro for https://github.com/dazinator/DotNet.Glob/issues/37
+        [InlineData("C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\**\\MSVC*120.DLL", false, "C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\ANTLR3.RUNTIME.DLL")]      // Attempted repro for https://github.com/dazinator/DotNet.Glob/issues/37
         public void Does_Not_Match(string pattern, bool allowInvalidPathCharcters, params string[] testStrings)
         {
             GlobParseOptions options = new GlobParseOptions() { AllowInvalidPathCharacters = allowInvalidPathCharcters };
