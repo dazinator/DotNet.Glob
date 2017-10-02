@@ -106,6 +106,11 @@ namespace DotNet.Globbing.Evaluation
                         return isMatch;
                     }
 
+                    if(currentPosition == maxPos)
+                    {
+                        return false;
+                    }
+
                     // Iterate until we hit a seperator or maxPos.
                     while (currentPosition < maxPos)
                     {
