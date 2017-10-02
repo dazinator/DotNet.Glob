@@ -1,12 +1,12 @@
 ﻿//////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
-#tool "nuget:?package=GitVersion.CommandLine"
-#tool "nuget:?package=GitReleaseNotes"
+#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
+#tool "nuget:?package=GitReleaseNotes&version=0.7.0"
 #addin "nuget:?package=Cake.Git&version=0.15.0"
-#addin "Cake.ExtendedNuGet"
+#addin "nuget:?package=Cake.ExtendedNuGet&version=1.0.0.24"
 #addin "nuget:?package=NuGet.Core&version=2.14.0"
-#addin "MagicChunks"
+#addin "nuget:?package=MagicChunks&version=1.2.0.58"
 
 
 //////////////////////////////////////////////////////////////////////
