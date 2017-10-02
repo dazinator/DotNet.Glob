@@ -251,5 +251,6 @@ paket-files/
 .idea/
 *.sln.iml
 /src/BDN.Generated
-/tools
+tools/*
+!tools/packages.config
 /src/DotNet.Glob.Benchmarks/BenchmarkDotNet.Artifacts/results
