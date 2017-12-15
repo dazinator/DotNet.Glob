@@ -4,11 +4,13 @@ namespace DotNet.Globbing.Evaluation
 {
     public class LiteralTokenEvaluator : IGlobTokenEvaluator
     {
+        private readonly bool _caseInsensitive;
         private readonly LiteralToken _token;
 
-        public LiteralTokenEvaluator(LiteralToken token)
+        public LiteralTokenEvaluator(LiteralToken token, bool caseInsensitive)
         {
             _token = token;
+            _caseInsensitive = caseInsensitive;
         }
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
@@ -19,6 +21,12 @@ namespace DotNet.Globbing.Evaluation
             {
                 var compareChar = _token.Value[counter];
                 var currentChar = allChars[newPosition];
+
+                if (_caseInsensitive)
+                {
+                    compareChar = char.ToLowerInvariant(compareChar);
+                    currentChar = char.ToLowerInvariant(currentChar);
+                }
 
                 if (compareChar != currentChar)
                 {

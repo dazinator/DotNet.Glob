@@ -11,9 +11,9 @@ namespace DotNet.Globbing.Evaluation
 
         private readonly CompositeTokenEvaluator _rootTokenEvaluator;
 
-        public GlobTokenEvaluator(IGlobToken[] tokens)
+        public GlobTokenEvaluator(bool caseInsensitive, IGlobToken[] tokens)
         {
-            _rootTokenEvaluator = new CompositeTokenEvaluator(tokens);
+            _rootTokenEvaluator = new CompositeTokenEvaluator(tokens, caseInsensitive);
         }
 
         public bool IsMatch(string text)

@@ -12,12 +12,14 @@ namespace DotNet.Globbing
         private GlobTokenFormatter _Formatter;
         private string _pattern;
         private readonly GlobTokenEvaluator _isMatchEvaluator;
-      
-        public Glob(params IGlobToken[] tokens)
+        private readonly bool _caseInsensitive;
+
+        public Glob(bool caseInsensitive, params IGlobToken[] tokens)
         {
             Tokens = tokens;
+            _caseInsensitive = caseInsensitive;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);        
+            _isMatchEvaluator = new GlobTokenEvaluator(_caseInsensitive, Tokens);
         }
 
         public static Glob Parse(string pattern)
@@ -34,7 +36,7 @@ namespace DotNet.Globbing
             }
             var tokeniser = new GlobTokeniser();
             var tokens = tokeniser.Tokenise(pattern, options.AllowInvalidPathCharacters);
-            return new Glob(tokens.ToArray());
+            return new Glob(options.CaseInsensitive, tokens.ToArray());
         }
 
         public bool IsMatch(string subject)

@@ -4,19 +4,33 @@ namespace DotNet.Globbing.Evaluation
 {
     public class CharacterListTokenEvaluator : IGlobTokenEvaluator
     {
+        private readonly bool _caseInsensitive;
         private readonly CharacterListToken _token;
 
-        public CharacterListTokenEvaluator(CharacterListToken token)
+        public CharacterListTokenEvaluator(CharacterListToken token, bool caseInsensitive)
         {
+            _caseInsensitive = caseInsensitive;
             _token = token;
         }
+
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;
 
             //var currentChar = (char)read;
-            var contains = _token.Characters.Contains(currentChar);
+            bool contains;
+            if (_caseInsensitive)
+            {
+                // compare characters as lower case using invariant culture (case insensitive)
+                contains = _token.CharactersInvariantLowerCase.Contains(char.ToLowerInvariant(currentChar));
+            }
+            else
+            {
+                // compare characters as-is (case sensitive)
+                contains = _token.Characters.Contains(currentChar);
+            }
+
             if (_token.IsNegated)
             {
                 if (contains)

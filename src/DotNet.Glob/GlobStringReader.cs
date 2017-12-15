@@ -147,22 +147,6 @@ namespace DotNet.Globbing
         }
 
         /// <summary>
-        /// Does current character match the character argument
-        /// </summary>
-        public bool IsCurrentCharEqualTo(char comparisonChar)
-        {
-            return IsCharEqualTo(CurrentChar, comparisonChar);
-        }
-
-        /// <summary>
-        /// Are the arguments the same character, ignoring case
-        /// </summary>
-        public static bool IsCharEqualTo(char comparisonChar, char compareTo)
-        {
-            return char.ToLowerInvariant(comparisonChar) == char.ToLowerInvariant(compareTo);
-        }
-
-        /// <summary>
         /// Is current character WhiteSpace
         /// </summary>
         public bool IsWhiteSpace
@@ -218,8 +202,8 @@ namespace DotNet.Globbing
         public static bool IsPathSeperator(char character)
         {
 
-            var isCurrentCharacterStartOfDelimiter = IsCharEqualTo(character, PathSeperators[0]) ||
-                                                     IsCharEqualTo(character, PathSeperators[1]);
+            var isCurrentCharacterStartOfDelimiter = character == PathSeperators[0] ||
+                                                     character == PathSeperators[1];
 
             return isCurrentCharacterStartOfDelimiter;
 

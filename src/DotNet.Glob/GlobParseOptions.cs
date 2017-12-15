@@ -6,6 +6,7 @@
         public GlobParseOptions()
         {
             AllowInvalidPathCharacters = false;
+            CaseInsensitive = false;
         }
 
         public static GlobParseOptions Default = new GlobParseOptions();
@@ -15,7 +16,7 @@
         /// If you are comparing to arbitrary text and not file or directory paths, then you should set this to true.
         /// </summary>
         public bool AllowInvalidPathCharacters { get; set; }
-
-       
+        
+        public bool CaseInsensitive { get; set; }
     }
 }

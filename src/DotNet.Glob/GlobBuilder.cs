@@ -9,10 +9,12 @@ namespace DotNet.Globbing
     public class GlobBuilder : IGlobBuilder
     {
         private readonly List<IGlobToken> _tokens;
+        private bool _caseInsensitive;
 
-        public GlobBuilder()
+        public GlobBuilder(bool caseInsensitive = false)
         {
             _tokens = new List<IGlobToken>();
+            _caseInsensitive = caseInsensitive;
         }
 
         public IGlobBuilder AnyCharacter()
@@ -139,7 +141,7 @@ namespace DotNet.Globbing
 
         public Glob ToGlob()
         {
-            return new Glob(this._tokens.ToArray());
+            return new Glob(_caseInsensitive, _tokens.ToArray());
         }
 
         public List<IGlobToken> Tokens

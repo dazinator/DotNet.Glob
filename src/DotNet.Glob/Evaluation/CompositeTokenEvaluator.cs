@@ -7,15 +7,17 @@ namespace DotNet.Globbing.Evaluation
 {
     public class CompositeTokenEvaluator : IGlobTokenEvaluator, IGlobTokenVisitor
     {
+        private readonly bool _caseInsensitive;
         private IGlobToken[] _Tokens;
         private List<IGlobTokenEvaluator> _Evaluators;
         public int _currentTokenIndex;
         private bool _finished = false;
 
-        public CompositeTokenEvaluator(IGlobToken[] tokens)
+        public CompositeTokenEvaluator(IGlobToken[] tokens, bool caseInsensitive)
         {
             ConsumesVariableLength = tokens.Length == 0; // the only time we pass in 0 tokens is for a wildcard at the end of glob pattern.
             ConsumesMinLength = 0;
+            _caseInsensitive = caseInsensitive;
             _Tokens = tokens;
             _Evaluators = new List<IGlobTokenEvaluator>();
             _currentTokenIndex = 0;
@@ -28,7 +30,6 @@ namespace DotNet.Globbing.Evaluation
                 }
                 _currentTokenIndex = _currentTokenIndex + 1;
             }
-
         }
 
         public void Visit(PathSeperatorToken token)
@@ -38,7 +39,7 @@ namespace DotNet.Globbing.Evaluation
 
         public void Visit(LiteralToken token)
         {
-            AddEvaluator(new LiteralTokenEvaluator(token));
+            AddEvaluator(new LiteralTokenEvaluator(token, _caseInsensitive));
         }
 
         public void Visit(AnyCharacterToken token)
@@ -48,7 +49,7 @@ namespace DotNet.Globbing.Evaluation
 
         public void Visit(LetterRangeToken token)
         {
-            AddEvaluator(new LetterRangeTokenEvaluator(token));
+            AddEvaluator(new LetterRangeTokenEvaluator(token, _caseInsensitive));
         }
 
         public void Visit(NumberRangeToken token)
@@ -58,7 +59,7 @@ namespace DotNet.Globbing.Evaluation
 
         public void Visit(CharacterListToken token)
         {
-            AddEvaluator(new CharacterListTokenEvaluator(token));
+            AddEvaluator(new CharacterListTokenEvaluator(token, _caseInsensitive));
         }
         public void Visit(WildcardToken token)
         {
@@ -72,7 +73,7 @@ namespace DotNet.Globbing.Evaluation
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
-            AddEvaluator(new WildcardTokenEvaluator(token, new CompositeTokenEvaluator(remaining)));
+            AddEvaluator(new WildcardTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _caseInsensitive)));
 
             //  _Evaluators.Add(new CompositeEvaluator(remaining));
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
@@ -90,7 +91,7 @@ namespace DotNet.Globbing.Evaluation
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
-            var subEvaluator = new WildcardDirectoryTokenEvaluator(token, new CompositeTokenEvaluator(remaining));
+            var subEvaluator = new WildcardDirectoryTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _caseInsensitive));
             AddEvaluator(subEvaluator);
 
             //  _Evaluators.Add(new CompositeEvaluator(remaining));
