@@ -21,9 +21,15 @@ namespace DotNet.Glob.Tests
         [InlineData("C:\\name\\**", false, "C:\\name.ext", "C:\\name_longer.ext")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/29
         [InlineData("Bumpy/**/AssemblyInfo.cs", false, "Bumpy.Test/Properties/AssemblyInfo.cs")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/33
         [InlineData("C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\**\\MSVC*120.DLL", false, "C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\ANTLR3.RUNTIME.DLL")]      // Attempted repro for https://github.com/dazinator/DotNet.Glob/issues/37
+        [InlineData("literal1", false, "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("*ral*", false, "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("[list]s", false, "LS", "iS", "Is")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("range/[a-b][C-D]", false, "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
         public void Does_Not_Match(string pattern, bool allowInvalidPathCharcters, params string[] testStrings)
         {
-            GlobParseOptions options = new GlobParseOptions() { AllowInvalidPathCharacters = allowInvalidPathCharcters };
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
+           
             var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
@@ -63,8 +69,10 @@ namespace DotNet.Glob.Tests
         public void IsMatch(string pattern, params string[] testStrings)
         {
 
-            GlobParseOptions.Default.AllowInvalidPathCharacters = true;
-            var glob = Globbing.Glob.Parse(pattern);
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = true;
+           
+            var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
@@ -73,6 +81,25 @@ namespace DotNet.Glob.Tests
             }
         }
 
+        // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [Theory]
+        [InlineData("literal1", "LITERAL1", "literal1")]
+        [InlineData("*ral*", "LITERAL1", "literal1")]
+        [InlineData("[list]s", "LS", "ls", "iS", "Is")]
+        [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/bC", "range/BD")]
+        public void IsMatchCaseInsensitive(string pattern, params string[] testStrings)
+        {
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = true;
+            options.Evaluation.CaseInsensitive = true;
+           
+            var glob = Globbing.Glob.Parse(pattern, options);
+            foreach (var testString in testStrings)
+            {
+                var match = glob.IsMatch(testString);
+                Assert.True(match);
+            }
+        }
 
         [Fact]
         public void To_String_Returns_Pattern()

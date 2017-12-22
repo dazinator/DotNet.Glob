@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
@@ -12,7 +10,7 @@ namespace DotNet.Globbing
 
         public GlobBuilder()
         {
-            _tokens = new List<IGlobToken>();
+            _tokens = new List<IGlobToken>();           
         }
 
         public IGlobBuilder AnyCharacter()
@@ -137,9 +135,9 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public Glob ToGlob()
+        public Glob ToGlob(GlobOptions options = null)
         {
-            return new Glob(this._tokens.ToArray());
+            return new Glob(options ?? GlobOptions.Default, _tokens.ToArray());
         }
 
         public List<IGlobToken> Tokens

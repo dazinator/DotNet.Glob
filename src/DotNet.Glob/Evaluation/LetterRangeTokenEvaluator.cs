@@ -1,40 +1,40 @@
 using DotNet.Globbing.Token;
+using System.Runtime.CompilerServices;
 
 namespace DotNet.Globbing.Evaluation
 {
     public class LetterRangeTokenEvaluator : IGlobTokenEvaluator
-    {
+    {     
         private readonly LetterRangeToken _token;
 
         public LetterRangeTokenEvaluator(LetterRangeToken token)
-        {
+        {          
             _token = token;
         }
+
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
-            var currentChar = allChars[currentPosition];
-            newPosition = currentPosition + 1;
+            newPosition = currentPosition + 1;           
+            char currentChar;          
+            currentChar = allChars[currentPosition];
+            return IsMatch(currentChar);
+        }
 
-            //var currentChar = (char)read;
-            if (currentChar >= _token.Start && currentChar <= _token.End)
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        private bool IsMatch(char testChar)
+        {
+            bool isMatch = testChar >= _token.Start && testChar <= _token.End;
+
+            if (_token.IsNegated)
             {
-                if (_token.IsNegated)
-                {
-                    return false; // failed to match
-                }
+                return !isMatch;
             }
             else
             {
-                if (!_token.IsNegated)
-                {
-                    return false; // failed to match
-                }
+                return isMatch;
             }
-
-            return true;
-            // this.Success = true;
-
-
         }
 
         public virtual int ConsumesMinLength
@@ -48,5 +48,5 @@ namespace DotNet.Globbing.Evaluation
         }
     }
 
-  
+
 }

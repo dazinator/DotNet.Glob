@@ -16,4 +16,9 @@
     <PackageReleaseNotes>This is a hotfix release to support tilde characters (~), thanks goes to @ming4883</PackageReleaseNotes>
     <RootNamespace>DotNet.Glob</RootNamespace>
   </PropertyGroup>
+
+  <PropertyGroup Condition="  '$(TargetFramework)' == 'net4' ">
+    <DefineConstants>NET40</DefineConstants>   
+  </PropertyGroup>
+  
 </Project>
