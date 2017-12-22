@@ -1,52 +1,40 @@
 using DotNet.Globbing.Token;
+using System.Runtime.CompilerServices;
 
 namespace DotNet.Globbing.Evaluation
 {
     public class LetterRangeTokenEvaluator : IGlobTokenEvaluator
-    {
-        private readonly bool _caseInsensitive;
+    {     
         private readonly LetterRangeToken _token;
 
-        public LetterRangeTokenEvaluator(LetterRangeToken token, bool caseInsensitive)
-        {
-            _caseInsensitive = caseInsensitive;
+        public LetterRangeTokenEvaluator(LetterRangeToken token)
+        {          
             _token = token;
         }
 
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
-            newPosition = currentPosition + 1;
-
-            //var currentChar = (char)read;
-            char start, end, currentChar;
-            start = _token.Start;
-            end = _token.End;
+            newPosition = currentPosition + 1;           
+            char currentChar;          
             currentChar = allChars[currentPosition];
+            return IsMatch(currentChar);
+        }
 
-            if (_caseInsensitive)
-            {
-                start = char.ToLowerInvariant(start);
-                end = char.ToLowerInvariant(end);
-                currentChar = char.ToLowerInvariant(currentChar);
-            }
+#if !NET40
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
+        private bool IsMatch(char testChar)
+        {
+            bool isMatch = testChar >= _token.Start && testChar <= _token.End;
 
-            if (currentChar >= start && currentChar <= end)
+            if (_token.IsNegated)
             {
-                if (_token.IsNegated)
-                {
-                    return false; // failed to match
-                }
+                return !isMatch;
             }
             else
             {
-                if (!_token.IsNegated)
-                {
-                    return false; // failed to match
-                }
+                return isMatch;
             }
-
-            return true;
-            // this.Success = true;
         }
 
         public virtual int ConsumesMinLength

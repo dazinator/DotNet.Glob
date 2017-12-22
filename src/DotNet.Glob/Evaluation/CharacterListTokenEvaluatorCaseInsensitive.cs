@@ -1,17 +1,25 @@
 using DotNet.Globbing.Token;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace DotNet.Globbing.Evaluation
 {
 
-    public class CharacterListTokenEvaluator : IGlobTokenEvaluator
+    public class CharacterListTokenEvaluatorCaseInsensitive : IGlobTokenEvaluator
     {
         private readonly CharacterListToken _token;
+        private readonly char[] _charactersAsUpperInvariant;
 
-
-        public CharacterListTokenEvaluator(CharacterListToken token)
-        {
+        public CharacterListTokenEvaluatorCaseInsensitive(CharacterListToken token)
+        {           
             _token = token;
+
+            _charactersAsUpperInvariant = new char[token.Characters.Length];
+            for (int i = 0; i < token.Characters.Length; i++)
+            {
+                var tokenChar = token.Characters[i];
+                _charactersAsUpperInvariant[i] = Char.ToUpperInvariant(tokenChar);
+            }
         }
 
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
@@ -36,9 +44,11 @@ namespace DotNet.Globbing.Evaluation
 #endif
         private bool IsMatch(char containsChar)
         {
-            foreach (var item in _token.Characters)
+            var upperInvariantChar = Char.ToUpperInvariant(containsChar);
+
+            foreach (var item in _charactersAsUpperInvariant)
             {
-                if (item.Equals(containsChar))
+                if (item.Equals(upperInvariantChar))
                 {
                     return true;
                 }

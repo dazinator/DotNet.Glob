@@ -12,37 +12,41 @@ namespace DotNet.Globbing
         private GlobTokenFormatter _Formatter;
         private string _pattern;
         private readonly GlobTokenEvaluator _isMatchEvaluator;
-        private readonly bool _caseInsensitive;
+        private readonly GlobOptions _options;
 
-        public Glob(bool caseInsensitive, params IGlobToken[] tokens)
+        public Glob(params IGlobToken[] tokens) : this(GlobOptions.Default, tokens)
+        {
+        }
+
+        public Glob(GlobOptions options = null, params IGlobToken[] tokens)
         {
             Tokens = tokens;
-            _caseInsensitive = caseInsensitive;
+            _options = options ?? GlobOptions.Default;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobTokenEvaluator(_caseInsensitive, Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(options.Evaluation, Tokens);
         }
 
         public static Glob Parse(string pattern)
         {
-            var options = GlobParseOptions.Default;
+            var options = GlobOptions.Default;
             return Parse(pattern, options);
         }
 
-        public static Glob Parse(string pattern, GlobParseOptions options)
+        public static Glob Parse(string pattern, GlobOptions options)
         {
             if (string.IsNullOrEmpty(pattern))
             {
                 throw new ArgumentNullException(pattern);
             }
             var tokeniser = new GlobTokeniser();
-            var tokens = tokeniser.Tokenise(pattern, options.AllowInvalidPathCharacters);
-            return new Glob(options.CaseInsensitive, tokens.ToArray());
+            var tokens = tokeniser.Tokenise(pattern, options.Parsing.AllowInvalidPathCharacters);
+            return new Glob(options, tokens.ToArray());
         }
 
         public bool IsMatch(string subject)
         {
             return _isMatchEvaluator.IsMatch(subject);
-        }      
+        }
 
         public override string ToString()
         {

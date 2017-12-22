@@ -1,4 +1,3 @@
-using System.Text;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
@@ -10,10 +9,12 @@ namespace DotNet.Globbing.Evaluation
         public int _currentChar;
 
         private readonly CompositeTokenEvaluator _rootTokenEvaluator;
-
-        public GlobTokenEvaluator(bool caseInsensitive, IGlobToken[] tokens)
+        private readonly EvaluationOptions _options;
+     
+        public GlobTokenEvaluator(EvaluationOptions options, IGlobToken[] tokens)
         {
-            _rootTokenEvaluator = new CompositeTokenEvaluator(tokens, caseInsensitive);
+            _options = options;        
+            _rootTokenEvaluator = new CompositeTokenEvaluator(tokens, options.GetTokenEvaluatorFactory());
         }
 
         public bool IsMatch(string text)
@@ -24,4 +25,5 @@ namespace DotNet.Globbing.Evaluation
         }
 
     }
+
 }

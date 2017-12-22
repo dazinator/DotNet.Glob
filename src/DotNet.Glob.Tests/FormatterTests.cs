@@ -14,7 +14,7 @@ namespace DotNet.Glob.Tests
             // build the following glob pattern using tokens:
             //       /foo?\\*[abc][!1-3].txt
 
-            var glob = new Globbing.Glob(false, 
+            var glob = new Globbing.Glob(
                 new PathSeperatorToken('/'),
                 new LiteralToken("foo"),
                 new AnyCharacterToken(),

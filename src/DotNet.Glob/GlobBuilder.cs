@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
@@ -9,12 +7,10 @@ namespace DotNet.Globbing
     public class GlobBuilder : IGlobBuilder
     {
         private readonly List<IGlobToken> _tokens;
-        private bool _caseInsensitive;
 
-        public GlobBuilder(bool caseInsensitive = false)
+        public GlobBuilder()
         {
-            _tokens = new List<IGlobToken>();
-            _caseInsensitive = caseInsensitive;
+            _tokens = new List<IGlobToken>();           
         }
 
         public IGlobBuilder AnyCharacter()
@@ -139,9 +135,9 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public Glob ToGlob()
+        public Glob ToGlob(GlobOptions options = null)
         {
-            return new Glob(_caseInsensitive, _tokens.ToArray());
+            return new Glob(options ?? GlobOptions.Default, _tokens.ToArray());
         }
 
         public List<IGlobToken> Tokens

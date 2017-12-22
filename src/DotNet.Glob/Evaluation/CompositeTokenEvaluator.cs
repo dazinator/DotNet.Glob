@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
 using DotNet.Globbing.Token;
-using System.Linq;
 
 namespace DotNet.Globbing.Evaluation
 {
     public class CompositeTokenEvaluator : IGlobTokenEvaluator, IGlobTokenVisitor
     {
-        private readonly bool _caseInsensitive;
+        private readonly IGlobTokenEvaluatorFactory _evaluatorFactory;
         private IGlobToken[] _Tokens;
         private List<IGlobTokenEvaluator> _Evaluators;
         public int _currentTokenIndex;
         private bool _finished = false;
 
-        public CompositeTokenEvaluator(IGlobToken[] tokens, bool caseInsensitive)
+        public CompositeTokenEvaluator(IGlobToken[] tokens, IGlobTokenEvaluatorFactory evaluatorFactory)
         {
             ConsumesVariableLength = tokens.Length == 0; // the only time we pass in 0 tokens is for a wildcard at the end of glob pattern.
             ConsumesMinLength = 0;
-            _caseInsensitive = caseInsensitive;
+            _evaluatorFactory = evaluatorFactory;
             _Tokens = tokens;
             _Evaluators = new List<IGlobTokenEvaluator>();
             _currentTokenIndex = 0;
@@ -34,48 +33,43 @@ namespace DotNet.Globbing.Evaluation
 
         public void Visit(PathSeperatorToken token)
         {
-            AddEvaluator(new PathSeperatorTokenEvaluator(token));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
         public void Visit(LiteralToken token)
-        {
-            AddEvaluator(new LiteralTokenEvaluator(token, _caseInsensitive));
+        {           
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
         public void Visit(AnyCharacterToken token)
         {
-            AddEvaluator(new AnyCharacterTokenEvaluator(token));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
         public void Visit(LetterRangeToken token)
         {
-            AddEvaluator(new LetterRangeTokenEvaluator(token, _caseInsensitive));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
         public void Visit(NumberRangeToken token)
         {
-            AddEvaluator(new NumberRangeTokenEvaluator(token));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
         public void Visit(CharacterListToken token)
         {
-            AddEvaluator(new CharacterListTokenEvaluator(token, _caseInsensitive));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
         public void Visit(WildcardToken token)
         {
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _Tokens.Length - (_currentTokenIndex + 1);
-            //if (remainingCount == 0)
-            //{
-            //    var subEvaluator = new WildcardDirectoryTokenEvaluator(token, new CompositeTokenEvaluator(new IGlobToken[]));
-            //}
 
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
-            Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
-            AddEvaluator(new WildcardTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _caseInsensitive)));
+            Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);        
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _evaluatorFactory)));
 
-            //  _Evaluators.Add(new CompositeEvaluator(remaining));
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
         }
 
@@ -83,18 +77,12 @@ namespace DotNet.Globbing.Evaluation
         {
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _Tokens.Length - (_currentTokenIndex + 1);
-            //if (remainingCount == 0)
-            //{
-            //    return;
-            //}
 
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
-            var subEvaluator = new WildcardDirectoryTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _caseInsensitive));
-            AddEvaluator(subEvaluator);
-
-            //  _Evaluators.Add(new CompositeEvaluator(remaining));
+            AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _evaluatorFactory)));
+                  
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
         }
 
@@ -115,13 +103,6 @@ namespace DotNet.Globbing.Evaluation
                 // can't possibly match as tokens require a minimum length and the string is too short.
                 return false;
             }
-
-            //if (_Evaluators.Count == 0)
-            //{
-            //    // no sub evaluators in this composite.
-            //    // happens for wildcards that are at the end of a pattern.
-            //    return true;
-            //}
 
             foreach (var matcher in _Evaluators)
             {

@@ -66,8 +66,6 @@ In addition, DotNet Glob also supports:
 | `**` |  matches any number of path / directory segments. When used must be the only contents of a segment. | /\*\*/some.\* | /foo/bar/bah/some.txt, /some.txt, or /foo/some.txt	|
 
 
-
-
 # Advanced Usages
 
 ## Parsing options.
@@ -82,17 +80,36 @@ However, introduced in version `1.6.4`, you can override this behaviour so that 
 
 ```csharp
     // Overide the default options globally for all matche:
-    GlobParseOptions.Default.AllowInvalidPathCharacters = true;
+    GlobParseOptions.Default.Parsing.AllowInvalidPathCharacters = true;
     DotNet.Globbing.Glob.Parse("\"Stuff*").IsMatch("\"Stuff"); // true;    
 ```
 
 You can also just set these options on a per glob pattern basis:
 
 ```csharp
-    var globParseOptions = new GlobParseOptions() { AllowInvalidPathCharacters = true };
+    GlobOptions options = new GlobOptions();
+    options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
     DotNet.Globbing.Glob.Parse("\"Stuff*", globParseOptions).IsMatch("\"Stuff"); // true; 
 
 ```
+
+## Case Sensitivity
+
+By default, evaluation is case-sensitive unless you specify otherwise.
+
+```csharp
+    GlobOptions options = new GlobOptions();
+    options.Evaluation.CaseInsensitive = true;
+    DotNet.Globbing.Glob.Parse("foo*", globParseOptions).IsMatch("FOo"); // true; 
+
+```
+
+Setting CaseInsensitive has an impact on:
+
+- Letter Ranges. Any letter range (i.e '[A-Z]') will now match both lower or upper case characters.
+- Character Lists. Any character list (i.e '[ABC]') will now match both lower or upper case characters.
+- Literals. Any literal (i.e 'foo') will now match both lower or upper case characters i.e `FoO` will match `foO` etc.
+
 
 ## Match Generation
 Given a glob, you can generate random matches, or non matches, for that glob.

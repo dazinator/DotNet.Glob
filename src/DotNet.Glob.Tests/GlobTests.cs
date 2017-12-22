@@ -27,10 +27,9 @@ namespace DotNet.Glob.Tests
         [InlineData("range/[a-b][C-D]", false, "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
         public void Does_Not_Match(string pattern, bool allowInvalidPathCharcters, params string[] testStrings)
         {
-            GlobParseOptions options = new GlobParseOptions()
-            {
-                AllowInvalidPathCharacters = allowInvalidPathCharcters
-            };
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
+           
             var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
@@ -70,10 +69,9 @@ namespace DotNet.Glob.Tests
         public void IsMatch(string pattern, params string[] testStrings)
         {
 
-            GlobParseOptions options = new GlobParseOptions()
-            {
-                AllowInvalidPathCharacters = true
-            };
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = true;
+           
             var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
@@ -91,11 +89,10 @@ namespace DotNet.Glob.Tests
         [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/bC", "range/BD")]
         public void IsMatchCaseInsensitive(string pattern, params string[] testStrings)
         {
-            GlobParseOptions options = new GlobParseOptions()
-            {
-                CaseInsensitive = true,
-                AllowInvalidPathCharacters = true
-            };
+            GlobOptions options = new GlobOptions();
+            options.Parsing.AllowInvalidPathCharacters = true;
+            options.Evaluation.CaseInsensitive = true;
+           
             var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
