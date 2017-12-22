@@ -93,7 +93,7 @@ You can also just set these options on a per glob pattern basis:
 
 ```
 
-## Case Sensitivity
+## Case Sensitivity (Available as of version >= 2.0.0)
 
 By default, evaluation is case-sensitive unless you specify otherwise.
 
