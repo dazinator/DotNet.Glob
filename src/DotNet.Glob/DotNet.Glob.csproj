@@ -4,10 +4,7 @@
     <TargetFrameworks>netstandard1.1;net45;net46;net4</TargetFrameworks>
     <AssemblyName>DotNet.Glob</AssemblyName>
     <OutputType>Library</OutputType>
-    <PackageId>DotNet.Glob</PackageId>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageId>DotNet.Glob</PackageId>   
     <PackageProjectUrl>https://github.com/dazinator/DotNet.Glob</PackageProjectUrl>
     <Description>A fast globbing library for .NET applications, including .net core. Doesn't use Regex.</Description>
     <Authors>Darrell Tunnell &lt;darrell.tunnell@googlemail.com&gt;</Authors>
