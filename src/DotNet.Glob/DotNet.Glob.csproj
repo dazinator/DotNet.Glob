@@ -13,12 +13,18 @@
     <Authors>Darrell Tunnell &lt;darrell.tunnell@googlemail.com&gt;</Authors>
     <PackageLicenseUrl>https://github.com/dazinator/DotNet.Glob/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>glob;globbing;dotnet;pattern;match</PackageTags>
-    <PackageReleaseNotes>This is a hotfix release to support tilde characters (~), thanks goes to @ming4883</PackageReleaseNotes>
+    <PackageReleaseNotes>New features and fixes. See README in Github Repo.</PackageReleaseNotes>
     <RootNamespace>DotNet.Glob</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="  '$(TargetFramework)' == 'net4' ">
-    <DefineConstants>NET40</DefineConstants>   
+    <DefineConstants>NET40</DefineConstants>
   </PropertyGroup>
-  
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1269-1531">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

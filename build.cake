@@ -20,7 +20,6 @@ var configuration = Argument("configuration", "Release");
 ///////////////////////////////////////////////////////////////////////////////
 var artifactsDir = "./artifacts";
 var projectName = "DotNet.Glob";
-var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
 var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
@@ -92,20 +91,6 @@ Task("__SetAppVeyorBuildNumber")
 Task("__Restore")
     .Does(() => DotNetCoreRestore(solutionPath));
 
-Task("__UpdateAssemblyVersionInformation")
-    .WithCriteria(isContinuousIntegrationBuild)
-    .Does(() =>
-{
-     GitVersion(new GitVersionSettings {
-        UpdateAssemblyInfo = true,
-        UpdateAssemblyInfoFilePath = globalAssemblyFile
-    });
-
-    Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
-    Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
-    Information("AssemblyInformationalVersion -> {0}", gitVersionInfo.InformationalVersion);
-});
-
 Task("__Build")
     .Does(() =>
 {
@@ -162,12 +147,12 @@ Task("__Pack")
     .Does(() =>
 {
 
-    var versionarg = "/p:PackageVersion=" + nugetVersion;
+   //  var versionarg = "/p:PackageVersion=" + nugetVersion;
     var settings = new DotNetCorePackSettings
     {
         Configuration = "Release",
         OutputDirectory = $"{artifactsDir}",
-		ArgumentCustomization = args=>args.Append(versionarg)
+		// ArgumentCustomization = args=>args.Append(versionarg)
     };
             
     DotNetCorePack($"{projectToPackage}", settings);
