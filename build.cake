@@ -89,6 +89,7 @@ Task("__Restore")
 {
 	 var settings = new DotNetCoreRestoreSettings
      {      
+	     Configuration = configuration,
          ArgumentCustomization = args => args.Append("/p:PackageVersion=" + nugetVersion),
 		 DisableParallel = true
      };
@@ -158,7 +159,7 @@ Task("__Pack")
     var versionarg = "/p:PackageVersion=" + nugetVersion;
     var settings = new DotNetCorePackSettings
     {
-        Configuration = "Release",
+        Configuration = configuration,
         OutputDirectory = $"{artifactsDir}",
 		ArgumentCustomization = args=>args.Append(versionarg)
     };
