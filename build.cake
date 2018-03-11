@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////
 #tool "nuget:https://ci.appveyor.com/nuget/gitversion-8nigugxjftrw?package=GitVersion.CommandLine&version=4.0.0-pullrequest1269-1534"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.0"
-#addin "nuget:?package=Cake.Git&version=0.15.0"
 #addin "nuget:?package=Cake.ExtendedNuGet&version=1.0.0.24"
 #addin "nuget:?package=NuGet.Core&version=2.14.0"
 #addin "nuget:?package=MagicChunks&version=1.2.0.58"
