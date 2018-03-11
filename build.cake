@@ -88,7 +88,16 @@ Task("__SetAppVeyorBuildNumber")
 });
 
 Task("__Restore")
-    .Does(() => DotNetCoreRestore(solutionPath));
+    .Does(() => 
+{
+	 var settings = new DotNetCoreRestoreSettings
+     {      
+         ArgumentCustomization = args => args.Append("/p:PackageVersion=" + nugetVersion)        
+     };
+
+	 DotNetCoreRestore(solutionPath, settings);
+
+});	
 
 Task("__Build")
     .Does(() =>
