@@ -104,7 +104,7 @@ Task("__Build")
     {        
         Configuration = configuration,
 		ArgumentCustomization = args => args.Append("--disable-parallel"),
-		Verbosity = Cake.Common.Tools.DotNetCore.Detailed
+		Verbosity = Cake.Common.Tools.DotNetCore.DotNetCoreVerbosity.Detailed
     });   
 });
 
