@@ -9,8 +9,9 @@ environment:
   PUBLIC_NUGET_FEED_SOURCE: https://www.nuget.org/
   BENCHMARKS: on
 build_script:
-- cmd: ./build.cmd
+- cmd: dotnet restore ./src/DotNetGlob.sln --disable-parallel
+- cmd: dotnet build ./src/DotNetGlob.sln --disable-parallel
+- cmd: dotnet pack ./src/DotNetGlob.sln --output ../../artifacts/
 test: off
 artifacts:
 - path: ./artifacts/*
-- path: ./**/*Artifacts/**/*.*
