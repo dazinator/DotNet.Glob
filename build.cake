@@ -1,7 +1,7 @@
 ﻿//////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
-#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
+#tool "nuget:https://ci.appveyor.com/nuget/gitversion-8nigugxjftrw?package=GitVersion.CommandLine&version=4.0.0-pullrequest1269-1531""
 #tool "nuget:?package=GitReleaseNotes&version=0.7.0"
 #addin "nuget:?package=Cake.Git&version=0.15.0"
 #addin "nuget:?package=Cake.ExtendedNuGet&version=1.0.0.24"
@@ -53,8 +53,7 @@ Teardown(context =>
 Task("__Default")    
     .IsDependentOn("__SetAppVeyorBuildNumber")
     .IsDependentOn("__Clean")
-    .IsDependentOn("__Restore")
-    .IsDependentOn("__UpdateAssemblyVersionInformation")
+    .IsDependentOn("__Restore")   
     .IsDependentOn("__Build")
     .IsDependentOn("__Test")
     .IsDependentOn("__Benchmarks")       
