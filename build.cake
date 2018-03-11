@@ -105,7 +105,8 @@ Task("__Build")
 {
     DotNetCoreBuild(solutionPath, new DotNetCoreBuildSettings
     {        
-        Configuration = configuration
+        Configuration = configuration,
+		ArgumentCustomization = args => args.Append("--disable-parallel),
     });   
 });
 
@@ -169,12 +170,7 @@ Task("__Pack")
 
 Task("__GenerateReleaseNotes")
     .Does(() =>
-{
-    var settings = new DotNetCorePackSettings
-    {
-        Configuration = "Release",
-        OutputDirectory = $"{artifactsDir}"        
-    };    
+{   
             
     GitReleaseNotes($"{artifactsDir}/ReleaseNotes.md", new GitReleaseNotesSettings {
     WorkingDirectory         = ".",
