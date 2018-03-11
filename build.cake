@@ -106,7 +106,7 @@ Task("__Build")
     DotNetCoreBuild(solutionPath, new DotNetCoreBuildSettings
     {        
         Configuration = configuration,
-		ArgumentCustomization = args => args.Append("--disable-parallel),
+		ArgumentCustomization = args => args.Append("--disable-parallel"),
     });   
 });
 
