@@ -146,12 +146,12 @@ Task("__Pack")
     .Does(() =>
 {
 
-   //  var versionarg = "/p:PackageVersion=" + nugetVersion;
+    var versionarg = "/p:PackageVersion=" + nugetVersion;
     var settings = new DotNetCorePackSettings
     {
         Configuration = "Release",
         OutputDirectory = $"{artifactsDir}",
-		// ArgumentCustomization = args=>args.Append(versionarg)
+		ArgumentCustomization = args=>args.Append(versionarg)
     };
             
     DotNetCorePack($"{projectToPackage}", settings);
