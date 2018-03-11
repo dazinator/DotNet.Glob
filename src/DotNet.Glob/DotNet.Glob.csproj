@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1269-1534">
-      <PrivateAssets>all</PrivateAssets>
+     
     </PackageReference>
   </ItemGroup>
 
