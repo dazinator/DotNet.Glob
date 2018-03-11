@@ -1,7 +1,7 @@
 skip_tags: true
 image: Visual Studio 2017
 build:
-  verbosity: minimal
+  verbosity: normal
 environment:
   NuGetOrgApiKey: 
     secure: u8JpW5kkti8pMi+ra2QcXTJPhkHCA8pkKSiiZOJbcS/vFVHNvF3W8qw1Fy2If6a7
