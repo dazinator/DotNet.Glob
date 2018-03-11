@@ -77,35 +77,24 @@ namespace DotNet.Globbing.Generation
 
         void IGlobTokenVisitor.Visit(WildcardToken token)
         {
-
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _tokens.Length - (_currentTokenIndex + 1);
-            //if (remainingCount == 0)
-            //{
-            //    return;
-            //}
-
+           
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
             var subEvaluator = new WildcardTokenMatchGenerator(token, _random, new CompositeTokenMatchGenerator(_random, remaining));
             AddMatchGenerator(subEvaluator);
 
-            //  _Evaluators.Add(new CompositeEvaluator(remaining));
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
 
-            //.Add(new WildcardTokenMatchGenerator(token, _random));
         }
 
         void IGlobTokenVisitor.Visit(WildcardDirectoryToken token)
         {
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _tokens.Length - (_currentTokenIndex + 1);
-            //if (remainingCount == 0)
-            //{
-            //    return;
-            //}
-
+           
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
@@ -115,20 +104,12 @@ namespace DotNet.Globbing.Generation
             //  _Evaluators.Add(new CompositeEvaluator(remaining));
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
 
-            //.Add(new WildcardTokenMatchGenerator(token, _random));
         }
 
         protected void AddMatchGenerator(IMatchGenerator evaluator)
         {
             _generators.Add(evaluator);
-            //this.ConsumesMinLength = this.ConsumesMinLength + evaluator.ConsumesMinLength;
-            //if (!ConsumesVariableLength)
-            //{
-            //    if (evaluator.ConsumesVariableLength)
-            //    {
-            //        this.ConsumesVariableLength = true;
-            //    }
-            //}
+           
         }
     }
 }

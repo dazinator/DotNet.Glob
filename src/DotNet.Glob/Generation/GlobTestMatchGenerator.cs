@@ -9,17 +9,10 @@ namespace DotNet.Globbing.Generation
     public class GlobMatchStringGenerator
     {
         private StringBuilder _stringBuilder;
-        private Random _random;
-        private MatchGenerationMode _mode;
-
+        private Random _random;  
         private CompositeTokenMatchGenerator _generator;
 
-        private enum MatchGenerationMode
-        {
-            Match, // generates a string that will match all tokens.
-            PartialMatch, // geenrates a string where some tokens will match, but others wont.
-            NoMatch // generates a string where no portion of it will match any tokens - except wildcards.
-        }
+       
 
         public GlobMatchStringGenerator(IEnumerable<IGlobToken> tokens)
         {
