@@ -92,7 +92,8 @@ Task("__Restore")
 {
 	 var settings = new DotNetCoreRestoreSettings
      {      
-         ArgumentCustomization = args => args.Append("/p:PackageVersion=" + nugetVersion)        
+         ArgumentCustomization = args => args.Append("/p:PackageVersion=" + nugetVersion),
+		 DisableParallel = true
      };
 
 	 DotNetCoreRestore(solutionPath, settings);
