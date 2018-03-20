@@ -11,6 +11,7 @@ namespace DotNet.Globbing.Evaluation
         {
             _token = token;
         }
+
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
         {
             newPosition = currentPosition + 1;

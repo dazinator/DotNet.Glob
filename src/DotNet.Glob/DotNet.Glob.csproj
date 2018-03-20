@@ -4,16 +4,24 @@
     <TargetFrameworks>netstandard1.1;net45;net46;net4</TargetFrameworks>
     <AssemblyName>DotNet.Glob</AssemblyName>
     <OutputType>Library</OutputType>
-    <PackageId>DotNet.Glob</PackageId>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <PackageId>DotNet.Glob</PackageId>   
     <PackageProjectUrl>https://github.com/dazinator/DotNet.Glob</PackageProjectUrl>
     <Description>A fast globbing library for .NET applications, including .net core. Doesn't use Regex.</Description>
     <Authors>Darrell Tunnell &lt;darrell.tunnell@googlemail.com&gt;</Authors>
     <PackageLicenseUrl>https://github.com/dazinator/DotNet.Glob/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>glob;globbing;dotnet;pattern;match</PackageTags>
-    <PackageReleaseNotes>This is a hotfix release to support tilde characters (~), thanks goes to @ming4883</PackageReleaseNotes>
+    <PackageReleaseNotes>New features and fixes. See README in Github Repo.</PackageReleaseNotes>
     <RootNamespace>DotNet.Glob</RootNamespace>
   </PropertyGroup>
+
+  <PropertyGroup Condition="  '$(TargetFramework)' == 'net4' ">
+    <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1269-1542">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
 </Project>

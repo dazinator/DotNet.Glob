@@ -1,12 +1,9 @@
 ﻿//////////////////////////////////////////////////////////////////////
 // TOOLS
 //////////////////////////////////////////////////////////////////////
-#tool "nuget:?package=GitVersion.CommandLine&version=4.0.0-beta0012"
+#tool "nuget:https://ci.appveyor.com/nuget/gitversion-8nigugxjftrw?package=GitVersion.CommandLine&version=4.0.0-pullrequest1269-1542"
 #tool "nuget:?package=GitReleaseNotes&version=0.7.0"
-#addin "nuget:?package=Cake.Git&version=0.15.0"
-#addin "nuget:?package=Cake.ExtendedNuGet&version=1.0.0.24"
 #addin "nuget:?package=NuGet.Core&version=2.14.0"
-#addin "nuget:?package=MagicChunks&version=1.2.0.58"
 
 
 //////////////////////////////////////////////////////////////////////
@@ -20,7 +17,6 @@ var configuration = Argument("configuration", "Release");
 ///////////////////////////////////////////////////////////////////////////////
 var artifactsDir = "./artifacts";
 var projectName = "DotNet.Glob";
-var globalAssemblyFile = "./src/GlobalAssemblyInfo.cs";
 var projectToPackage = $"./src/{projectName}";
 var repoBranchName = "master";
 var benchMarksEnabled = EnvironmentVariable("BENCHMARKS") == "on";
@@ -54,8 +50,7 @@ Teardown(context =>
 Task("__Default")    
     .IsDependentOn("__SetAppVeyorBuildNumber")
     .IsDependentOn("__Clean")
-    .IsDependentOn("__Restore")
-    .IsDependentOn("__UpdateAssemblyVersionInformation")
+    .IsDependentOn("__Restore")   
     .IsDependentOn("__Build")
     .IsDependentOn("__Test")
     .IsDependentOn("__Benchmarks")       
@@ -90,28 +85,26 @@ Task("__SetAppVeyorBuildNumber")
 });
 
 Task("__Restore")
-    .Does(() => DotNetCoreRestore(solutionPath));
-
-Task("__UpdateAssemblyVersionInformation")
-    .WithCriteria(isContinuousIntegrationBuild)
-    .Does(() =>
+    .Does(() => 
 {
-     GitVersion(new GitVersionSettings {
-        UpdateAssemblyInfo = true,
-        UpdateAssemblyInfoFilePath = globalAssemblyFile
-    });
+	 var settings = new DotNetCoreRestoreSettings
+     {      	    
+        // ArgumentCustomization = args => args.Append("/p:PackageVersion=" + nugetVersion),
+		 DisableParallel = true
+     };
 
-    Information("AssemblyVersion -> {0}", gitVersionInfo.AssemblySemVer);
-    Information("AssemblyFileVersion -> {0}", $"{gitVersionInfo.MajorMinorPatch}.0");
-    Information("AssemblyInformationalVersion -> {0}", gitVersionInfo.InformationalVersion);
-});
+	 DotNetCoreRestore(solutionPath, settings);
+
+});	
 
 Task("__Build")
     .Does(() =>
 {
     DotNetCoreBuild(solutionPath, new DotNetCoreBuildSettings
     {        
-        Configuration = configuration
+        Configuration = configuration,
+		ArgumentCustomization = args => args.Append("--disable-parallel"),
+		Verbosity = Cake.Common.Tools.DotNetCore.DotNetCoreVerbosity.Detailed
     });   
 });
 
@@ -165,7 +158,7 @@ Task("__Pack")
     var versionarg = "/p:PackageVersion=" + nugetVersion;
     var settings = new DotNetCorePackSettings
     {
-        Configuration = "Release",
+        Configuration = configuration,
         OutputDirectory = $"{artifactsDir}",
 		ArgumentCustomization = args=>args.Append(versionarg)
     };
@@ -175,12 +168,7 @@ Task("__Pack")
 
 Task("__GenerateReleaseNotes")
     .Does(() =>
-{
-    var settings = new DotNetCorePackSettings
-    {
-        Configuration = "Release",
-        OutputDirectory = $"{artifactsDir}"        
-    };    
+{   
             
     GitReleaseNotes($"{artifactsDir}/ReleaseNotes.md", new GitReleaseNotesSettings {
     WorkingDirectory         = ".",

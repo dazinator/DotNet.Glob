@@ -46,7 +46,7 @@ namespace DotNet.Glob.Benchmarks.Utils
             {
                 _stringBuilder.Append('^');
             }
-            _stringBuilder.Append(Regex.Escape(new string(token.Characters.ToArray())));
+            _stringBuilder.Append(Regex.Escape(new string(token.Characters)));
             _stringBuilder.Append(']');
 
         }

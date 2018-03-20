@@ -12,42 +12,40 @@ namespace DotNet.Globbing
         private GlobTokenFormatter _Formatter;
         private string _pattern;
         private readonly GlobTokenEvaluator _isMatchEvaluator;
-        private readonly GlobTokenMatchAnalysisEvaluator _matchEvaluator; // provides more in depth analyis than IsMatch.
+        private readonly GlobOptions _options;
 
-        public Glob(params IGlobToken[] tokens)
+        public Glob(params IGlobToken[] tokens) : this(GlobOptions.Default, tokens)
+        {
+        }
+
+        public Glob(GlobOptions options = null, params IGlobToken[] tokens)
         {
             Tokens = tokens;
+            _options = options ?? GlobOptions.Default;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobTokenEvaluator(Tokens);
-            _matchEvaluator = new GlobTokenMatchAnalysisEvaluator(Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(options.Evaluation, Tokens);
         }
 
         public static Glob Parse(string pattern)
         {
-            var options = GlobParseOptions.Default;
+            var options = GlobOptions.Default;
             return Parse(pattern, options);
         }
 
-        public static Glob Parse(string pattern, GlobParseOptions options)
+        public static Glob Parse(string pattern, GlobOptions options)
         {
             if (string.IsNullOrEmpty(pattern))
             {
                 throw new ArgumentNullException(pattern);
             }
             var tokeniser = new GlobTokeniser();
-            var tokens = tokeniser.Tokenise(pattern, options.AllowInvalidPathCharacters);
-            return new Glob(tokens.ToArray());
+            var tokens = tokeniser.Tokenise(pattern, options.Parsing.AllowInvalidPathCharacters);
+            return new Glob(options, tokens.ToArray());
         }
 
         public bool IsMatch(string subject)
         {
             return _isMatchEvaluator.IsMatch(subject);
-        }
-
-        public MatchInfo Match(string subject)
-        {
-            // var segments = reader.ReadPathSegment();          
-            return _matchEvaluator.Evaluate(subject);
         }
 
         public override string ToString()

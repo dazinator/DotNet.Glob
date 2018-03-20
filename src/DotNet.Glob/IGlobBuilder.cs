@@ -16,7 +16,7 @@ namespace DotNet.Globbing
         IGlobBuilder LetterNotInRange(char start, char end);
         IGlobBuilder NumberInRange(char start, char end);
         IGlobBuilder NumberNotInRange(char start, char end);
-        Glob ToGlob();
+        Glob ToGlob(GlobOptions options = null);
         List<IGlobToken> Tokens { get; }
     }
 

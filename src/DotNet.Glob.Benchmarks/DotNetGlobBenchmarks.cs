@@ -65,19 +65,7 @@ namespace DotNet.Glob.Benchmarks
                 result ^= _glob.IsMatch(testString);
             }
             return result;
-        }
-
-        [Benchmark]
-        public List<MatchInfo> Match()
-        {
-            var results = new List<MatchInfo>(NumberOfMatches);
-            for (int i = 0; i < NumberOfMatches; i++)
-            {
-                var testString = _testMatchingStringsList[i];
-                results.Add(_glob.Match(testString));
-            }
-            return results;
-        }
+        }       
 
     }
 }

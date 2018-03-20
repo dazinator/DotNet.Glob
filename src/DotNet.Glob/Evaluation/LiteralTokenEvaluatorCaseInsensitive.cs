@@ -1,16 +1,19 @@
-using DotNet.Globbing.Token;
+﻿using DotNet.Globbing.Token;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace DotNet.Globbing.Evaluation
 {
-    public class LiteralTokenEvaluator : IGlobTokenEvaluator
+    public class LiteralTokenEvaluatorCaseInsensitive : IGlobTokenEvaluator
     {
-       
-        private readonly LiteralToken _token;
 
-        public LiteralTokenEvaluator(LiteralToken token)
+        private readonly LiteralToken _token;
+        private readonly string _literalAsUpperInvariant;
+
+        public LiteralTokenEvaluatorCaseInsensitive(LiteralToken token)
         {
-            _token = token;           
+            _token = token;
+            _literalAsUpperInvariant = token.Value.ToUpperInvariant();
         }
 
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
@@ -19,9 +22,9 @@ namespace DotNet.Globbing.Evaluation
             int counter = 0;
 
             while (newPosition < allChars.Length && counter < _token.Value.Length)
-            {               
+            {
                 var currentChar = allChars[newPosition];
-                if(!IsMatch(currentChar, counter))
+                if (!IsMatch(currentChar, counter))
                 {
                     return false;
                 }
@@ -34,16 +37,18 @@ namespace DotNet.Globbing.Evaluation
             {
                 return false;
             }
-          
+
             return true;
         }
 
 #if !NET40
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
 #endif
-        private bool IsMatch(char containsChar, int position)
+        public bool IsMatch(char containsChar, int position)
         {
-            return containsChar == _token.Value[position];
+            var upperInvariantChar = Char.ToUpperInvariant(containsChar);
+            var comparisonChar = _literalAsUpperInvariant[position];
+            return upperInvariantChar == comparisonChar;
         }
 
         public virtual int ConsumesMinLength
