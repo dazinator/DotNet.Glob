@@ -44,9 +44,8 @@ namespace DotNet.Globbing
                     {
                         if (tokens.Count > 0)
                         {
-                            var lastToken = tokens[tokens.Count - 1] as PathSeperatorToken;
 
-                            if (lastToken != null)
+                            if (tokens[tokens.Count - 1] is PathSeperatorToken lastToken)
                             {
                                 tokens.Remove(lastToken);
                                 tokens.Add(ReadDirectoryWildcardToken(reader, lastToken));
