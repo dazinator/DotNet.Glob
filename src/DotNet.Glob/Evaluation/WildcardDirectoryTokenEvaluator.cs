@@ -66,13 +66,16 @@ namespace DotNet.Globbing.Evaluation
             {
                 // Fixed length.
                 // As we can only match full segments, make sure character before chacracter at max pos is a seperator, 
-
-                var mustMatchUntilChar = allChars[maxPos - 1];
-                if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
+                if(maxPos > 0)
                 {
-                    // can only match full segments.
-                    return false;
+                    var mustMatchUntilChar = allChars[maxPos - 1];
+                    if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
+                    {
+                        // can only match full segments.
+                        return false;
+                    }
                 }
+              
 
                 // Advance position to max pos.
                 currentPosition = maxPos;
