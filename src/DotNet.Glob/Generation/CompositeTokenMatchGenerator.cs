@@ -101,7 +101,6 @@ namespace DotNet.Globbing.Generation
             var subEvaluator = new WildcardDirectoryTokenMatchGenerator(token, _random, new CompositeTokenMatchGenerator(_random, remaining));
             AddMatchGenerator(subEvaluator);
 
-            //  _Evaluators.Add(new CompositeEvaluator(remaining));
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
 
         }

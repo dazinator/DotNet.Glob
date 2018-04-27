@@ -9,7 +9,6 @@
             LeadingPathSeperator = leadingPathSeperator;
         }
 
-        //public PathSeperatorKind? TrailingPathSeperatorKind { get; set; }
         public PathSeperatorToken TrailingPathSeperator { get; set; }
 
         public PathSeperatorToken LeadingPathSeperator { get; set; }

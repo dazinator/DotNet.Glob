@@ -4,7 +4,7 @@
     {
         public CharacterListToken(char[] characters, bool isNegated)
         {
-            Characters = characters; // new List<char>(characters);                
+            Characters = characters;              
             IsNegated = isNegated;
         }
 

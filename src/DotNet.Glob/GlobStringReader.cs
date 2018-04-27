@@ -19,9 +19,6 @@ namespace DotNet.Globbing
         public const char CloseBracketChar = ']';
         public const char DashChar = '-';
         public const char QuestionMarkChar = '?';
-        //public const char DotChar = '.';
-        //public const char SpaceChar = ' ';
-        //public const char HashChar = '#';
 
         /// <summary>
         /// Tokens can start with the following characters.
@@ -100,14 +97,6 @@ namespace DotNet.Globbing
         public string ReadPathSegment()
         {
             var segmentBuilder = new StringBuilder();
-            //if (IsPathSeperator(CurrentChar))
-            //{
-            //    if (!ReadChar())
-            //    {
-            //        return segmentBuilder.ToString();
-            //    }
-            //    segmentBuilder.Append(CurrentChar);
-            //}
             while (ReadChar())
             {
                 if (!IsPathSeperator(CurrentChar))

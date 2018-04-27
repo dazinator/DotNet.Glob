@@ -7,7 +7,6 @@ namespace DotNet.Globbing.Evaluation
     public class WildcardTokenEvaluator : IGlobTokenEvaluator
     {
         private readonly WildcardToken _token;
-        //private readonly IGlobToken[] _subTokens;
         private readonly CompositeTokenEvaluator _subEvaluator;
         private readonly bool _requiresSubEvaluation;
 
@@ -73,26 +72,16 @@ namespace DotNet.Globbing.Evaluation
                 }
                 var isMatch = _subEvaluator.IsMatch(allChars, requiredMatchPosition, out newPosition);
                 return isMatch;
-            }
+            }          
 
-            // Sub pattern matches a variable length string.
-            // if we are at the end of the string, we match!
-            //if (currentPosition >= allChars.Length)
-            //{
-            //    return true;
-            //}
-            // otherwise we can consume a variable amount of characters but we can't match more characters than the amount that will take
-            // us past the min required length required by the sub evaluator tokens, and as we are not a directory wildcard, we
-            // can't go past a path seperator.
-
+            // We can match a variable amount of characters but,
+            // We can't match more characters than the amount that will take us past the min required length required by the sub evaluator tokens,
+            // and as we are not a directory wildcard, we can't match past a path seperator.
             var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
             for (int i = currentPosition; i <= maxPos; i++)
             {
                 var currentChar = allChars[i];
 
-
-
-                //int newSubPosition;
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
                 if (isMatch)
                 {

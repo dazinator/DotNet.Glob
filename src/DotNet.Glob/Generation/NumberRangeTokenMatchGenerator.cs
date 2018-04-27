@@ -20,7 +20,6 @@ namespace DotNet.Globbing.Generation
             if (token.IsNegated)
             {
                 builder.AppendRandomNumberCharacterNotBetween(_random, token.Start, token.End);
-                //builder.Append(GetRandomLiteralCharacterNotBetween(token.Start, token.End));
             }
             else
             {
@@ -33,7 +32,6 @@ namespace DotNet.Globbing.Generation
             if (token.IsNegated)
             {
                 builder.AppendRandomLiteralCharacterBetween(_random, token.Start, token.End);
-                //.Append(GetRandomCharacterBetween(token.Start, token.End));
             }
             else
             {
