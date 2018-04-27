@@ -40,11 +40,15 @@ namespace DotNet.Globbing.Evaluation
             var currentChar = allChars[currentPosition];
             if (this._token.LeadingPathSeperator != null)
             {
-                if (currentChar != this._token.LeadingPathSeperator.Value)
+                if (!GlobStringReader.IsPathSeperator(currentChar))
                 {
                     // expected seperator.
                     return false;
                 }
+                //if (currentChar != this._token.LeadingPathSeperator.Value)
+                //{
+
+                //}
                 // advance current position to match the leading seperator.
                 currentPosition = currentPosition + 1;
             }
@@ -66,16 +70,20 @@ namespace DotNet.Globbing.Evaluation
             {
                 // Fixed length.
                 // As we can only match full segments, make sure character before chacracter at max pos is a seperator, 
-                if(maxPos > 0)
+                if (maxPos > 0)
                 {
                     var mustMatchUntilChar = allChars[maxPos - 1];
-                    if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
+                    if (!GlobStringReader.IsPathSeperator(mustMatchUntilChar))
                     {
                         // can only match full segments.
                         return false;
                     }
+                    //if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
+                    //{
+                       
+                    //}
                 }
-              
+
 
                 // Advance position to max pos.
                 currentPosition = maxPos;
@@ -92,11 +100,16 @@ namespace DotNet.Globbing.Evaluation
                 // If the ** token was parsed with a trailing slash - i.e "**/" then we need to match past it before we test remainijng tokens.
                 if (_token.TrailingPathSeperator != null)
                 {
-                    if (currentChar == '/' || currentChar == '\\')
+                    if (GlobStringReader.IsPathSeperator(currentChar))
                     {
                         // match the seperator.
                         currentPosition = currentPosition + 1;
                     }
+
+                    //if (currentChar == '/' || currentChar == '\\')
+                    //{
+                       
+                    //}
                 }
 
                 // Match until maxpos, is reached.
@@ -109,7 +122,7 @@ namespace DotNet.Globbing.Evaluation
                         return isMatch;
                     }
 
-                    if(currentPosition == maxPos)
+                    if (currentPosition == maxPos)
                     {
                         return false;
                     }
@@ -119,12 +132,20 @@ namespace DotNet.Globbing.Evaluation
                     {
                         currentPosition = currentPosition + 1;
                         currentChar = allChars[currentPosition];
-                        if (currentChar == '/' || currentChar == '\\')
+
+                        if (GlobStringReader.IsPathSeperator(currentChar))
                         {
-                            // advance past the seperator.
+                            // match the seperator.
                             currentPosition = currentPosition + 1;
                             break;
                         }
+
+                        //if (currentChar == '/' || currentChar == '\\')
+                        //{
+                        //    // advance past the seperator.
+                        //    currentPosition = currentPosition + 1;
+                        //    break;
+                        //}
                     }
                 }
             }

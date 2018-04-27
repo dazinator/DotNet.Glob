@@ -68,8 +68,8 @@ namespace DotNet.Glob.Tests
         [InlineData("**/app*.js", "dist/app.js", "dist/app.a72ka8234.js")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/34
         [InlineData("**/y", "y")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/44      
         [InlineData("**/gfx/*.gfx", "HKEY_LOCAL_MACHINE\\gfx\\foo.gfx", "HKEY_LOCAL_MACHINE/gfx/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   -  seems to work fine on mixed slashes.   
-        [InlineData("**/gfx/**/*.gfx", "HKEY_LOCAL_MACHINE\\gfx\\bar\\foo.gfx", "HKEY_LOCAL_MACHINE/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   - only seems to work on paths with forward slashes.
-        [InlineData("**\\gfx\\**\\*.gfx", "HKEY_LOCAL_MACHINE\\gfx\\bar\\foo.gfx", "HKEY_LOCAL_MACHINE/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46    -  only seems to work on paths with backwards slashes.
+        [InlineData("**/gfx/**/*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   - only seems to work on paths with forward slashes.
+        [InlineData("**\\gfx\\**\\*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46    -  only seems to work on paths with backwards slashes.
         public void IsMatch(string pattern, params string[] testStrings)
         {
 
