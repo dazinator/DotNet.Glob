@@ -19,7 +19,8 @@ build_script:
 - cmd: dotnet restore ./src/DotNetGlob.sln --disable-parallel
 - cmd: dotnet build ./src/DotNetGlob.sln -c Release --disable-parallel
 - cmd: dotnet pack ./src/DotNetGlob.sln -c Release --output ../../artifacts/
-test: on
+test_script:
+- cmd: dotnet test src/dotnetglob.sln --test-adapter-path:. --logger:Appveyor
 artifacts:
 - path: ./artifacts/*
 deploy:
