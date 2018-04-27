@@ -22,6 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="GitVersionTask" Version="4.0.0-pullrequest1269-1542">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DotNet.Glob\DotNet.Glob.csproj" />
   </ItemGroup>
 

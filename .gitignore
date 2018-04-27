@@ -254,3 +254,5 @@ paket-files/
 tools/*
 !tools/packages.config
 /src/DotNet.Glob.Benchmarks/BenchmarkDotNet.Artifacts/results
+/src/DotNet.Glob/Dotnet.Glob.snk
+/Dotnet.Glob.snk
