@@ -1,21 +1,26 @@
 skip_tags: true
 image: Visual Studio 2017
+environment:  
+  BENCHMARKS: on  
+  signingkey:
+    secure: DcEnjxct82WwrppME28Rkw==
 install:
   - choco install gitversion.portable -pre -y
 before_build:
   - ps: gitversion /l console /output buildserver
+  - cmd: ./appveyor-tools/secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
 build:
   verbosity: detailed
-environment:
-  NuGetOrgApiKey: 
-    secure: u8JpW5kkti8pMi+ra2QcXTJPhkHCA8pkKSiiZOJbcS/vFVHNvF3W8qw1Fy2If6a7
-  PUBLIC_NUGET_FEED_NAME: nuget.org
-  PUBLIC_NUGET_FEED_SOURCE: https://www.nuget.org/
-  BENCHMARKS: on
 build_script:
 - cmd: dotnet restore ./src/DotNetGlob.sln --disable-parallel
-- cmd: dotnet build ./src/DotNetGlob.sln --disable-parallel
-- cmd: dotnet pack ./src/DotNetGlob.sln --output ../../artifacts/
-test: off
+- cmd: dotnet build ./src/DotNetGlob.sln -c Release --disable-parallel
+- cmd: dotnet pack ./src/DotNetGlob.sln -c Release --output ../../artifacts/
+test: on
 artifacts:
 - path: ./artifacts/*
+deploy:
+  provider: NuGet
+  api_key:
+    secure: u8JpW5kkti8pMi+ra2QcXTJPhkHCA8pkKSiiZOJbcS/vFVHNvF3W8qw1Fy2If6a7
+  skip_symbols: false
+  artifact: /.*\.nupkg/
