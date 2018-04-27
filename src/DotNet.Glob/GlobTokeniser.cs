@@ -58,11 +58,6 @@ namespace DotNet.Globbing
                     else
                     {
                         tokens.Add(ReadLiteralToken(reader, allowInvalidPathCharcaters));
-
-                        ////else if (reader.IsValidLiteralCharacter())
-                        ////{
-                        //// literal
-                        //tokens.Add(ReadLiteralToken(reader));
                     }
                 }
             }
@@ -99,49 +94,39 @@ namespace DotNet.Globbing
                     throw new NotSupportedException($"{reader.CurrentChar} is not a supported character for a pattern.");
                 }
             }
-            //else
-            //{
-            //    // dont need to check this because if this was start of token, token would havebeen parsed already, as parsing literal always called last.
+            
+            AcceptCurrentChar(reader);
 
-            //  //  isValid = GlobStringReader.IsNotStartOfToken(reader.CurrentChar);
-
-            //}
-
-            //if (isValid)
-            //{
-                AcceptCurrentChar(reader);
-
-                while (!reader.HasReachedEnd)
+            while (!reader.HasReachedEnd)
+            {
+                var peekChar = reader.PeekChar();
+                if (!allowAnyChracter)
                 {
-                    var peekChar = reader.PeekChar();
-                    if (!allowAnyChracter)
-                    {
-                        isValid = GlobStringReader.IsValidLiteralCharacter(peekChar);
-                    }
-                    else
-                    {
-                        isValid = GlobStringReader.IsNotStartOfToken(peekChar);
-                    }
+                    isValid = GlobStringReader.IsValidLiteralCharacter(peekChar);
+                }
+                else
+                {
+                    isValid = GlobStringReader.IsNotStartOfToken(peekChar) && !GlobStringReader.IsPathSeperator(peekChar);
+                }
 
-                    if (isValid)
+                if (isValid)
+                {
+                    if (reader.ReadChar())
                     {
-                        if (reader.ReadChar())
-                        {
-                            AcceptCurrentChar(reader);
-                        }
-                        else
-                        {
-                            // potentially hit end of string.
-                            break;
-                        }
+                        AcceptCurrentChar(reader);
                     }
                     else
                     {
-                        // we have hit a character that may not be a valid literal (could be unsupported, or start of a token for instance).
+                        // potentially hit end of string.
                         break;
                     }
                 }
-            
+                else
+                {
+                    // we have hit a character that may not be a valid literal (could be unsupported, or start of a token for instance).
+                    break;
+                }
+            }
 
             return new LiteralToken(GetBufferAndReset());
         }
@@ -177,7 +162,6 @@ namespace DotNet.Globbing
                     {
                         isNumberRange = true;
                     }
-                    //  throw new ArgumentOutOfRangeException("Range expressions must either be a letter range, i.e [a-z] or a number range i.e [0-9]");
                 }
                 else
                 {
@@ -201,7 +185,6 @@ namespace DotNet.Globbing
 
             while (reader.ReadChar())
             {
-                //  ReadCharacter(CharacterType.BracketedText, CurrentChar);
                 if (reader.IsEndOfRangeOrList)
                 {
                     var peekChar = reader.PeekChar();
@@ -210,8 +193,6 @@ namespace DotNet.Globbing
                     if (peekChar == GlobStringReader.CloseBracketChar)
                     {
                         AcceptCurrentChar(reader);
-                        // Read();
-                        //ReadCharacter(CharacterType.BracketedText, CurrentChar);
                     }
                     else
                     {
@@ -261,7 +242,6 @@ namespace DotNet.Globbing
 
         private IGlobToken ReadSingleCharacterMatchToken()
         {
-            // this.Read();
             return new AnyCharacterToken();
         }
 

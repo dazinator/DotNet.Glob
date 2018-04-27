@@ -17,7 +17,6 @@ namespace DotNet.Globbing.Evaluation
 
         public GlobTokenMatchAnalysisEvaluator(IGlobToken[] tokens)
         {
-            // _Reader = reader;
             _Tokens = tokens;
             var tokenCount = tokens.Length;
             _TokenQueue = new Queue<IGlobToken>(tokenCount);
@@ -120,8 +119,6 @@ namespace DotNet.Globbing.Evaluation
         }
         public void Visit(AnyCharacterToken token)
         {
-            //WithWildcardProgression(() =>
-            //{
             Success = false;
             var read = _Reader.Read();
             if (read == -1)
@@ -238,11 +235,6 @@ namespace DotNet.Globbing.Evaluation
             var remainingText = _Reader.ReadToEnd();
             int endOfSegmentPos = remainingText.Length; //TODO: improve this.
 
-            //using (var pathReader = new GlobStringReader(remainingText))
-            //{
-            //    var thisPath = pathReader.ReadPathSegment();
-            //    endOfSegmentPos = pathReader.CurrentIndex;
-            //}
 
             var remaining = _TokenQueue.ToArray();
             // if no more tokens remaining then just return as * matches the rest of the segment.
@@ -400,7 +392,6 @@ namespace DotNet.Globbing.Evaluation
             this.MatchedTokens.Add(match);
             this.Success = true;
         }
-
      
     }
 }

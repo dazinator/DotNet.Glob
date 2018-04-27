@@ -24,7 +24,6 @@ namespace DotNet.Globbing.Generation
         public void AppendNonMatch(StringBuilder builder)
         {
             // append a literal of the same size, but with one or many of the characters changed.
-
             bool sameSize = true;
 
             if (sameSize)
@@ -34,7 +33,6 @@ namespace DotNet.Globbing.Generation
 
                 int numberOfCharsToChange = _random.Next(1, token.Value.Length);
                 int changed = 0;
-                //   var removedList = new List<int>(numberOfCharsToChange);
 
                 int chanceToChange = token.Value.Length / numberOfCharsToChange;
 
