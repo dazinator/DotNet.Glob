@@ -8,7 +8,7 @@ install:
   - choco install gitversion.portable -pre -y
 before_build:
   - ps: gitversion /l console /output buildserver
-  - cmd: ./appveyor-tools/secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
+  - cmd: appveyor-tools/secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
 build:
   verbosity: detailed
 build_script:
