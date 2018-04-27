@@ -22,18 +22,23 @@ namespace DotNet.Glob.Tests
             typeof(NumberRangeToken), typeof(LiteralToken),
             typeof(WildcardToken))]
         [InlineData("path/**/*.*", typeof(LiteralToken), typeof(WildcardDirectoryToken), typeof(WildcardToken), typeof(LiteralToken), typeof(WildcardToken))]
+        [InlineData("**/gfx/*.gfx", typeof(WildcardDirectoryToken), typeof(LiteralToken), typeof(PathSeperatorToken), typeof(WildcardToken), typeof(LiteralToken))] // https://github.com/dazinator/DotNet.Glob/issues/47
         public void Can_Tokenise_Glob_Pattern(string testString, params Type[] expectedTokens)
         {
-            // Arrange
+            // Arrange         
 
             var sut = new GlobTokeniser();
             var tokens = sut.Tokenise(testString, false);
+            var tokensAllowInvalidPathWhenParsing = sut.Tokenise(testString, true);
 
             Assert.True(tokens.Count == expectedTokens.Length);
+            Assert.True(tokensAllowInvalidPathWhenParsing.Count == expectedTokens.Length);
+
             for (int i = 0; i < tokens.Count; i++)
             {
-                Assert.True(tokens[i].GetType() == expectedTokens[i]);
-
+                var expectedToken = expectedTokens[i];
+                Assert.True(tokens[i].GetType() == expectedToken);
+                Assert.True(tokensAllowInvalidPathWhenParsing[i].GetType() == expectedToken);
             }
 
         }
