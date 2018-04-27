@@ -17,12 +17,6 @@ namespace DotNet.Globbing.Generation
             _random = random;
         }
 
-        //public WildcardTokenMatchGenerator(WildcardToken token, Random _random)
-        //{
-        //    this.token = token;
-        //    this._random = _random;
-        //}
-
         public void AppendMatch(StringBuilder builder)
         {
             // append a random literal, between 0 characters and 10 in length

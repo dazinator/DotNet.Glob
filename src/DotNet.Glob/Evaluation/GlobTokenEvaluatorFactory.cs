@@ -18,7 +18,6 @@ namespace DotNet.Globbing.Evaluation
 
         public IGlobTokenEvaluator CreateTokenEvaluator(CharacterListToken token)
         {
-            // ICharacterMatcher matcher;
             if (_options.CaseInsensitive)
             {
                 return new CharacterListTokenEvaluatorCaseInsensitive(token);

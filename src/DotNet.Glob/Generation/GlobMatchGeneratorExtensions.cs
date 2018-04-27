@@ -7,7 +7,6 @@ namespace DotNet.Globbing.Generation
     public static class GlobMatchGeneratorExtensions
     {
 
-
         public static void AppendRandomLiteralCharacterBetween(this StringBuilder builder, Random random, char start, char end)
         {
             builder.Append(random.GetRandomCharacterBetween(start, end));
@@ -21,11 +20,6 @@ namespace DotNet.Globbing.Generation
         {
             builder.Append(random.GetRandomNumberCharacterNotBetween(start, end));
         }
-        //public static void AppendRandomNumberCharacterBetween(this StringBuilder builder, Random random, char start, char end)
-        //{
-        //    builder.Append(random.GetRandomNumberCharacterBetween(start, end));
-        //}
-
 
         public static void AppendRandomLetterCharacter(this StringBuilder builder, Random random)
         {
@@ -94,7 +88,6 @@ namespace DotNet.Globbing.Generation
 
         public static char GetRandomLiteralCharacterNotBetween(this Random random, char start, char end)
         {
-
 
             bool canGenerateHigher = !((int)end >= 'z');
             bool canGenerateLower = !((int)start <= '0');

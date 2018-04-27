@@ -26,7 +26,7 @@ namespace DotNet.Globbing.Evaluation
             //  2. The ** token is the last token - in which case it will math all remaining text
 
             // We shortcut to failure for a ** in some special cases:-
-            // A) The token was parsed with a leading seperator (i.e '/**' and the current charater we are matching from doesn't match that seperator.
+            // A) The token was parsed with a leading path seperator (i.e '/**' and the current charater we are matching from isn't a path seperator.
 
             newPosition = currentPosition;
 
@@ -45,10 +45,7 @@ namespace DotNet.Globbing.Evaluation
                     // expected seperator.
                     return false;
                 }
-                //if (currentChar != this._token.LeadingPathSeperator.Value)
-                //{
-
-                //}
+               
                 // advance current position to match the leading seperator.
                 currentPosition = currentPosition + 1;
             }
@@ -77,13 +74,8 @@ namespace DotNet.Globbing.Evaluation
                     {
                         // can only match full segments.
                         return false;
-                    }
-                    //if (mustMatchUntilChar != '/' && mustMatchUntilChar != '\\')
-                    //{
-                       
-                    //}
+                    }                   
                 }
-
 
                 // Advance position to max pos.
                 currentPosition = maxPos;
@@ -105,11 +97,6 @@ namespace DotNet.Globbing.Evaluation
                         // match the seperator.
                         currentPosition = currentPosition + 1;
                     }
-
-                    //if (currentChar == '/' || currentChar == '\\')
-                    //{
-                       
-                    //}
                 }
 
                 // Match until maxpos, is reached.
@@ -138,14 +125,7 @@ namespace DotNet.Globbing.Evaluation
                             // match the seperator.
                             currentPosition = currentPosition + 1;
                             break;
-                        }
-
-                        //if (currentChar == '/' || currentChar == '\\')
-                        //{
-                        //    // advance past the seperator.
-                        //    currentPosition = currentPosition + 1;
-                        //    break;
-                        //}
+                        }                       
                     }
                 }
             }

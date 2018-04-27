@@ -58,11 +58,6 @@ namespace DotNet.Globbing
                     else
                     {
                         tokens.Add(ReadLiteralToken(reader, allowInvalidPathCharcaters));
-
-                        ////else if (reader.IsValidLiteralCharacter())
-                        ////{
-                        //// literal
-                        //tokens.Add(ReadLiteralToken(reader));
                     }
                 }
             }
@@ -167,7 +162,6 @@ namespace DotNet.Globbing
                     {
                         isNumberRange = true;
                     }
-                    //  throw new ArgumentOutOfRangeException("Range expressions must either be a letter range, i.e [a-z] or a number range i.e [0-9]");
                 }
                 else
                 {
@@ -191,7 +185,6 @@ namespace DotNet.Globbing
 
             while (reader.ReadChar())
             {
-                //  ReadCharacter(CharacterType.BracketedText, CurrentChar);
                 if (reader.IsEndOfRangeOrList)
                 {
                     var peekChar = reader.PeekChar();
@@ -200,8 +193,6 @@ namespace DotNet.Globbing
                     if (peekChar == GlobStringReader.CloseBracketChar)
                     {
                         AcceptCurrentChar(reader);
-                        // Read();
-                        //ReadCharacter(CharacterType.BracketedText, CurrentChar);
                     }
                     else
                     {
@@ -251,7 +242,6 @@ namespace DotNet.Globbing
 
         private IGlobToken ReadSingleCharacterMatchToken()
         {
-            // this.Read();
             return new AnyCharacterToken();
         }
 

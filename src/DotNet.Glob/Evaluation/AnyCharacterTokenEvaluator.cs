@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
@@ -16,18 +15,12 @@ namespace DotNet.Globbing.Evaluation
         {
             newPosition = currentPosition + 1;
             var currentChar = allChars[currentPosition];
-            //if (read == Char.MinValue)
-            //{
-            //    return;
-            //}
             if (GlobStringReader.IsPathSeperator(currentChar))
             {
                 return false;
             }
 
             return true;
-
-
         }
 
         public virtual int ConsumesMinLength

@@ -15,7 +15,6 @@ namespace DotNet.Globbing.Evaluation
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;
 
-            //var currentChar = (char)read;
             if (currentChar >= _token.Start && currentChar <= _token.End)
             {
                 if (_token.IsNegated)
@@ -32,9 +31,6 @@ namespace DotNet.Globbing.Evaluation
             }
 
             return true;
-            // this.Success = true;
-
-
         }
 
         public virtual int ConsumesMinLength
