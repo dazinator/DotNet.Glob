@@ -11,11 +11,16 @@
     <PackageLicenseUrl>https://github.com/dazinator/DotNet.Glob/blob/master/LICENSE</PackageLicenseUrl>
     <PackageTags>glob;globbing;dotnet;pattern;match</PackageTags>
     <PackageReleaseNotes>New features and fixes. See README in Github Repo.</PackageReleaseNotes>
-    <RootNamespace>DotNet.Glob</RootNamespace>
+    <RootNamespace>DotNet.Glob</RootNamespace>    
   </PropertyGroup>
 
   <PropertyGroup Condition="  '$(TargetFramework)' == 'net4' ">
     <DefineConstants>NET40</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="  '$(Configuration)' == 'Release' ">
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\Dotnet.Glob.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
