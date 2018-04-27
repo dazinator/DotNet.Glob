@@ -20,7 +20,7 @@ build_script:
 - cmd: dotnet build ./src/DotNetGlob.sln -c Release --disable-parallel
 - cmd: dotnet pack ./src/DotNetGlob.sln -c Release --output ../../artifacts/
 test_script:
-- cmd: dotnet test src/dotnetglob.sln
+- cmd: dotnet test src/dotnet.glob.tests/dotnet.glob.tests.csproj
 artifacts:
 - path: ./artifacts/*
 deploy:
