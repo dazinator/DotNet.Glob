@@ -7,7 +7,7 @@ environment:
 
 install:
   - cmd: choco install gitversion.portable -pre -y
-  - ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
+  #- ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
   - cmd: appveyor-tools\secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
 
 before_build:
