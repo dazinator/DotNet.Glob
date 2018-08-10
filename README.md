@@ -80,7 +80,7 @@ However, introduced in version `1.6.4`, you can override this behaviour so that 
 
 ```csharp
     // Overide the default options globally for all matche:
-    GlobParseOptions.Default.Parsing.AllowInvalidPathCharacters = true;
+    GlobOptions.Default.Parsing.AllowInvalidPathCharacters = true;
     DotNet.Globbing.Glob.Parse("\"Stuff*").IsMatch("\"Stuff"); // true;    
 ```
 
@@ -89,7 +89,7 @@ You can also just set these options on a per glob pattern basis:
 ```csharp
     GlobOptions options = new GlobOptions();
     options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
-    DotNet.Globbing.Glob.Parse("\"Stuff*", globParseOptions).IsMatch("\"Stuff"); // true; 
+    DotNet.Globbing.Glob.Parse("\"Stuff*", options).IsMatch("\"Stuff"); // true; 
 
 ```
 
@@ -100,11 +100,11 @@ By default, evaluation is case-sensitive unless you specify otherwise.
 ```csharp
     GlobOptions options = new GlobOptions();
     options.Evaluation.CaseInsensitive = true;
-    DotNet.Globbing.Glob.Parse("foo*", globParseOptions).IsMatch("FOo"); // true; 
+    DotNet.Globbing.Glob.Parse("foo*", options).IsMatch("FOo"); // true; 
 
 ```
 
-Setting CaseInsensitive has an impact on:
+Setting `CaseInsensitive` has an impact on:
 
 - Letter Ranges. Any letter range (i.e '[A-Z]') will now match both lower or upper case characters.
 - Character Lists. Any character list (i.e '[ABC]') will now match both lower or upper case characters.
