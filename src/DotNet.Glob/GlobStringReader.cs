@@ -6,7 +6,6 @@ namespace DotNet.Globbing
 {
     public class GlobStringReader : StringReader
     {
-
         private readonly string _text;
         private int _currentIndex;
         public const int FailedRead = -1;
@@ -173,6 +172,18 @@ namespace DotNet.Globbing
         public bool IsBeginningOfRangeOrList
         {
             get { return CurrentChar == OpenBracketChar; }
+        }
+
+        public bool IsEscapeSequence
+        {
+            get
+            {
+                if (!TryPeek(2, out var nextChars))
+                    return false;
+
+                return CurrentChar == OpenBracketChar && 
+                       nextChars[1] == CloseBracketChar;
+            }
         }
 
         public bool IsEndOfRangeOrList

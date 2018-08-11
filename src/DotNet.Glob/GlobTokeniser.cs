@@ -14,14 +14,18 @@ namespace DotNet.Globbing
             _currentBufferText = new StringBuilder();
         }
 
-        public IList<IGlobToken> Tokenise(string globText, bool allowInvalidPathCharcaters)
+        public IList<IGlobToken> Tokenise(string globText)
         {
             var tokens = new List<IGlobToken>();
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())
                 {
-                    if (reader.IsBeginningOfRangeOrList)
+                    if (reader.IsEscapeSequence)
+                    {
+                        tokens.Add(ReadEscapedCharacter(reader));
+                    }
+                    else if (reader.IsBeginningOfRangeOrList)
                     {
                         tokens.Add(ReadRangeOrListToken(reader));
                     }
@@ -105,6 +109,15 @@ namespace DotNet.Globbing
                     break;
                 }
             }
+
+            return new LiteralToken(GetBufferAndReset());
+        }
+
+        private IGlobToken ReadEscapedCharacter(GlobStringReader reader)
+        {
+            reader.Read(); // [
+            AcceptCurrentChar(reader);
+            reader.Read(); // ]
 
             return new LiteralToken(GetBufferAndReset());
         }
