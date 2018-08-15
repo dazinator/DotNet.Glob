@@ -105,6 +105,11 @@ namespace DotNet.Glob.Tests
         }
 
         [Theory]
+
+        [InlineData(@"/foo/bar[!!].baz", @"/foo/bar7.baz")] // not an exclaimation mark after bar
+        [InlineData(@"/foo/bar[!]].baz", @"/foo/bar9.baz")] // not an ] after bar
+        [InlineData(@"/foo/bar[!?].baz", @"/foo/bar7.baz")] // not an ? after bar
+        [InlineData(@"/foo/bar[![].baz", @"/foo/bar7.baz")] // not an [ after bar
         [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
         [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
         [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
