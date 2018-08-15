@@ -103,5 +103,19 @@ namespace DotNet.Glob.Tests
             var resultPattern = glob.ToString();
             Assert.Equal(pattern, resultPattern);
         }
+
+        [Theory]
+        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
+        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
+        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
+        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
+        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*]ator")]
+        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
+        public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
+        {
+            var glob = Globbing.Glob.Parse(pattern);
+            Assert.Equal(glob.ToString(), expectedFormatted);
+        }
     }
 }

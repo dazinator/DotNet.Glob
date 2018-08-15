@@ -37,20 +37,6 @@ namespace DotNet.Glob.Tests
                 var expectedToken = expectedTokens[i];
                 Assert.True(tokens[i].GetType() == expectedToken);
             }
-        }
-
-        [Theory]
-        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
-        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
-        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
-        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
-        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*]ator")]
-        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
-        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
-        public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
-        {
-            var glob = Globbing.Glob.Parse(pattern);
-            Assert.Equal(glob.ToString(), expectedFormatted);
-        }
+        }      
     }
 }
