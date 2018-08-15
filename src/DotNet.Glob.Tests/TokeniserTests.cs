@@ -7,7 +7,6 @@ namespace DotNet.Glob.Tests
 {
     public class TokeniserTests
     {
-       
         [Theory]
         [InlineData("path/hatstand", typeof(LiteralToken), typeof(PathSeperatorToken), typeof(LiteralToken))]
         [InlineData("p*th/ha?s[stu][s-z]and[1-3]/[!a-z]![1234Z]", 
@@ -29,20 +28,29 @@ namespace DotNet.Glob.Tests
             // Arrange         
 
             var sut = new GlobTokeniser();
-            var tokens = sut.Tokenise(testString, false);
-            var tokensAllowInvalidPathWhenParsing = sut.Tokenise(testString, true);
+            var tokens = sut.Tokenise(testString);
 
             Assert.True(tokens.Count == expectedTokens.Length);
-            Assert.True(tokensAllowInvalidPathWhenParsing.Count == expectedTokens.Length);
 
             for (int i = 0; i < tokens.Count; i++)
             {
                 var expectedToken = expectedTokens[i];
                 Assert.True(tokens[i].GetType() == expectedToken);
-                Assert.True(tokensAllowInvalidPathWhenParsing[i].GetType() == expectedToken);
             }
-
         }
 
+        [Theory]
+        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
+        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
+        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
+        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
+        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*]ator")]
+        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
+        public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
+        {
+            var glob = Globbing.Glob.Parse(pattern);
+            Assert.Equal(glob.ToString(), expectedFormatted);
+        }
     }
 }

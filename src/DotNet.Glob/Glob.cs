@@ -5,7 +5,6 @@ using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
-
     public class Glob
     {
         public IGlobToken[] Tokens { get; }
@@ -39,7 +38,7 @@ namespace DotNet.Globbing
                 throw new ArgumentNullException(pattern);
             }
             var tokeniser = new GlobTokeniser();
-            var tokens = tokeniser.Tokenise(pattern, options.Parsing.AllowInvalidPathCharacters);
+            var tokens = tokeniser.Tokenise(pattern);
             return new Glob(options, tokens.ToArray());
         }
 
