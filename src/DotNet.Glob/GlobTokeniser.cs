@@ -7,21 +7,20 @@ namespace DotNet.Globbing
 {
     public class GlobTokeniser
     {
-
-        private StringBuilder _currentBufferText;
+        private readonly StringBuilder _currentBufferText;
 
         public GlobTokeniser()
         {
             _currentBufferText = new StringBuilder();
         }
 
-        public IList<IGlobToken> Tokenise(string globText, bool allowInvalidPathCharcaters)
+        public IList<IGlobToken> Tokenise(string globText)
         {
             var tokens = new List<IGlobToken>();
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())
-                {
+                {                   
                     if (reader.IsBeginningOfRangeOrList)
                     {
                         tokens.Add(ReadRangeOrListToken(reader));
@@ -38,13 +37,11 @@ namespace DotNet.Globbing
                     {
                         var sepToken = ReadPathSeperatorToken(reader);
                         tokens.Add(sepToken);
-
                     }
                     else if (reader.IsBeginningOfDirectoryWildcard)
                     {
                         if (tokens.Count > 0)
                         {
-
                             if (tokens[tokens.Count - 1] is PathSeperatorToken lastToken)
                             {
                                 tokens.Remove(lastToken);
@@ -57,7 +54,7 @@ namespace DotNet.Globbing
                     }
                     else
                     {
-                        tokens.Add(ReadLiteralToken(reader, allowInvalidPathCharcaters));
+                        tokens.Add(ReadLiteralToken(reader));
                     }
                 }
             }
@@ -65,7 +62,6 @@ namespace DotNet.Globbing
             _currentBufferText.Clear();
 
             return tokens;
-
         }
 
         private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader, PathSeperatorToken leadingPathSeperatorToken)
@@ -80,34 +76,16 @@ namespace DotNet.Globbing
             }
 
             return new WildcardDirectoryToken(leadingPathSeperatorToken, null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
-
         }
 
-        private IGlobToken ReadLiteralToken(GlobStringReader reader, bool allowAnyChracter)
+        private IGlobToken ReadLiteralToken(GlobStringReader reader)
         {
-            bool isValid = allowAnyChracter;
-            if (!allowAnyChracter)
-            {
-                isValid = GlobStringReader.IsValidLiteralCharacter(reader.CurrentChar);
-                if (!isValid)
-                {
-                    throw new NotSupportedException($"{reader.CurrentChar} is not a supported character for a pattern.");
-                }
-            }
-            
             AcceptCurrentChar(reader);
 
             while (!reader.HasReachedEnd)
             {
                 var peekChar = reader.PeekChar();
-                if (!allowAnyChracter)
-                {
-                    isValid = GlobStringReader.IsValidLiteralCharacter(peekChar);
-                }
-                else
-                {
-                    isValid = GlobStringReader.IsNotStartOfToken(peekChar) && !GlobStringReader.IsPathSeperator(peekChar);
-                }
+                var isValid = GlobStringReader.IsNotStartOfToken(peekChar) && !GlobStringReader.IsPathSeperator(peekChar);
 
                 if (isValid)
                 {
@@ -129,7 +107,7 @@ namespace DotNet.Globbing
             }
 
             return new LiteralToken(GetBufferAndReset());
-        }
+        }      
 
         /// <summary>
         /// Parses a token for a range or list globbing expression.
@@ -226,8 +204,6 @@ namespace DotNet.Globbing
             }
 
             return result;
-
-
         }
 
         private PathSeperatorToken ReadPathSeperatorToken(GlobStringReader reader)
@@ -261,6 +237,5 @@ namespace DotNet.Globbing
             _currentBufferText.Clear();
             return text;
         }
-
     }
 }
