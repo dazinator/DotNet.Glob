@@ -68,7 +68,7 @@ In addition, DotNet Glob also supports:
 
 # Escaping special characters
 
-Wrap special characters `?, *, **, [` in square brackets in order to escape them.
+Wrap special characters `?, *, [` in square brackets in order to escape them.
 You can also use negation when doing this.
 
 Here are some examples:
