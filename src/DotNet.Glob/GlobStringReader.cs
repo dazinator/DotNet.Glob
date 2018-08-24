@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -7,9 +6,8 @@ namespace DotNet.Globbing
 {
     public class GlobStringReader : StringReader
     {
-
-        private readonly string _Text;
-        private int _CurrentIndex;
+        private readonly string _text;
+        private int _currentIndex;
         public const int FailedRead = -1;
         public const char NullChar = (char)0;
 
@@ -23,19 +21,19 @@ namespace DotNet.Globbing
         /// <summary>
         /// Tokens can start with the following characters.
         /// </summary>
-        public static char[] BeginningOfTokenCharacters = new[] { ExclamationMarkChar, StarChar, OpenBracketChar, QuestionMarkChar };
+        public static char[] BeginningOfTokenCharacters = { StarChar, OpenBracketChar, QuestionMarkChar };
 
-        public static char[] AllowedNonAlphaNumericChars = new[] { '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_', ':' };
+        public static char[] AllowedNonAlphaNumericChars = { '.', ' ', '!', '#', '-', ';', '=', '@', '~', '_', ':' };
 
         /// <summary>
         /// The current delimiters
         /// </summary>
-        private static readonly char[] PathSeperators = new char[] { '/', '\\' };
+        private static readonly char[] PathSeperators = { '/', '\\' };
 
         public GlobStringReader(string text) : base(text)
         {
-            _Text = text;
-            _CurrentIndex = -1;
+            _text = text;
+            _currentIndex = -1;
         }
 
         /// <summary>
@@ -43,12 +41,12 @@ namespace DotNet.Globbing
         /// </summary>
         public int CurrentIndex
         {
-            get { return _CurrentIndex; }
+            get { return _currentIndex; }
             private set
             {
-                _CurrentIndex = value;
-                LastChar = _Text[_CurrentIndex - 1];
-                CurrentChar = _Text[_CurrentIndex];
+                _currentIndex = value;
+                LastChar = _text[_currentIndex - 1];
+                CurrentChar = _text[_currentIndex];
             }
         }
 
@@ -62,7 +60,7 @@ namespace DotNet.Globbing
             var result = base.Read();
             if (result != FailedRead)
             {
-                _CurrentIndex++;
+                _currentIndex++;
                 LastChar = CurrentChar;
                 CurrentChar = (char)result;
                 return result;
@@ -75,7 +73,7 @@ namespace DotNet.Globbing
         {
             var read = base.Read(buffer, index, count);
             CurrentIndex += read;
-            CurrentChar = _Text[CurrentIndex];
+            CurrentChar = _text[CurrentIndex];
             return read;
         }
 
@@ -113,7 +111,7 @@ namespace DotNet.Globbing
 
         public override string ReadToEnd()
         {
-            CurrentIndex = _Text.Length - 1;
+            CurrentIndex = _text.Length - 1;
             return base.ReadToEnd();
         }
 
@@ -153,28 +151,12 @@ namespace DotNet.Globbing
                 return NullChar;
             }
             return (char)Peek();
-        }
-
-        /// <summary>
-        /// Peek at the next character
-        /// </summary>
-        public bool TryPeek(int numberOfCharacters, out string result)
-        {
-            var currentIndex = CurrentIndex;
-            if (currentIndex + numberOfCharacters >= _Text.Length)
-            {
-                result = null;
-                return false;
-            }
-
-            result = _Text.Substring(CurrentIndex + 1, numberOfCharacters);
-            return true;
-        }
+        }      
 
         public bool IsBeginningOfRangeOrList
         {
             get { return CurrentChar == OpenBracketChar; }
-        }
+        }                
 
         public bool IsEndOfRangeOrList
         {
@@ -184,8 +166,6 @@ namespace DotNet.Globbing
         public bool IsPathSeperator()
         {
             return IsPathSeperator(CurrentChar);
-
-
         }
 
         public static bool IsPathSeperator(char character)
@@ -211,16 +191,6 @@ namespace DotNet.Globbing
         public bool IsBeginningOfDirectoryWildcard
         {
             get { return CurrentChar == StarChar && PeekChar() == StarChar; }
-        }
-
-        public static bool IsValidLiteralCharacter(char character)
-        {
-            return Char.IsLetterOrDigit(character) || AllowedNonAlphaNumericChars.Contains(character);
-        }
-
-        internal bool IsValidLiteralCharacter()
-        {
-            return IsValidLiteralCharacter(CurrentChar);
         }
 
         public static bool IsNotStartOfToken(char character)

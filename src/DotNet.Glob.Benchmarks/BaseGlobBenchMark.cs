@@ -25,7 +25,7 @@ namespace DotNet.Glob.Benchmarks
             if (!_testDataSet.ContainsKey(GlobPattern))
             {
                 // generate test data.
-                var tokens = new GlobTokeniser().Tokenise(GlobPattern, false);
+                var tokens = new GlobTokeniser().Tokenise(GlobPattern);
                 var generator = new GlobMatchStringGenerator(tokens);
                 
                 int total = numberOfMatchingStrings + numberOfNonMatchingStrings;
@@ -49,7 +49,7 @@ namespace DotNet.Glob.Benchmarks
 
         protected Regex CreateRegex(string GlobPattern, bool compiled)
         {
-            var tokens = new GlobTokeniser().Tokenise(GlobPattern, false);
+            var tokens = new GlobTokeniser().Tokenise(GlobPattern);
             return CreateRegex(tokens, compiled);
         }
 

@@ -5,32 +5,28 @@ namespace DotNet.Glob.Tests
 {
     public class GlobTests
     {
-
         [Theory]
-        [InlineData("literal", false, "fliteral", "foo/literal", "literals", "literals/foo")]
-        [InlineData("path/hats*nd", false, "path/hatsblahn", "path/hatsblahndt")]
-        [InlineData("path/?atstand", false, "path/moatstand", "path/batstands")]
-        [InlineData("/**/file.csv", false, "/file.txt")]
-        [InlineData("/*file.txt", false, "/folder")]
-        [InlineData("Shock* 12", false, "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
-        [InlineData("*Shock* 12", false, "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
-        [InlineData("*ave*2", false, "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
-        [InlineData("*ave 12", false, "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
-        [InlineData("*ave 12", false, "wave 12/")]
-        [InlineData("C:\\THIS_IS_A_DIR\\**\\somefile.txt", false, "C:\\THIS_IS_A_DIR\\awesomefile.txt")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/27
-        [InlineData("C:\\name\\**", false, "C:\\name.ext", "C:\\name_longer.ext")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/29
-        [InlineData("Bumpy/**/AssemblyInfo.cs", false, "Bumpy.Test/Properties/AssemblyInfo.cs")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/33
-        [InlineData("C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\**\\MSVC*120.DLL", false, "C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\ANTLR3.RUNTIME.DLL")]      // Attempted repro for https://github.com/dazinator/DotNet.Glob/issues/37
-        [InlineData("literal1", false, "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
-        [InlineData("*ral*", false, "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
-        [InlineData("[list]s", false, "LS", "iS", "Is")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
-        [InlineData("range/[a-b][C-D]", false, "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
-        public void Does_Not_Match(string pattern, bool allowInvalidPathCharcters, params string[] testStrings)
+        [InlineData("literal", "fliteral", "foo/literal", "literals", "literals/foo")]
+        [InlineData("path/hats*nd", "path/hatsblahn", "path/hatsblahndt")]
+        [InlineData("path/?atstand", "path/moatstand", "path/batstands")]
+        [InlineData("/**/file.csv", "/file.txt")]
+        [InlineData("/*file.txt", "/folder")]
+        [InlineData("Shock* 12", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
+        [InlineData("*Shock* 12", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
+        [InlineData("*ave*2", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
+        [InlineData("*ave 12", "HKEY_LOCAL_MACHINE\\SOFTWARE\\Adobe\\Shockwave 12")]
+        [InlineData("*ave 12", "wave 12/")]
+        [InlineData("C:\\THIS_IS_A_DIR\\**\\somefile.txt", "C:\\THIS_IS_A_DIR\\awesomefile.txt")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/27
+        [InlineData("C:\\name\\**", "C:\\name.ext", "C:\\name_longer.ext")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/29
+        [InlineData("Bumpy/**/AssemblyInfo.cs", "Bumpy.Test/Properties/AssemblyInfo.cs")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/33
+        [InlineData("C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\**\\MSVC*120.DLL", "C:\\sources\\x-y 1\\BIN\\DEBUG\\COMPILE\\ANTLR3.RUNTIME.DLL")]      // Attempted repro for https://github.com/dazinator/DotNet.Glob/issues/37
+        [InlineData("literal1", "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("*ral*", "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("[list]s", "LS", "iS", "Is")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        public void Does_Not_Match(string pattern, params string[] testStrings)
         {
-            GlobOptions options = new GlobOptions();
-            options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
-           
-            var glob = Globbing.Glob.Parse(pattern, options);
+            var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 Assert.False(glob.IsMatch(testString));
@@ -70,18 +66,26 @@ namespace DotNet.Glob.Tests
         [InlineData("**/gfx/*.gfx", "HKEY_LOCAL_MACHINE\\gfx\\foo.gfx", "HKEY_LOCAL_MACHINE/gfx/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   -  seems to work fine on mixed slashes.   
         [InlineData("**/gfx/**/*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   - only seems to work on paths with forward slashes.
         [InlineData("**\\gfx\\**\\*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46    -  only seems to work on paths with backwards slashes.
+        [InlineData(@"/foo/bar!.baz", @"/foo/bar!.baz")] // match a ! after bar
+        [InlineData(@"/foo/bar[!!].baz", @"/foo/bar7.baz")] // anything except an exclaimation mark after bar
+        [InlineData(@"/foo/bar[!]].baz", @"/foo/bar9.baz")] // anything except an ] after bar
+        [InlineData(@"/foo/bar[!?].baz", @"/foo/bar7.baz")] // anything except an ? after bar
+        [InlineData(@"/foo/bar[![].baz", @"/foo/bar7.baz")] // anything except an [ after bar
+        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
+        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
+        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
+        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
+        [InlineData(@"C:\myergen[*][]]ator", @"C:\myergen*]ator")]
+        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*ator", @"C:\myergen]ator")]
+        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
         public void IsMatch(string pattern, params string[] testStrings)
         {
-
-            GlobOptions options = new GlobOptions();
-            options.Parsing.AllowInvalidPathCharacters = true;
-           
-            var glob = Globbing.Glob.Parse(pattern, options);
+            var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
                 Assert.True(match);
-
             }
         }
 
@@ -93,8 +97,7 @@ namespace DotNet.Glob.Tests
         [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/bC", "range/BD")]
         public void IsMatchCaseInsensitive(string pattern, params string[] testStrings)
         {
-            GlobOptions options = new GlobOptions();
-            options.Parsing.AllowInvalidPathCharacters = true;
+            var options = new GlobOptions();
             options.Evaluation.CaseInsensitive = true;
            
             var glob = Globbing.Glob.Parse(pattern, options);
@@ -108,10 +111,18 @@ namespace DotNet.Glob.Tests
         [Fact]
         public void To_String_Returns_Pattern()
         {
-            var pattern = "p?th/*a[bcd]b[e-g]/**/a[1-4][!wxyz][!a-c][!1-3].*";
+            const string pattern = "p?th/*a[bcd]b[e-g]/**/a[1-4][!wxyz][!a-c][!1-3].*";
             var glob = Globbing.Glob.Parse(pattern);
             var resultPattern = glob.ToString();
             Assert.Equal(pattern, resultPattern);
         }
+
+        //[Theory]
+       
+        //public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
+        //{
+        //    var glob = Globbing.Glob.Parse(pattern);
+        //    Assert.Equal(expectedFormatted, glob.ToString());
+        //}
     }
 }

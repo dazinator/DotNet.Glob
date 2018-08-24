@@ -66,30 +66,45 @@ In addition, DotNet Glob also supports:
 | `**` |  matches any number of path / directory segments. When used must be the only contents of a segment. | /\*\*/some.\* | /foo/bar/bah/some.txt, /some.txt, or /foo/some.txt	|
 
 
+# Escaping special characters
+
+Wrap special characters `?, *, [` in square brackets in order to escape them.
+You can also use negation when doing this.
+
+Here are some examples:
+
+| Pattern  | Description | Matches |  
+| --------  | ----------- | ------- | 
+|`/foo/bar[[].baz` | match a `[` after bar | `/foo/bar[.baz` |
+|`/foo/bar[!!].baz` | match any character except `!` after bar | `/foo/bar7.baz` |
+|`/foo/bar[!]].baz` | match any character except an ] after bar | `/foo/bar7.baz` |
+|`/foo/bar[?].baz` | match an `?` after bar | `/foo/bar?.baz` |
+|`/foo/bar[*]].baz` | match either a `*` or a `]` after bar | `/foo/bar*.baz`,`/foo/bar].baz` |
+|`/foo/bar[*][]].baz` | match `*]` after bar | `/foo/bar*].baz` |
+
+
 # Advanced Usages
 
-## Parsing options.
-By default, when your glob pattern is parsed, `DotNet.Glob` will only allow literals which are valid for path / directory names.
-These are:
+## Options.
 
-1. Any Letter (A-Z, a-z) or Digit
-2. `.`, ` `, `!`, `#`, `-`, `;`, `=`, `@`, `~`, `_`, `:`
+`DotNet.Glob` allows you to set options at a global level, however you can also override these options on a per glob basis, by passing in your own `GlobOptions` instance to a glob.
 
-This is optimised for matching against paths / directory strings.
-However, introduced in version `1.6.4`, you can override this behaviour so that you can include arbitrary characters in your literals. For example, here is a pattern that matches the literal `"Stuff`:
+To set global options, use `GlobOptions.Default`.
+
+For example:
 
 ```csharp
     // Overide the default options globally for all matche:
-    GlobParseOptions.Default.Parsing.AllowInvalidPathCharacters = true;
-    DotNet.Globbing.Glob.Parse("\"Stuff*").IsMatch("\"Stuff"); // true;    
+    GlobOptions.Default.Evaluation.CaseInsensitive = true;   
+	DotNet.Globbing.Glob.Parse("foo", options).IsMatch("Foo"); // true; 
 ```
 
-You can also just set these options on a per glob pattern basis:
+Or, override any global options, by passing in your own `GlobOptions` instance:
 
 ```csharp
     GlobOptions options = new GlobOptions();
-    options.Parsing.AllowInvalidPathCharacters = allowInvalidPathCharcters;
-    DotNet.Globbing.Glob.Parse("\"Stuff*", globParseOptions).IsMatch("\"Stuff"); // true; 
+    options.Evaluation.CaseInsensitive = false;
+    DotNet.Globbing.Glob.Parse("foo", options).IsMatch("Foo"); // false; 
 
 ```
 
@@ -100,11 +115,11 @@ By default, evaluation is case-sensitive unless you specify otherwise.
 ```csharp
     GlobOptions options = new GlobOptions();
     options.Evaluation.CaseInsensitive = true;
-    DotNet.Globbing.Glob.Parse("foo*", globParseOptions).IsMatch("FOo"); // true; 
+    DotNet.Globbing.Glob.Parse("foo*", options).IsMatch("FOo"); // true; 
 
 ```
 
-Setting CaseInsensitive has an impact on:
+Setting `CaseInsensitive` has an impact on:
 
 - Letter Ranges. Any letter range (i.e '[A-Z]') will now match both lower or upper case characters.
 - Character Lists. Any character list (i.e '[ABC]') will now match both lower or upper case characters.
