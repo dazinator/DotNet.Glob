@@ -151,40 +151,12 @@ namespace DotNet.Globbing
                 return NullChar;
             }
             return (char)Peek();
-        }
-
-        /// <summary>
-        /// Peek at the next character
-        /// </summary>
-        public bool TryPeek(int numberOfCharacters, out string result)
-        {
-            var currentIndex = CurrentIndex;
-            if (currentIndex + numberOfCharacters >= _text.Length)
-            {
-                result = null;
-                return false;
-            }
-
-            result = _text.Substring(CurrentIndex + 1, numberOfCharacters);
-            return true;
-        }
+        }      
 
         public bool IsBeginningOfRangeOrList
         {
             get { return CurrentChar == OpenBracketChar; }
-        }
-
-        public bool IsEscapeSequence
-        {
-            get
-            {
-                if (!TryPeek(2, out var nextChars))
-                    return false;
-
-                return CurrentChar == OpenBracketChar && 
-                       nextChars[1] == CloseBracketChar;
-            }
-        }
+        }                
 
         public bool IsEndOfRangeOrList
         {
@@ -194,8 +166,6 @@ namespace DotNet.Globbing
         public bool IsPathSeperator()
         {
             return IsPathSeperator(CurrentChar);
-
-
         }
 
         public static bool IsPathSeperator(char character)

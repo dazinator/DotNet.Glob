@@ -66,6 +66,19 @@ namespace DotNet.Glob.Tests
         [InlineData("**/gfx/*.gfx", "HKEY_LOCAL_MACHINE\\gfx\\foo.gfx", "HKEY_LOCAL_MACHINE/gfx/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   -  seems to work fine on mixed slashes.   
         [InlineData("**/gfx/**/*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46   - only seems to work on paths with forward slashes.
         [InlineData("**\\gfx\\**\\*.gfx", "a_b\\gfx\\bar\\foo.gfx", "a_b/gfx/bar/foo.gfx")]      // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/46    -  only seems to work on paths with backwards slashes.
+        [InlineData(@"/foo/bar!.baz", @"/foo/bar!.baz")] // match a ! after bar
+        [InlineData(@"/foo/bar[!!].baz", @"/foo/bar7.baz")] // anything except an exclaimation mark after bar
+        [InlineData(@"/foo/bar[!]].baz", @"/foo/bar9.baz")] // anything except an ] after bar
+        [InlineData(@"/foo/bar[!?].baz", @"/foo/bar7.baz")] // anything except an ? after bar
+        [InlineData(@"/foo/bar[![].baz", @"/foo/bar7.baz")] // anything except an [ after bar
+        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
+        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
+        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
+        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
+        [InlineData(@"C:\myergen[*][]]ator", @"C:\myergen*]ator")]
+        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*ator", @"C:\myergen]ator")]
+        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
         public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
@@ -104,23 +117,12 @@ namespace DotNet.Glob.Tests
             Assert.Equal(pattern, resultPattern);
         }
 
-        [Theory]
-
-        [InlineData(@"/foo/bar[!!].baz", @"/foo/bar7.baz")] // not an exclaimation mark after bar
-        [InlineData(@"/foo/bar[!]].baz", @"/foo/bar9.baz")] // not an ] after bar
-        [InlineData(@"/foo/bar[!?].baz", @"/foo/bar7.baz")] // not an ? after bar
-        [InlineData(@"/foo/bar[![].baz", @"/foo/bar7.baz")] // not an [ after bar
-        [InlineData(@"C:\myergen\[[]a]tor", @"C:\myergen\[a]tor")]
-        [InlineData(@"C:\myergen\[[]ator", @"C:\myergen\[ator")]
-        [InlineData(@"C:\myergen\[[][]]ator", @"C:\myergen\[]ator")]
-        [InlineData(@"C:\myergen[*]ator", @"C:\myergen*ator")]
-        [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*]ator")]
-        [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
-        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
-        public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
-        {
-            var glob = Globbing.Glob.Parse(pattern);
-            Assert.Equal(glob.ToString(), expectedFormatted);
-        }
+        //[Theory]
+       
+        //public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
+        //{
+        //    var glob = Globbing.Glob.Parse(pattern);
+        //    Assert.Equal(expectedFormatted, glob.ToString());
+        //}
     }
 }
