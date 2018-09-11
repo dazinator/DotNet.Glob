@@ -96,10 +96,10 @@ For example:
 ```csharp
     // Overide the default options globally for all matche:
     GlobOptions.Default.Evaluation.CaseInsensitive = true;   
-	DotNet.Globbing.Glob.Parse("foo", options).IsMatch("Foo"); // true; 
+	DotNet.Globbing.Glob.Parse("foo").IsMatch("Foo"); // true; 
 ```
 
-Or, override any global options, by passing in your own `GlobOptions` instance:
+Or, override any global default options, by passing in your own instance of `GlobOptions`:
 
 ```csharp
     GlobOptions options = new GlobOptions();
