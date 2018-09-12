@@ -15,7 +15,7 @@ namespace DotNet.Globbing.Evaluation
         {
             newPosition = currentPosition + 1;
             var currentChar = allChars[currentPosition];
-            if (GlobStringReader.IsPathSeperator(currentChar))
+            if (GlobStringReader.IsPathSeparator(currentChar))
             {
                 return false;
             }

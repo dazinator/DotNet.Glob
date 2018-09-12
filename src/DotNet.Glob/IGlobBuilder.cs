@@ -5,11 +5,11 @@ namespace DotNet.Globbing
 {
     public interface IGlobBuilder
     {
-        IGlobBuilder PathSeperator(PathSeperatorKind kind = PathSeperatorKind.ForwardSlash);
+        IGlobBuilder PathSeparator(PathSeparatorKind kind = PathSeparatorKind.ForwardSlash);
         IGlobBuilder Literal(string text);
         IGlobBuilder AnyCharacter();
         IGlobBuilder Wildcard();
-        IGlobBuilder DirectoryWildcard(PathSeperatorKind? leadingPathSeperatorKind = PathSeperatorKind.ForwardSlash, PathSeperatorKind ? trailingPathSeperatorKind = PathSeperatorKind.ForwardSlash);
+        IGlobBuilder DirectoryWildcard(PathSeparatorKind? leadingPathSeparatorKind = PathSeparatorKind.ForwardSlash, PathSeparatorKind ? trailingPathSeparatorKind = PathSeparatorKind.ForwardSlash);
         IGlobBuilder OneOf(params char[] characters);
         IGlobBuilder NotOneOf(params char[] characters);
         IGlobBuilder LetterInRange(char start, char end);

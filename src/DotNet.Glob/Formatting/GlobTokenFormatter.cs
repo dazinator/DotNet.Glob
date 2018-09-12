@@ -28,14 +28,14 @@ namespace DotNet.Globbing
 
         public void Visit(WildcardDirectoryToken wildcardDirectoryToken)
         {
-            if (wildcardDirectoryToken.LeadingPathSeperator != null)
+            if (wildcardDirectoryToken.LeadingPathSeparator != null)
             {
-                _stringBuilder.Append(wildcardDirectoryToken.LeadingPathSeperator.Value);
+                _stringBuilder.Append(wildcardDirectoryToken.LeadingPathSeparator.Value);
             }
             _stringBuilder.Append("**");
-            if(wildcardDirectoryToken.TrailingPathSeperator != null)
+            if(wildcardDirectoryToken.TrailingPathSeparator != null)
             {
-                _stringBuilder.Append(wildcardDirectoryToken.TrailingPathSeperator.Value);
+                _stringBuilder.Append(wildcardDirectoryToken.TrailingPathSeparator.Value);
             }
         }
 
@@ -55,7 +55,7 @@ namespace DotNet.Globbing
             _stringBuilder.Append(']');
         }
 
-        void IGlobTokenVisitor.Visit(PathSeperatorToken token)
+        void IGlobTokenVisitor.Visit(PathSeparatorToken token)
         {
             _stringBuilder.Append(token.Value);
         }

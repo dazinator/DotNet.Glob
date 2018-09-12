@@ -1,6 +1,6 @@
 ﻿namespace DotNet.Globbing
 {
-    public enum PathSeperatorKind
+    public enum PathSeparatorKind
     {
         ForwardSlash,
         BackwardSlash

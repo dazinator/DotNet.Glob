@@ -33,16 +33,16 @@ namespace DotNet.Globbing
                     {
                         tokens.Add(ReadWildcardToken());
                     }
-                    else if (reader.IsPathSeperator())
+                    else if (reader.IsPathSeparator())
                     {
-                        var sepToken = ReadPathSeperatorToken(reader);
+                        var sepToken = ReadPathSeparatorToken(reader);
                         tokens.Add(sepToken);
                     }
                     else if (reader.IsBeginningOfDirectoryWildcard)
                     {
                         if (tokens.Count > 0)
                         {
-                            if (tokens[tokens.Count - 1] is PathSeperatorToken lastToken)
+                            if (tokens[tokens.Count - 1] is PathSeparatorToken lastToken)
                             {
                                 tokens.Remove(lastToken);
                                 tokens.Add(ReadDirectoryWildcardToken(reader, lastToken));
@@ -64,18 +64,18 @@ namespace DotNet.Globbing
             return tokens;
         }
 
-        private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader, PathSeperatorToken leadingPathSeperatorToken)
+        private IGlobToken ReadDirectoryWildcardToken(GlobStringReader reader, PathSeparatorToken leadingPathSeparatorToken)
         {
             reader.ReadChar();
 
-            if (GlobStringReader.IsPathSeperator(reader.PeekChar()))
+            if (GlobStringReader.IsPathSeparator(reader.PeekChar()))
             {
                 reader.ReadChar();
-                var trailingSeperator = ReadPathSeperatorToken(reader);
-                return new WildcardDirectoryToken(leadingPathSeperatorToken, trailingSeperator);
+                var trailingSeparator = ReadPathSeparatorToken(reader);
+                return new WildcardDirectoryToken(leadingPathSeparatorToken, trailingSeparator);
             }
 
-            return new WildcardDirectoryToken(leadingPathSeperatorToken, null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
+            return new WildcardDirectoryToken(leadingPathSeparatorToken, null); // this shouldn't happen unless a pattern ends with ** which is weird. **sometext is not legal.
         }
 
         private IGlobToken ReadLiteralToken(GlobStringReader reader)
@@ -85,7 +85,7 @@ namespace DotNet.Globbing
             while (!reader.HasReachedEnd)
             {
                 var peekChar = reader.PeekChar();
-                var isValid = GlobStringReader.IsNotStartOfToken(peekChar) && !GlobStringReader.IsPathSeperator(peekChar);
+                var isValid = GlobStringReader.IsNotStartOfToken(peekChar) && !GlobStringReader.IsPathSeparator(peekChar);
 
                 if (isValid)
                 {
@@ -206,9 +206,9 @@ namespace DotNet.Globbing
             return result;
         }
 
-        private PathSeperatorToken ReadPathSeperatorToken(GlobStringReader reader)
+        private PathSeparatorToken ReadPathSeparatorToken(GlobStringReader reader)
         {
-            return new PathSeperatorToken(reader.CurrentChar);
+            return new PathSeparatorToken(reader.CurrentChar);
         }
 
         private IGlobToken ReadWildcardToken()

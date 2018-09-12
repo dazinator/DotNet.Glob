@@ -33,7 +33,7 @@ namespace DotNet.Glob.Benchmarks.Utils
         public void Visit(WildcardDirectoryToken wildcardDirectoryToken)
         {
             _stringBuilder.Append(".*");
-            if(wildcardDirectoryToken.TrailingPathSeperator != null)
+            if(wildcardDirectoryToken.TrailingPathSeparator != null)
             {
                 _stringBuilder.Append(@"[/\\]");               
             }
@@ -51,7 +51,7 @@ namespace DotNet.Glob.Benchmarks.Utils
 
         }
 
-        void IGlobTokenVisitor.Visit(PathSeperatorToken token)
+        void IGlobTokenVisitor.Visit(PathSeparatorToken token)
         {
             _stringBuilder.Append(@"[/\\]");
         }

@@ -4,11 +4,11 @@ using DotNet.Globbing.Token;
 namespace DotNet.Globbing.Evaluation
 {
 
-    public class PathSeperatorTokenEvaluator : IGlobTokenEvaluator
+    public class PathSeparatorTokenEvaluator : IGlobTokenEvaluator
     {
-        private readonly PathSeperatorToken _token;
+        private readonly PathSeparatorToken _token;
 
-        public PathSeperatorTokenEvaluator(PathSeperatorToken token)
+        public PathSeparatorTokenEvaluator(PathSeparatorToken token)
         {
             _token = token;
         }
@@ -16,7 +16,7 @@ namespace DotNet.Globbing.Evaluation
         {
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;
-            return GlobStringReader.IsPathSeperator(currentChar);
+            return GlobStringReader.IsPathSeparator(currentChar);
         }
 
         public virtual int ConsumesMinLength

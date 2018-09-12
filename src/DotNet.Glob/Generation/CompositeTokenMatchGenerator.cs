@@ -51,9 +51,9 @@ namespace DotNet.Globbing.Generation
             AddMatchGenerator(new CharacterListTokenMatchGenerator(token, _random));
         }
 
-        void IGlobTokenVisitor.Visit(PathSeperatorToken token)
+        void IGlobTokenVisitor.Visit(PathSeparatorToken token)
         {
-            AddMatchGenerator(new PathSeperatorMatchGenerator(token, _random));
+            AddMatchGenerator(new PathSeparatorMatchGenerator(token, _random));
         }
 
         void IGlobTokenVisitor.Visit(LiteralToken token)

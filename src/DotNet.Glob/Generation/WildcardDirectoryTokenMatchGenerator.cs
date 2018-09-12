@@ -7,7 +7,7 @@ namespace DotNet.Globbing.Generation
     internal class WildcardDirectoryTokenMatchGenerator : IMatchGenerator
     {
         private WildcardDirectoryToken token;
-        private PathSeperatorKind _PathSeperatorKind = PathSeperatorKind.ForwardSlash;
+        private PathSeparatorKind _PathSeparatorKind = PathSeparatorKind.ForwardSlash;
         private CompositeTokenMatchGenerator _subGenerator;
         private readonly Random _random;
 
@@ -33,19 +33,19 @@ namespace DotNet.Globbing.Generation
         private bool AppendRandomPaths(StringBuilder builder)
         {
             // append a random number of random literals, between 0 characters and 10 in length,
-            // seperated by path seperators.
+            // seperated by path separators.
             var numberOfSegments = _random.Next(_minSegments, _maxSegments);
 
-            if (token.LeadingPathSeperator != null)
+            if (token.LeadingPathSeparator != null)
             {
-                builder.Append(token.LeadingPathSeperator.Value);
+                builder.Append(token.LeadingPathSeparator.Value);
             }
             if (numberOfSegments > 1)
             {
                 for (int i = 1; i <= (numberOfSegments - 1); i++)
                 {
                     builder.AppendRandomLiteralString(_random, _maxLiteralLength);
-                    if (_PathSeperatorKind == PathSeperatorKind.ForwardSlash)
+                    if (_PathSeparatorKind == PathSeparatorKind.ForwardSlash)
                     {
                         builder.Append('/');
                     }
@@ -58,9 +58,9 @@ namespace DotNet.Globbing.Generation
 
             builder.AppendRandomLiteralString(_random, _maxLiteralLength);
 
-            if (token.TrailingPathSeperator != null)
+            if (token.TrailingPathSeparator != null)
             {
-                builder.Append(token.TrailingPathSeperator.Value);
+                builder.Append(token.TrailingPathSeparator.Value);
             }
             return true;
         }

@@ -31,10 +31,10 @@ So to build the following glob pattern: `/foo?\\*[abc][!1-3].txt`:
 ```csharp
 
   var glob = new GlobBuilder()
-                .PathSeperator()
+                .PathSeparator()
                 .Literal("foo")
                 .AnyCharacter()
-                .PathSeperator(PathSeperatorKind.BackwardSlash)
+                .PathSeparator(PathSeparatorKind.BackwardSlash)
                 .Wildcard()
                 .OneOf('a', 'b', 'c')
                 .NumberNotInRange('1', '3')

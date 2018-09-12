@@ -11,7 +11,7 @@ namespace DotNet.Globbing
         void Visit(NumberRangeToken token);
         void Visit(CharacterListToken token);
         void Visit(LiteralToken token);
-        void Visit(PathSeperatorToken token);
+        void Visit(PathSeparatorToken token);
 
     }
 }

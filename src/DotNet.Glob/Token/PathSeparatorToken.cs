@@ -2,9 +2,9 @@
 
 namespace DotNet.Globbing.Token
 {
-    public class PathSeperatorToken : IGlobToken
+    public class PathSeparatorToken : IGlobToken
     {
-        public PathSeperatorToken(char value)
+        public PathSeparatorToken(char value)
         {
             Value = value;
         }

@@ -31,7 +31,7 @@ namespace DotNet.Globbing.Evaluation
             }
         }
 
-        public void Visit(PathSeperatorToken token)
+        public void Visit(PathSeparatorToken token)
         {
             AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
