@@ -48,7 +48,6 @@ namespace DotNet.Glob.Tests
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*", "pGth/yGKNY6acbea3rm8.")]
         [InlineData("/**/file.*", "/folder/file.csv")]
         [InlineData("/**/file.*", "/file.txt")]
-        [InlineData("/**/file.*", "/file.txt")]
         [InlineData("**/file.*", "/file.txt")]
         [InlineData("/*file.txt", "/file.txt")]
         [InlineData("C:\\THIS_IS_A_DIR\\*", "C:\\THIS_IS_A_DIR\\somefile")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/20
@@ -78,14 +77,18 @@ namespace DotNet.Glob.Tests
         [InlineData(@"C:\myergen[*][]]ator", @"C:\myergen*]ator")]
         [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*ator", @"C:\myergen]ator")]
         [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
-        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]     
+        [InlineData(@"**\[#!]*\**", @"#test3", @"#test3\", @"\#test3\foo", @"\#test3")]
+        [InlineData(@"**\[#!]*", @"#test3", "#this is a comment", @"\#test3")]
+        [InlineData(@"[#!]*\**","#this is a comment")]
+        [InlineData(@"[#!]*",  @"#test3", "#this is a comment")]       
         public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
             {
                 var match = glob.IsMatch(testString);
-                Assert.True(match);
+                Assert.True(match, $"glob {pattern} failed to match test string: {testString}");
             }
         }
 

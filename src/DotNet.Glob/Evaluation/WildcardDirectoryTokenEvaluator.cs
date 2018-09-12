@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using DotNet.Globbing.Token;
+﻿using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -31,27 +29,41 @@ namespace DotNet.Globbing.Evaluation
             newPosition = currentPosition;
 
             // 1. Are we already at the end of the test string?
-            if (currentPosition >= allChars.Length)
+            if (currentPosition >= allChars.Length - 1)
             {
                 return true;
             }
 
             // A) If leading seperator then current character needs to be that seperator.
-            var currentChar = allChars[currentPosition];
-            if (this._token.LeadingPathSeperator != null)
+            char currentChar = allChars[currentPosition];
+            if (_token.LeadingPathSeperator != null)
             {
                 if (!GlobStringReader.IsPathSeperator(currentChar))
                 {
                     // expected seperator.
                     return false;
                 }
-               
+                //else
+                //{
                 // advance current position to match the leading seperator.
                 currentPosition = currentPosition + 1;
+                //}
+            }
+            else
+            {
+                // no leading seperator, means ** used at start of pattern not /** used within pattern.              
+                // If **/ is used for start of pattern then input string doesn't need to start with a / or \ and it will be matched.
+                // i.e **/foo/bar will match foo/bar or /foo/bar.
+                //     where as /**/foo/bar will not match foo/bar it will only match /foo/bar.
+                if (GlobStringReader.IsPathSeperator(currentChar))
+                {
+                    // advance current position to match the leading seperator.
+                    currentPosition = currentPosition + 1;
+                }
             }
 
             // 2. if no more tokens require matching (i.e ** is the last token) - we match.         
-            if (this._subEvaluator.EvaluatorCount == 0)
+            if (_subEvaluator.EvaluatorCount == 0)
             {
                 newPosition = allChars.Length;
                 return true;
@@ -59,7 +71,7 @@ namespace DotNet.Globbing.Evaluation
 
             // Because we know we have more tokens in the pattern (subevaluators) - those will require a minimum amount of characters to match (could be 0 too).
             // We can therefore calculate a "max" character position that we can match to, as if we exceed that position the remaining tokens cant possibly match.
-            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
+            int maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
 
             // If all of the remaining tokens have a precise length, we can calculate the exact character that we need to macth to in the string.
             // Otherwise we have to test at multiple character positions until we find a match (less efficient)
@@ -69,12 +81,12 @@ namespace DotNet.Globbing.Evaluation
                 // As we can only match full segments, make sure character before chacracter at max pos is a seperator, 
                 if (maxPos > 0)
                 {
-                    var mustMatchUntilChar = allChars[maxPos - 1];
+                    char mustMatchUntilChar = allChars[maxPos - 1];
                     if (!GlobStringReader.IsPathSeperator(mustMatchUntilChar))
                     {
                         // can only match full segments.
                         return false;
-                    }                   
+                    }
                 }
 
                 // Advance position to max pos.
@@ -90,6 +102,7 @@ namespace DotNet.Globbing.Evaluation
                 currentChar = allChars[currentPosition];
 
                 // If the ** token was parsed with a trailing slash - i.e "**/" then we need to match past it before we test remainijng tokens.
+                // special exception if **/ is at start of pattern, as then the input string need not have any path seperators.
                 if (_token.TrailingPathSeperator != null)
                 {
                     if (GlobStringReader.IsPathSeperator(currentChar))
@@ -125,7 +138,7 @@ namespace DotNet.Globbing.Evaluation
                             // match the seperator.
                             currentPosition = currentPosition + 1;
                             break;
-                        }                       
+                        }
                     }
                 }
             }
@@ -134,15 +147,9 @@ namespace DotNet.Globbing.Evaluation
 
         }
 
-        public virtual int ConsumesMinLength
-        {
-            get { return _subEvaluator.ConsumesMinLength; }
-        }
+        public virtual int ConsumesMinLength => _subEvaluator.ConsumesMinLength;
 
-        public bool ConsumesVariableLength
-        {
-            get { return true; }
-        }
+        public bool ConsumesVariableLength => true;      
 
         #endregion
 
