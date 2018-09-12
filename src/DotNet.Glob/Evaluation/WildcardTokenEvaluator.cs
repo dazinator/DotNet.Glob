@@ -9,12 +9,13 @@ namespace DotNet.Globbing.Evaluation
         private readonly WildcardToken _token;
         private readonly CompositeTokenEvaluator _subEvaluator;
         private readonly bool _requiresSubEvaluation;
+      
 
         public WildcardTokenEvaluator(WildcardToken token, CompositeTokenEvaluator subEvaluator)
         {
             _token = token;
             _subEvaluator = subEvaluator;
-            _requiresSubEvaluation = _subEvaluator.EvaluatorCount > 0;
+            _requiresSubEvaluation = _subEvaluator.EvaluatorCount > 0;          
         }
 
         #region IGlobTokenEvaluator
@@ -72,15 +73,19 @@ namespace DotNet.Globbing.Evaluation
                 }
                 var isMatch = _subEvaluator.IsMatch(allChars, requiredMatchPosition, out newPosition);
                 return isMatch;
-            }          
+            }
 
             // We can match a variable amount of characters but,
             // We can't match more characters than the amount that will take us past the min required length required by the sub evaluator tokens,
             // and as we are not a directory wildcard, we can't match past a path seperator.
-            var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
-            for (int i = currentPosition; i <= maxPos; i++)
+            var maxPos = allChars.Length - 1;
+            if (_subEvaluator.ConsumesMinLength > 0)
             {
-                var currentChar = allChars[i];
+                maxPos = maxPos - _subEvaluator.ConsumesMinLength + 1;
+            }
+           // var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
+            for (int i = currentPosition; i <= maxPos; i++)
+            {               
 
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
                 if (isMatch)
@@ -88,11 +93,12 @@ namespace DotNet.Globbing.Evaluation
                     return true;
                 }
 
+                var currentChar = allChars[i];
                 if (currentChar == '/' || currentChar == '\\')
                 {
                     return false;
                 }
-            }
+            }      
 
             return false;
 
