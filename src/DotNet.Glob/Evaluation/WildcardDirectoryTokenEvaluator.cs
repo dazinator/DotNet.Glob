@@ -1,4 +1,5 @@
 ﻿using DotNet.Globbing.Token;
+using System;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -17,7 +18,13 @@ namespace DotNet.Globbing.Evaluation
 
         #region IGlobTokenEvaluator
 
+#if NETCOREAPP2_1
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition) => IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
             // We shortcut to success for a ** in some special cases:-
             //  1. We are already at the end of the test string.

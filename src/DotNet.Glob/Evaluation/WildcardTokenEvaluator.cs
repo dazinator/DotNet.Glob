@@ -20,7 +20,13 @@ namespace DotNet.Globbing.Evaluation
 
         #region IGlobTokenEvaluator
 
+#if NETCOREAPP2_1
+        public bool IsMatch(string allChars, int currentPosition, out int newPosition) => IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
 
             newPosition = currentPosition;
