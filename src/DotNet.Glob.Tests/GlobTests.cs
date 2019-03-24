@@ -24,6 +24,7 @@ namespace DotNet.Glob.Tests
         [InlineData("*ral*", "LITERAL1")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
         [InlineData("[list]s", "LS", "iS", "Is")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
         [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
+        [InlineData(@"abc/**", @"abcd")]
         public void Does_Not_Match(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
@@ -77,11 +78,12 @@ namespace DotNet.Glob.Tests
         [InlineData(@"C:\myergen[*][]]ator", @"C:\myergen*]ator")]
         [InlineData(@"C:\myergen[*]]ator", @"C:\myergen*ator", @"C:\myergen]ator")]
         [InlineData(@"C:\myergen[?]ator", @"C:\myergen?ator")]
-        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]     
+        [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
         [InlineData(@"**\[#!]*\**", @"#test3", @"#test3\", @"\#test3\foo", @"\#test3")]
         [InlineData(@"**\[#!]*", @"#test3", "#this is a comment", @"\#test3")]
         [InlineData(@"[#!]*\**","#this is a comment")]
-        [InlineData(@"[#!]*",  @"#test3", "#this is a comment")]       
+        [InlineData(@"[#!]*",  @"#test3", "#this is a comment")]
+        [InlineData(@"abc/**", @"abc/def/hij.txt")]
         public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
