@@ -19,11 +19,11 @@ build:
 build_script:
 - cmd: dotnet restore ./src/DotNetGlob.sln --disable-parallel
 - cmd: dotnet build ./src/DotNetGlob.sln -c Release --disable-parallel
-- cmd: dotnet pack ./src/DotNetGlob.sln -c Release --output ../../artifacts/
+- cmd: dotnet pack ./src/DotNetGlob.sln -c Release --output %APPVEYOR_BUILD_FOLDER%/artifacts/
 test_script:
 - cmd: dotnet test src/dotnet.glob.tests/dotnet.glob.tests.csproj
 artifacts:
-- path: ./artifacts/*
+- path: artifacts/*
 deploy:
   provider: NuGet
   api_key:
