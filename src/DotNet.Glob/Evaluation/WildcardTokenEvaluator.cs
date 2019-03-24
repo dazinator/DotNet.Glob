@@ -104,7 +104,13 @@ namespace DotNet.Globbing.Evaluation
                 {
                     return false;
                 }
-            }      
+            }
+
+            // If subevakuators are optional match then match
+            if (_subEvaluator.ConsumesMinLength == 0)
+            {
+                return true;
+            }
 
             return false;
 

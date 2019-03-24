@@ -27,24 +27,18 @@ namespace DotNet.Globbing.Evaluation
 #endif
         {
             // We shortcut to success for a ** in some special cases:-
-            //  1. We are already at the end of the test string.
-            //  2. The ** token is the last token - in which case it will math all remaining text
+            //  1. We have reached the end of the test string.
+            //  2. We haven't yet reached the end of the test string, but the remaining tokens don't need to consume a minimum number of chracters in order to match.
 
             // We shortcut to failure for a ** in some special cases:-
             // A) The token was parsed with a leading path separator (i.e '/**' and the current charater we are matching from isn't a path separator.
 
-            newPosition = currentPosition;
+            newPosition = currentPosition;          
 
-            // 1. Are we already at the end of the test string?
-            if (currentPosition >= allChars.Length - 1)
-            {
-                return true;
-            }
-
-            // A) If leading separator then current character needs to be that separator.
+            // A) If leading seperator then current character needs to be that seperator.
             char currentChar = allChars[currentPosition];
             if (_token.LeadingPathSeparator != null)
-            {
+            {              
                 if (!GlobStringReader.IsPathSeparator(currentChar))
                 {
                     // expected separator.
@@ -58,10 +52,11 @@ namespace DotNet.Globbing.Evaluation
             }
             else
             {
-                // no leading separator, means ** used at start of pattern not /** used within pattern.              
+                // no leading seperator, means ** used at start of pattern not /** used within pattern.              
                 // If **/ is used for start of pattern then input string doesn't need to start with a / or \ and it will be matched.
                 // i.e **/foo/bar will match foo/bar or /foo/bar.
                 //     where as /**/foo/bar will not match foo/bar it will only match /foo/bar.
+                currentChar = allChars[currentPosition];
                 if (GlobStringReader.IsPathSeparator(currentChar))
                 {
                     // advance current position to match the leading separator.
@@ -69,8 +64,14 @@ namespace DotNet.Globbing.Evaluation
                 }
             }
 
-            // 2. if no more tokens require matching (i.e ** is the last token) - we match.         
-            if (_subEvaluator.EvaluatorCount == 0)
+            // 1) are we at the end of the test string?
+            if (currentPosition >= allChars.Length - 1)
+            {
+                return true;
+            }
+
+            // 2. if no more tokens require matching we match.         
+            if (_subEvaluator.ConsumesMinLength == 0)
             {
                 newPosition = allChars.Length;
                 return true;
@@ -156,7 +157,7 @@ namespace DotNet.Globbing.Evaluation
 
         public virtual int ConsumesMinLength => _subEvaluator.ConsumesMinLength;
 
-        public bool ConsumesVariableLength => true;      
+        public bool ConsumesVariableLength => true;
 
         #endregion
 
