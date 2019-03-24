@@ -17,7 +17,7 @@ The benchmarks use [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) 
 3. Parse a glob from a pattern
 ```
  var glob = Glob.Parse("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*");
- var isMatch = glob.IsMatch("pAth/fooooacbfa2vd4.txt");
+ var isMatch = glob.IsMatch("pAth/fooooacbfa2vd4.txt"); // You can also use ReadOnlySpan<char> on supported platforms.
 
 ```
 
@@ -82,6 +82,25 @@ Here are some examples:
 |`/foo/bar[*]].baz` | match either a `*` or a `]` after bar | `/foo/bar*.baz`,`/foo/bar].baz` |
 |`/foo/bar[*][]].baz` | match `*]` after bar | `/foo/bar*].baz` |
 
+## ReadOnlySpan<char>
+
+`ReadOnlySpan<char>` is supported as of version `3.0.0` of this library. 
+You can read more about `Span` here: https://msdn.microsoft.com/en-us/magazine/mt814808.aspx
+
+You must be targeting a platform that supports `ReadOnlySpan<T>` for this API to become available. These are currently:
+
+- `.NET Core 2.1` 
+- Platforms that implement `.NET Standard 2.1`
+
+Usage remains very similar, except you can use the overload that takes a `ReadOnlySpan<char>` as opposed to a `string`:
+```
+    var glob = Globbing.Glob.Parse("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*");
+    var span = "pAth/fooooacbfa2vd4.txt".AsSpan();
+    Assert.True(glob.IsMatch(span));
+
+```
+
+There should be some performance benefits in utilising this in conjunction with other `Span` based API's being added to the .net framework / .net standard.
 
 # Advanced Usages
 
