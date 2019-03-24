@@ -28,7 +28,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="4.0.1-beta1-53">
+    <PackageReference Include="GitVersionTask" Version="4.0.1-beta1-65">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
   </ItemGroup>
