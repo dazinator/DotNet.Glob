@@ -9,7 +9,7 @@ namespace DotNet.Globbing.Evaluation
         IGlobTokenEvaluator CreateTokenEvaluator(LetterRangeToken token);
         IGlobTokenEvaluator CreateTokenEvaluator(LiteralToken token);
         IGlobTokenEvaluator CreateTokenEvaluator(NumberRangeToken token);
-        IGlobTokenEvaluator CreateTokenEvaluator(PathSeperatorToken token);
+        IGlobTokenEvaluator CreateTokenEvaluator(PathSeparatorToken token);
         IGlobTokenEvaluator CreateTokenEvaluator(WildcardDirectoryToken token, CompositeTokenEvaluator nestedCompositeTokenEvaluator);
         IGlobTokenEvaluator CreateTokenEvaluator(WildcardToken token, CompositeTokenEvaluator nestedCompositeTokenEvaluator);
 

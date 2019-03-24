@@ -1,4 +1,5 @@
 using DotNet.Globbing.Token;
+using System;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -10,7 +11,11 @@ namespace DotNet.Globbing.Evaluation
         {
             _token = token;
         }
+#if SPAN
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;

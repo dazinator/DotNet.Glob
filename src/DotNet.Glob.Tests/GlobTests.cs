@@ -1,4 +1,5 @@
 ﻿using DotNet.Globbing;
+using System;
 using Xunit;
 
 namespace DotNet.Glob.Tests
@@ -81,8 +82,8 @@ namespace DotNet.Glob.Tests
         [InlineData(@"/path[\]hatstand", @"/path\hatstand")]
         [InlineData(@"**\[#!]*\**", @"#test3", @"#test3\", @"\#test3\foo", @"\#test3")]
         [InlineData(@"**\[#!]*", @"#test3", "#this is a comment", @"\#test3")]
-        [InlineData(@"[#!]*\**","#this is a comment")]
-        [InlineData(@"[#!]*",  @"#test3", "#this is a comment")]
+        [InlineData(@"[#!]*\**", "#this is a comment")]
+        [InlineData(@"[#!]*", @"#test3", "#this is a comment")]
         [InlineData(@"abc/**", @"abc/def/hij.txt")]
         public void IsMatch(string pattern, params string[] testStrings)
         {
@@ -104,7 +105,7 @@ namespace DotNet.Glob.Tests
         {
             var options = new GlobOptions();
             options.Evaluation.CaseInsensitive = true;
-           
+
             var glob = Globbing.Glob.Parse(pattern, options);
             foreach (var testString in testStrings)
             {
@@ -122,8 +123,19 @@ namespace DotNet.Glob.Tests
             Assert.Equal(pattern, resultPattern);
         }
 
+#if SPAN
+        [Fact]
+        public void Can_Use_ReadOnly_Span()
+        {
+            const string pattern = "p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*";
+            var glob = Globbing.Glob.Parse(pattern);
+
+            var span = "pAth/fooooacbfa2vd4.txt".AsSpan();
+            Assert.True(glob.IsMatch(span));
+        }
+#endif
         //[Theory]
-       
+
         //public void Can_Escape_Special_Characters(string pattern, string expectedFormatted)
         //{
         //    var glob = Globbing.Glob.Parse(pattern);

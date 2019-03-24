@@ -3,15 +3,15 @@
     public class WildcardDirectoryToken : IGlobToken
     {
 
-        public WildcardDirectoryToken(PathSeperatorToken leadingPathSeperator, PathSeperatorToken trailingPathSeperator)
+        public WildcardDirectoryToken(PathSeparatorToken leadingPathSeparator, PathSeparatorToken trailingPathSeparator)
         {
-            TrailingPathSeperator = trailingPathSeperator;
-            LeadingPathSeperator = leadingPathSeperator;
+            TrailingPathSeparator = trailingPathSeparator;
+            LeadingPathSeparator = leadingPathSeparator;
         }
 
-        public PathSeperatorToken TrailingPathSeperator { get; set; }
+        public PathSeparatorToken TrailingPathSeparator { get; set; }
 
-        public PathSeperatorToken LeadingPathSeperator { get; set; }
+        public PathSeparatorToken LeadingPathSeparator { get; set; }
 
         public void Accept(IGlobTokenVisitor Visitor)
         {

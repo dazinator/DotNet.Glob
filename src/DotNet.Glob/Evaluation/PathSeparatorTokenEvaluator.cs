@@ -4,19 +4,23 @@ using DotNet.Globbing.Token;
 namespace DotNet.Globbing.Evaluation
 {
 
-    public class PathSeperatorTokenEvaluator : IGlobTokenEvaluator
+    public class PathSeparatorTokenEvaluator : IGlobTokenEvaluator
     {
-        private readonly PathSeperatorToken _token;
+        private readonly PathSeparatorToken _token;
 
-        public PathSeperatorTokenEvaluator(PathSeperatorToken token)
+        public PathSeparatorTokenEvaluator(PathSeparatorToken token)
         {
             _token = token;
         }
+#if SPAN
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;
-            return GlobStringReader.IsPathSeperator(currentChar);
+            return GlobStringReader.IsPathSeparator(currentChar);
         }
 
         public virtual int ConsumesMinLength

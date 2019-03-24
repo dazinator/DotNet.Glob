@@ -4,12 +4,12 @@ using System;
 
 namespace DotNet.Globbing.Generation
 {
-    internal class PathSeperatorMatchGenerator : IMatchGenerator
+    internal class PathSeparatorMatchGenerator : IMatchGenerator
     {
-        private PathSeperatorToken token;
+        private PathSeparatorToken token;
         private Random _random;
 
-        public PathSeperatorMatchGenerator(PathSeperatorToken token, Random _random)
+        public PathSeparatorMatchGenerator(PathSeparatorToken token, Random _random)
         {
             this.token = token;
             this._random = _random;

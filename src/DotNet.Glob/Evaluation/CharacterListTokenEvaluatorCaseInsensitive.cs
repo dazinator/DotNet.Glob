@@ -22,7 +22,11 @@ namespace DotNet.Globbing.Evaluation
             }
         }
 
+#if SPAN
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
             var currentChar = allChars[currentPosition];
             newPosition = currentPosition + 1;

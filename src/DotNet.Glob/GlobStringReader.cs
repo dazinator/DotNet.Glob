@@ -28,7 +28,7 @@ namespace DotNet.Globbing
         /// <summary>
         /// The current delimiters
         /// </summary>
-        private static readonly char[] PathSeperators = { '/', '\\' };
+        private static readonly char[] PathSeparators = { '/', '\\' };
 
         public GlobStringReader(string text) : base(text)
         {
@@ -97,7 +97,7 @@ namespace DotNet.Globbing
             var segmentBuilder = new StringBuilder();
             while (ReadChar())
             {
-                if (!IsPathSeperator(CurrentChar))
+                if (!IsPathSeparator(CurrentChar))
                 {
                     segmentBuilder.Append(CurrentChar);
                 }
@@ -163,16 +163,16 @@ namespace DotNet.Globbing
             get { return CurrentChar == CloseBracketChar; }
         }
 
-        public bool IsPathSeperator()
+        public bool IsPathSeparator()
         {
-            return IsPathSeperator(CurrentChar);
+            return IsPathSeparator(CurrentChar);
         }
 
-        public static bool IsPathSeperator(char character)
+        public static bool IsPathSeparator(char character)
         {
 
-            var isCurrentCharacterStartOfDelimiter = character == PathSeperators[0] ||
-                                                     character == PathSeperators[1];
+            var isCurrentCharacterStartOfDelimiter = character == PathSeparators[0] ||
+                                                     character == PathSeparators[1];
 
             return isCurrentCharacterStartOfDelimiter;
 

@@ -24,7 +24,7 @@ namespace DotNet.Globbing.Generation
         public void AppendNonMatch(StringBuilder builder)
         {
             // We can match any single character, 
-            // the only thing we wont match against is a directory seperator.
+            // the only thing we wont match against is a directory separator.
             if (_random.Next(0, 1) == 0)
             {
                 builder.Append('/');

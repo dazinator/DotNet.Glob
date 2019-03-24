@@ -47,6 +47,13 @@ namespace DotNet.Globbing
             return _isMatchEvaluator.IsMatch(subject);
         }
 
+#if SPAN
+        public bool IsMatch(ReadOnlySpan<char> subject)
+        {
+            return _isMatchEvaluator.IsMatch(subject);
+        }
+#endif
+
         public override string ToString()
         {
             if (_pattern == null)

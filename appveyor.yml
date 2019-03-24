@@ -1,5 +1,5 @@
 skip_tags: true
-image: Visual Studio 2017
+image: Visual Studio 2019 Preview
 environment:  
   BENCHMARKS: on  
   signingkey:
@@ -9,6 +9,7 @@ install:
   - cmd: choco install gitversion.portable -pre --version 4.0.1-beta1-65 -y
   #- ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
   - cmd: appveyor-tools\secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
+  - cmd: choco install dotnetcore-sdk --pre
 
 before_build:
   - ps: gitversion /l console /output buildserver

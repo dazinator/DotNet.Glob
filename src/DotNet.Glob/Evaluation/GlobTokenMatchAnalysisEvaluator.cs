@@ -80,7 +80,7 @@ namespace DotNet.Globbing.Evaluation
                 UnmatchedText = _Reader.ReadToEnd()
             };
         }
-        public void Visit(PathSeperatorToken token)
+        public void Visit(PathSeparatorToken token)
         {
             Success = false;
             var read = _Reader.Read();
@@ -90,7 +90,7 @@ namespace DotNet.Globbing.Evaluation
             }
 
             var currentChar = (char)read;
-            if (!GlobStringReader.IsPathSeperator(currentChar))
+            if (!GlobStringReader.IsPathSeparator(currentChar))
             {
                 return;
             }
@@ -126,7 +126,7 @@ namespace DotNet.Globbing.Evaluation
                 return;
             }
             var currentChar = (char)read;
-            if (GlobStringReader.IsPathSeperator(currentChar))
+            if (GlobStringReader.IsPathSeparator(currentChar))
             {
                 return;
             }

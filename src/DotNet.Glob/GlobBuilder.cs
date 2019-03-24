@@ -37,21 +37,21 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public IGlobBuilder PathSeperator(PathSeperatorKind kind = PathSeperatorKind.ForwardSlash)
+        public IGlobBuilder PathSeparator(PathSeparatorKind kind = PathSeparatorKind.ForwardSlash)
         {
-            char seperatorChar;
+            char separatorChar;
             switch (kind)
             {
-                case PathSeperatorKind.ForwardSlash:
-                    seperatorChar = '/';
+                case PathSeparatorKind.ForwardSlash:
+                    separatorChar = '/';
                     break;
-                case PathSeperatorKind.BackwardSlash:
-                    seperatorChar = '\\';
+                case PathSeparatorKind.BackwardSlash:
+                    separatorChar = '\\';
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(kind));
             }
-            _tokens.Add(new PathSeperatorToken(seperatorChar));
+            _tokens.Add(new PathSeparatorToken(separatorChar));
             return this;
         }
 
@@ -61,44 +61,44 @@ namespace DotNet.Globbing
             return this;
         }
 
-        public IGlobBuilder DirectoryWildcard(PathSeperatorKind? leadingSeperatorKind = PathSeperatorKind.ForwardSlash, PathSeperatorKind? trailingSeperatorKind = PathSeperatorKind.ForwardSlash)
+        public IGlobBuilder DirectoryWildcard(PathSeparatorKind? leadingSeparatorKind = PathSeparatorKind.ForwardSlash, PathSeparatorKind? trailingSeparatorKind = PathSeparatorKind.ForwardSlash)
         {
 
-            PathSeperatorToken trailingSep = null;
-            PathSeperatorToken leadingSep = null;
+            PathSeparatorToken trailingSep = null;
+            PathSeparatorToken leadingSep = null;
 
-            if (trailingSeperatorKind == null)
+            if (trailingSeparatorKind == null)
             {
                 trailingSep = null;
             }
             else
             {
-                switch (trailingSeperatorKind)
+                switch (trailingSeparatorKind)
                 {
-                    case PathSeperatorKind.BackwardSlash:
-                        trailingSep = new PathSeperatorToken('\\');
+                    case PathSeparatorKind.BackwardSlash:
+                        trailingSep = new PathSeparatorToken('\\');
                         break;
-                    case PathSeperatorKind.ForwardSlash:
-                        trailingSep = new PathSeperatorToken('/');
+                    case PathSeparatorKind.ForwardSlash:
+                        trailingSep = new PathSeparatorToken('/');
                         break;
                     default:
                         break;
                 }
             }
 
-            if (leadingSeperatorKind == null)
+            if (leadingSeparatorKind == null)
             {
                 leadingSep = null;
             }
             else
             {
-                switch (leadingSeperatorKind)
+                switch (leadingSeparatorKind)
                 {
-                    case PathSeperatorKind.BackwardSlash:
-                        leadingSep = new PathSeperatorToken('\\');
+                    case PathSeparatorKind.BackwardSlash:
+                        leadingSep = new PathSeparatorToken('\\');
                         break;
-                    case PathSeperatorKind.ForwardSlash:
-                        leadingSep = new PathSeperatorToken('/');
+                    case PathSeparatorKind.ForwardSlash:
+                        leadingSep = new PathSeparatorToken('/');
                         break;
                     default:
                         break;

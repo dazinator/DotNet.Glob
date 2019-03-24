@@ -14,23 +14,23 @@ namespace DotNet.Glob.Tests
             // build the following glob pattern using glob builder:
             //       /foo?\\*[abc][!1-3]/**/*.txt
             var tokens = new GlobBuilder()
-                .PathSeperator()
+                .PathSeparator()
                 .Literal("foo")
                 .AnyCharacter()
-                .PathSeperator(PathSeperatorKind.BackwardSlash)
+                .PathSeparator(PathSeparatorKind.BackwardSlash)
                 .Wildcard()
                 .OneOf('a', 'b', 'c')
                 .NumberNotInRange('1', '3')              
-                .DirectoryWildcard(PathSeperatorKind.ForwardSlash, PathSeperatorKind.ForwardSlash)              
+                .DirectoryWildcard(PathSeparatorKind.ForwardSlash, PathSeparatorKind.ForwardSlash)              
                 .Wildcard()
                 .Literal(".txt")
                 .Tokens;
 
             Assert.Equal(10, tokens.Count);
-            Assert.True(tokens[0] is PathSeperatorToken);
+            Assert.True(tokens[0] is PathSeparatorToken);
             Assert.True(tokens[1] is LiteralToken);
             Assert.True(tokens[2] is AnyCharacterToken);
-            Assert.True(tokens[3] is PathSeperatorToken);
+            Assert.True(tokens[3] is PathSeparatorToken);
             Assert.True(tokens[4] is WildcardToken);
             Assert.True(tokens[5] is CharacterListToken);
             Assert.True(tokens[6] is NumberRangeToken);

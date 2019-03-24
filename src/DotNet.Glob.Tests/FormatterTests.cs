@@ -15,13 +15,13 @@ namespace DotNet.Glob.Tests
             //       /foo?\\*[abc][!1-3].txt
 
             var glob = new Globbing.Glob(
-                new PathSeperatorToken('/'),
+                new PathSeparatorToken('/'),
                 new LiteralToken("foo"),
                 new AnyCharacterToken(),
-                new PathSeperatorToken('\\'),
+                new PathSeparatorToken('\\'),
                 new WildcardToken(),
                 new CharacterListToken(new char[] { 'a', 'b', 'c' }, false),
-                new WildcardDirectoryToken(new PathSeperatorToken('/'), new PathSeperatorToken('/')),
+                new WildcardDirectoryToken(new PathSeparatorToken('/'), new PathSeparatorToken('/')),
                 new NumberRangeToken('1', '3', true),
                 new LiteralToken(".txt"));
 

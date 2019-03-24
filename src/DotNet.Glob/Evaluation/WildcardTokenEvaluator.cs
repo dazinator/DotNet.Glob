@@ -20,7 +20,11 @@ namespace DotNet.Globbing.Evaluation
 
         #region IGlobTokenEvaluator
 
+#if SPAN
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#endif
         {
 
             newPosition = currentPosition;
@@ -34,7 +38,7 @@ namespace DotNet.Globbing.Evaluation
                     return true;
                 }
 
-                // We dont match if the remaining string has seperators.
+                // We dont match if the remaining string has separators.
                 for (int i = currentPosition; i <= allChars.Length - 1; i++)
                 {
                     var currentChar = allChars[i];
@@ -57,7 +61,7 @@ namespace DotNet.Globbing.Evaluation
                 // The remaining tokens match against a fixed length string, so we can infer that this wildcard **must** match
                 // a fixed amount of characters in order for the subevaluator to match its fixed amount of characters from the remaining portion
                 // of the string. 
-                // So we must match upto that position. We can't match seperators. 
+                // So we must match upto that position. We can't match separators. 
                 var requiredMatchPosition = allChars.Length - _subEvaluator.ConsumesMinLength;
                 //if (requiredMatchPosition < currentPosition)
                 //{
@@ -77,7 +81,7 @@ namespace DotNet.Globbing.Evaluation
 
             // We can match a variable amount of characters but,
             // We can't match more characters than the amount that will take us past the min required length required by the sub evaluator tokens,
-            // and as we are not a directory wildcard, we can't match past a path seperator.
+            // and as we are not a directory wildcard, we can't match past a path separator.
             var maxPos = allChars.Length - 1;
             if (_subEvaluator.ConsumesMinLength > 0)
             {

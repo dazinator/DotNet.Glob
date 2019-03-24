@@ -51,9 +51,9 @@ namespace DotNet.Globbing.Evaluation
             return new NumberRangeTokenEvaluator(token);
         }
 
-        public IGlobTokenEvaluator CreateTokenEvaluator(PathSeperatorToken token)
+        public IGlobTokenEvaluator CreateTokenEvaluator(PathSeparatorToken token)
         {
-            return new PathSeperatorTokenEvaluator(token);
+            return new PathSeparatorTokenEvaluator(token);
         }
 
         public IGlobTokenEvaluator CreateTokenEvaluator(WildcardDirectoryToken token, CompositeTokenEvaluator nestedCompositeTokenEvaluator)
