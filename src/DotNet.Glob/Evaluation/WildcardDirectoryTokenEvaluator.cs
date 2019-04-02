@@ -25,8 +25,7 @@ namespace DotNet.Globbing.Evaluation
 #endif
         {
             // We shortcut to success for a ** in some special cases:-
-            //  1. We have reached the end of the test string.
-            //  2. We haven't yet reached the end of the test string, but the remaining tokens don't need to consume a minimum number of chracters in order to match.
+               //  1. The remaining tokens don't need to consume a minimum number of chracters in order to match.
 
             // We shortcut to failure for a ** in some special cases:-
             // A) The token was parsed with a leading path separator (i.e '/**' and the current charater we are matching from isn't a path separator.
@@ -60,15 +59,9 @@ namespace DotNet.Globbing.Evaluation
                     // advance current position to match the leading separator.
                     currentPosition = currentPosition + 1;
                 }
-            }
+            }           
 
-            // 1) are we at the end of the test string?
-            if (currentPosition >= allChars.Length - 1)
-            {
-                return true;
-            }
-
-            // 2. if no more tokens require matching we match.         
+            // 1. if no more tokens require matching we match.         
             if (_subEvaluator.ConsumesMinLength == 0)
             {
                 newPosition = allChars.Length;
