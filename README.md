@@ -7,7 +7,7 @@ A fast (probably the fastest) globbing library for .NET.
 | Develop | [![Build status](https://ci.appveyor.com/api/projects/status/yab1btvh7bvkkgva/branch/develop?svg=true)](https://ci.appveyor.com/project/dazinator/dotnet-glob/branch/develop)  | [![NuGet](https://img.shields.io/nuget/vpre/DotNet.Glob.svg)](https://www.nuget.org/packages/DotNet.Glob/) |
 
 This library **does not** use Regex - I wanted to make something faster.
-The latest benchmarks show that DotNet.Glob outperforms Regex - and that was my goal for this library.
+The latest benchmarks show that `DotNet.Glob` outperforms Regex - that was my goal for this library.
 The benchmarks use [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) and can be located inside this repo. Just `dotnet run` them. Some Benchmark results have also been published on the wiki: https://github.com/dazinator/DotNet.Glob/wiki/Benchmarks-(vs-Compiled-Regex)
 
 # Usage
