@@ -63,7 +63,7 @@ In addition, DotNet Glob also supports:
 
 | Wildcard  | Description | Example | Matches | Does not match |
 | --------  | ----------- | ------- | ------- | -------------- |
-| `**` |  matches any number of path / directory segments. When used must be the only contents of a segment. | /\*\*/some.\* | /foo/bar/bah/some.txt, /some.txt, or /foo/some.txt	|
+| `**` |  matches zero or more path / directory segments. When used must be the only contents of a segment. | /\*\*/some.\* | /foo/bar/bah/some.txt, /some.txt, or /foo/some.txt	|
 
 
 # Escaping special characters

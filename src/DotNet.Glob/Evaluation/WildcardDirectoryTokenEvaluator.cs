@@ -33,9 +33,10 @@ namespace DotNet.Globbing.Evaluation
             newPosition = currentPosition;          
 
             // A) If leading seperator then current character needs to be that seperator.
-            if(allChars.Length <= currentPosition || currentPosition < 0)
+			if (allChars.Length <= currentPosition || currentPosition < 0)
             {
-                return false;
+				//There is no more characters, if there is no leading path separator, we match.
+                return _token.LeadingPathSeparator == null;
             }
             char currentChar = allChars[currentPosition];
             if (_token.LeadingPathSeparator != null)

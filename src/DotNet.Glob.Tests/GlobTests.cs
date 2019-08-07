@@ -88,7 +88,9 @@ namespace DotNet.Glob.Tests
         [InlineData(@"abc/**", @"abc/def/hij.txt")]
         [InlineData(@"a/**/b", "a/b")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/65
         [InlineData(@"abc/**", "abc/def")] // Regression Test for https://github.com/dazinator/DotNet.Glob/issues/65
-        public void IsMatch(string pattern, params string[] testStrings)
+		[InlineData(@"abc**", "abc")]
+		[InlineData(@"**abc", "abc")]
+		public void IsMatch(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
             foreach (var testString in testStrings)
