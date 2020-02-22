@@ -6,7 +6,7 @@ environment:
     secure: DcEnjxct82WwrppME28Rkw==
 
 install:
-  - cmd: choco install gitversion.portable --version 5.0.1 -y
+  - cmd: choco install gitversion.portable --version 5.1.3 -y
   #- ps: iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
   - cmd: appveyor-tools\secure-file -decrypt DotNet.Glob.snk.enc -secret %signingkey%
   - cmd: choco install dotnetcore-sdk --pre
