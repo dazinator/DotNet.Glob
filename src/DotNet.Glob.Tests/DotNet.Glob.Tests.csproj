@@ -30,13 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotNet.Glob\DotNet.Glob.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="GitVersionTask" Version="5.1.4-beta1.177">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+  </ItemGroup> 
 
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
