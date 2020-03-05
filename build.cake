@@ -136,14 +136,14 @@ Task("__Benchmarks")
 
             DotNetCoreBuild(projFile.ToString(), new DotNetCoreBuildSettings
             {
-                Framework = "netcoreapp1.1",
+                Framework = "netcoreapp2.1",
                 Configuration = configuration
             });
 
             var projectDir = projFile.GetDirectory();
             DotNetCoreRun(projFile.ToString(), "--args", new DotNetCoreRunSettings
             {
-                Framework = "netcoreapp1.1",
+                Framework = "netcoreapp2.1",
                 Configuration = configuration,
                 WorkingDirectory = projectDir               
             });
