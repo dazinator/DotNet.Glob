@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
+    <!--<TargetFrameworks>netcoreapp1.1;netcoreapp2.1</TargetFrameworks>-->
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
     <AssemblyName>DotNet.Glob.Tests</AssemblyName>
     <PackageId>DotNet.Glob.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>   
