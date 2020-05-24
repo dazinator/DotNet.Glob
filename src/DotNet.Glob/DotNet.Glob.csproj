@@ -19,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="  '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netcoreapp2.1' ">
-    <DefineConstants>SPAN;NEWGITVERSION</DefineConstants>
+    <DefineConstants>SPAN</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="  '$(Configuration)' == 'Release' ">
@@ -27,16 +27,6 @@
     <AssemblyOriginatorKeyFile>..\..\Dotnet.Glob.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <ItemGroup Condition="$(DefineConstants.Contains(NEWGITVERSION))">
-    <PackageReference Include="GitVersionTask" Version="5.1.4-beta1.220">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup Condition="!$(DefineConstants.Contains(NEWGITVERSION))">
-    <PackageReference Include="GitVersionTask" Version="4.0.1-beta1-65">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
+ 
 
 </Project>
