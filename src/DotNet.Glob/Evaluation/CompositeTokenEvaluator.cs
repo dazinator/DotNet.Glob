@@ -86,10 +86,12 @@ namespace DotNet.Globbing.Evaluation
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
         }
 
-#if SPAN
-        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
-#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#if SPAN
+        {
+            return IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+        }
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
 #endif
         {
             newPosition = currentPosition;

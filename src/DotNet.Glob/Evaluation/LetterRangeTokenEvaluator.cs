@@ -5,22 +5,24 @@ using System.Runtime.CompilerServices;
 namespace DotNet.Globbing.Evaluation
 {
     public class LetterRangeTokenEvaluator : IGlobTokenEvaluator
-    {     
+    {
         private readonly LetterRangeToken _token;
 
         public LetterRangeTokenEvaluator(LetterRangeToken token)
-        {          
+        {
             _token = token;
         }
 
-#if SPAN
-        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
-#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#if SPAN
+        {
+            return IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+        }
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
 #endif
         {
-            newPosition = currentPosition + 1;           
-            char currentChar;          
+            newPosition = currentPosition + 1;
+            char currentChar;
             currentChar = allChars[currentPosition];
             return IsMatch(currentChar);
         }

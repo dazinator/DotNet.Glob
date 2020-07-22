@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<TargetFrameworks>netcoreapp1.1;netcoreapp2.1</TargetFrameworks>-->
+    <!--<TargetFrameworks>netcoreapp1.1;netcoreapp2.1;net452</TargetFrameworks>-->
     <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
     <AssemblyName>DotNet.Glob.Tests</AssemblyName>
     <PackageId>DotNet.Glob.Tests</PackageId>
@@ -14,7 +14,7 @@
     <AssemblyOriginatorKeyFile>..\..\Dotnet.Glob.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition="  '$(TargetFramework)' == 'netcoreapp2.1' ">
+  <PropertyGroup Condition="  '$(TargetFramework)' != 'net4' ">
     <DefineConstants>SPAN</DefineConstants>
   </PropertyGroup>
 

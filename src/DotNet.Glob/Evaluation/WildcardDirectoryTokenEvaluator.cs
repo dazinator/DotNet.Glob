@@ -18,14 +18,16 @@ namespace DotNet.Globbing.Evaluation
 
         #region IGlobTokenEvaluator
 
-#if SPAN
-        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
-#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
+#if SPAN
+        {
+            return IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+        }
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
 #endif
         {
             // We shortcut to success for a ** in some special cases:-
-               //  1. The remaining tokens don't need to consume a minimum number of chracters in order to match.
+            //  1. The remaining tokens don't need to consume a minimum number of chracters in order to match.
 
             // We shortcut to failure for a ** in some special cases:-
             // A) The token was parsed with a leading path separator (i.e '/**' and the current charater we are matching from isn't a path separator.

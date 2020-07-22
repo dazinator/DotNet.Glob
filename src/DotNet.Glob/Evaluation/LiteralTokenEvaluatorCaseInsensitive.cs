@@ -16,12 +16,14 @@ namespace DotNet.Globbing.Evaluation
             _literalAsUpperInvariant = token.Value.ToUpperInvariant();
         }
 
-#if SPAN
-        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
-#else
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
-#endif
         {
+#if SPAN
+            return IsMatch(allChars.AsSpan(), currentPosition, out newPosition);
+        }
+        public bool IsMatch(ReadOnlySpan<char> allChars, int currentPosition, out int newPosition)
+        {
+#endif
             newPosition = currentPosition;
             int counter = 0;
 
