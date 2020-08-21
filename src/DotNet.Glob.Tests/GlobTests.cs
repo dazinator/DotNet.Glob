@@ -27,6 +27,7 @@ namespace DotNet.Glob.Tests
         [InlineData("range/[a-b][C-D]", "range/ac", "range/Ad", "range/BD")] // Regression tests for https://github.com/dazinator/DotNet.Glob/issues/41
         [InlineData(@"abc/**", @"abcd")]
         [InlineData(@"**\segment1\**\segment2\**", @"C:\test\segment1\src\segment2")]
+        [InlineData(@"**/.*", "foobar.")] // Regression test for https://github.com/dazinator/DotNet.Glob/issues/78        
         public void Does_Not_Match(string pattern, params string[] testStrings)
         {
             var glob = Globbing.Glob.Parse(pattern);
