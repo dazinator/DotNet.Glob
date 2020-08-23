@@ -27,7 +27,7 @@
     <AssemblyOriginatorKeyFile>..\..\Dotnet.Glob.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net4' And '$(TargetFramework)' != 'netcoreapp2.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net4' And '$(TargetFramework)' != 'netcoreapp2.1' And '$(TargetFramework)' != 'netstandard2.1' ">
     <PackageReference Include="System.Memory">
       <Version>4.5.0</Version>
     </PackageReference>
