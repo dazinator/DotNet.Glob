@@ -16,7 +16,7 @@ namespace DotNet.Glob.Benchmarks
 
         private string _pattern;
         private string _regexString;
-      
+
 
         [Params("p?th/a[e-g].txt",
          "p?th/a[bcd]b[e-g].txt",

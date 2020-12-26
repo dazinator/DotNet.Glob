@@ -27,10 +27,10 @@ namespace DotNet.Glob.Benchmarks
                 // generate test data.
                 var tokens = new GlobTokeniser().Tokenise(GlobPattern);
                 var generator = new GlobMatchStringGenerator(tokens);
-                
+
                 int total = numberOfMatchingStrings + numberOfNonMatchingStrings;
                 var testData = new List<string>(total);
-                
+
                 for (int i = 0; i < numberOfMatchingStrings; i++)
                 {
                     testData.Add(generator.GenerateRandomNonMatch());

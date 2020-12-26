@@ -20,7 +20,7 @@ namespace DotNet.Globbing
             using (var reader = new GlobStringReader(globText))
             {
                 while (reader.ReadChar())
-                {                   
+                {
                     if (reader.IsBeginningOfRangeOrList)
                     {
                         tokens.Add(ReadRangeOrListToken(reader));
@@ -107,7 +107,7 @@ namespace DotNet.Globbing
             }
 
             return new LiteralToken(GetBufferAndReset());
-        }      
+        }
 
         /// <summary>
         /// Parses a token for a range or list globbing expression.

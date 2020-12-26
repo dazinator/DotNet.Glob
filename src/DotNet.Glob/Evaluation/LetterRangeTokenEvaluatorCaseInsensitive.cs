@@ -1,6 +1,6 @@
-﻿using DotNet.Globbing.Token;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -11,7 +11,7 @@ namespace DotNet.Globbing.Evaluation
         private readonly char _endUpperInvariant;
         private readonly char _startLowerInvariant;
         private readonly char _endLowerInvariant;
-        
+
         public LetterRangeTokenEvaluatorCaseInsensitive(LetterRangeToken token)
         {
             _token = token;

@@ -1,15 +1,15 @@
-using DotNet.Globbing.Token;
 using System;
 using System.Runtime.CompilerServices;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
     public class LetterRangeTokenEvaluator : IGlobTokenEvaluator
-    {     
+    {
         private readonly LetterRangeToken _token;
 
         public LetterRangeTokenEvaluator(LetterRangeToken token)
-        {          
+        {
             _token = token;
         }
 
@@ -19,8 +19,8 @@ namespace DotNet.Globbing.Evaluation
         public bool IsMatch(string allChars, int currentPosition, out int newPosition)
 #endif
         {
-            newPosition = currentPosition + 1;           
-            char currentChar;          
+            newPosition = currentPosition + 1;
+            char currentChar;
             currentChar = allChars[currentPosition];
             return IsMatch(currentChar);
         }

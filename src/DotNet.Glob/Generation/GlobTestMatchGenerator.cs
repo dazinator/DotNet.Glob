@@ -9,8 +9,8 @@ namespace DotNet.Globbing.Generation
     public class GlobMatchStringGenerator
     {
         private StringBuilder _stringBuilder;
-        private Random _random;  
-        private CompositeTokenMatchGenerator _generator;       
+        private Random _random;
+        private CompositeTokenMatchGenerator _generator;
 
         public GlobMatchStringGenerator(IEnumerable<IGlobToken> tokens)
         {

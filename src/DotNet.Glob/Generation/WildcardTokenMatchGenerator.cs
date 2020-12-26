@@ -1,6 +1,6 @@
+using System;
 using System.Text;
 using DotNet.Globbing.Token;
-using System;
 
 namespace DotNet.Globbing.Generation
 {
@@ -9,7 +9,7 @@ namespace DotNet.Globbing.Generation
         private WildcardToken token;
         private CompositeTokenMatchGenerator _subGenerator;
         private Random _random;
-        
+
         public WildcardTokenMatchGenerator(WildcardToken token, Random random, CompositeTokenMatchGenerator subGenerator)
         {
             this.token = token;
@@ -26,7 +26,7 @@ namespace DotNet.Globbing.Generation
 
         public void AppendNonMatch(StringBuilder builder)
         {
-           // we won't match if our subtokens dont match.
+            // we won't match if our subtokens dont match.
             builder.AppendRandomLiteralString(_random, 10);
             _subGenerator.AppendNonMatch(builder);
             // builder.Append('/');

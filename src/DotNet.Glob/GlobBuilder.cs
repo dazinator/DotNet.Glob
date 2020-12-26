@@ -10,7 +10,7 @@ namespace DotNet.Globbing
 
         public GlobBuilder()
         {
-            _tokens = new List<IGlobToken>();           
+            _tokens = new List<IGlobToken>();
         }
 
         public IGlobBuilder AnyCharacter()

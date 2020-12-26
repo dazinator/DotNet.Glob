@@ -16,6 +16,6 @@ namespace DotNet.Globbing.Token
 
         public char Value { get; set; }
 
-      
+
     }
 }

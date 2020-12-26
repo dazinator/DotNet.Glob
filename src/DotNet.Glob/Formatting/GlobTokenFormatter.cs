@@ -33,7 +33,7 @@ namespace DotNet.Globbing
                 _stringBuilder.Append(wildcardDirectoryToken.LeadingPathSeparator.Value);
             }
             _stringBuilder.Append("**");
-            if(wildcardDirectoryToken.TrailingPathSeparator != null)
+            if (wildcardDirectoryToken.TrailingPathSeparator != null)
             {
                 _stringBuilder.Append(wildcardDirectoryToken.TrailingPathSeparator.Value);
             }

@@ -31,7 +31,7 @@ namespace DotNet.Glob.Benchmarks
             set
             {
                 _pattern = value;
-               // _glob = new global::Glob.Glob(_pattern);
+                // _glob = new global::Glob.Glob(_pattern);
                 _dotnetGlob = Globbing.Glob.Parse(_pattern);
                 _compiledRegex = CreateRegex(_dotnetGlob.Tokens, true);
                 base.InitialiseGlobTestData(value, 0, MaxResults);

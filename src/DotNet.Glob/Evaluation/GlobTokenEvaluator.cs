@@ -1,5 +1,5 @@
-using DotNet.Globbing.Token;
 using System;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {

@@ -1,5 +1,5 @@
-﻿using DotNet.Globbing.Token;
-using System;
+﻿using System;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -66,7 +66,7 @@ namespace DotNet.Globbing.Evaluation
                 {
                     // advance current position to match the leading separator.
                     // matchedLeadingSeperator = true;
-                    currentPosition = currentPosition + 1;                  
+                    currentPosition = currentPosition + 1;
                 }
             }
 
@@ -80,9 +80,9 @@ namespace DotNet.Globbing.Evaluation
             // Because we know we have more tokens in the pattern (subevaluators) - those will require a minimum amount of characters to match (could be 0 too).
             // We can therefore calculate a "max" character position that we can match to, as if we exceed that position the remaining tokens cant possibly match.
             int maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
-            
+
             // Is there enough remaining characters to provide a match, if not exit early.
-            if(currentPosition > maxPos)
+            if (currentPosition > maxPos)
             {
                 return false;
             }

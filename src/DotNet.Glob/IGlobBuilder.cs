@@ -1,5 +1,5 @@
-﻿using DotNet.Globbing.Token;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing
 {
@@ -9,7 +9,7 @@ namespace DotNet.Globbing
         IGlobBuilder Literal(string text);
         IGlobBuilder AnyCharacter();
         IGlobBuilder Wildcard();
-        IGlobBuilder DirectoryWildcard(PathSeparatorKind? leadingPathSeparatorKind = PathSeparatorKind.ForwardSlash, PathSeparatorKind ? trailingPathSeparatorKind = PathSeparatorKind.ForwardSlash);
+        IGlobBuilder DirectoryWildcard(PathSeparatorKind? leadingPathSeparatorKind = PathSeparatorKind.ForwardSlash, PathSeparatorKind? trailingPathSeparatorKind = PathSeparatorKind.ForwardSlash);
         IGlobBuilder OneOf(params char[] characters);
         IGlobBuilder NotOneOf(params char[] characters);
         IGlobBuilder LetterInRange(char start, char end);

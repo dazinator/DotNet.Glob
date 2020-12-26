@@ -38,6 +38,6 @@ namespace DotNet.Globbing.Generation
                 builder.Append(_random.GetRandomLetterCharacterNotBetween(token.Start, token.End));
             }
         }
-      
+
     }
 }

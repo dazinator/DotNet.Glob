@@ -64,7 +64,7 @@ namespace DotNet.Globbing.Generation
                     _nonMatches.Add((char)i);
                 }
             }
-           
+
         }
 
     }

@@ -37,7 +37,7 @@ namespace DotNet.Globbing.Evaluation
         }
 
         public void Visit(LiteralToken token)
-        {           
+        {
             AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token));
         }
 
@@ -67,7 +67,7 @@ namespace DotNet.Globbing.Evaluation
 
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
-            Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);        
+            Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
             AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _evaluatorFactory)));
 
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
@@ -82,7 +82,7 @@ namespace DotNet.Globbing.Evaluation
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_Tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
             AddEvaluator(_evaluatorFactory.CreateTokenEvaluator(token, new CompositeTokenEvaluator(remaining, _evaluatorFactory)));
-                  
+
             _finished = true; // signlas to stop visiting any further tokens as we have offloaded them all to the nested evaluator.
         }
 

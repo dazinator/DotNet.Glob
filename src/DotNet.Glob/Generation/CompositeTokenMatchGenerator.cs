@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using DotNet.Globbing.Token;
 using System.Text;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Generation
 {
@@ -79,7 +79,7 @@ namespace DotNet.Globbing.Generation
         {
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _tokens.Length - (_currentTokenIndex + 1);
-           
+
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
@@ -94,7 +94,7 @@ namespace DotNet.Globbing.Generation
         {
             // if no more tokens then just return as * matches the rest of the segment, and therefore no more matching.
             int remainingCount = _tokens.Length - (_currentTokenIndex + 1);
-           
+
             // Add a nested CompositeTokenEvaluator, passing all of our remaining tokens to it.
             IGlobToken[] remaining = new IGlobToken[remainingCount];
             Array.Copy(_tokens, _currentTokenIndex + 1, remaining, 0, remainingCount);
@@ -108,7 +108,7 @@ namespace DotNet.Globbing.Generation
         protected void AddMatchGenerator(IMatchGenerator evaluator)
         {
             _generators.Add(evaluator);
-           
+
         }
     }
 }

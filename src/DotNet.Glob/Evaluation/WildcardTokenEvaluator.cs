@@ -1,6 +1,6 @@
-using DotNet.Globbing.Token;
 using System;
 using System.Text;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -9,13 +9,13 @@ namespace DotNet.Globbing.Evaluation
         private readonly WildcardToken _token;
         private readonly CompositeTokenEvaluator _subEvaluator;
         private readonly bool _requiresSubEvaluation;
-      
+
 
         public WildcardTokenEvaluator(WildcardToken token, CompositeTokenEvaluator subEvaluator)
         {
             _token = token;
             _subEvaluator = subEvaluator;
-            _requiresSubEvaluation = _subEvaluator.EvaluatorCount > 0;          
+            _requiresSubEvaluation = _subEvaluator.EvaluatorCount > 0;
         }
 
         #region IGlobTokenEvaluator
@@ -87,9 +87,9 @@ namespace DotNet.Globbing.Evaluation
             {
                 maxPos = maxPos - _subEvaluator.ConsumesMinLength + 1;
             }
-           // var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
+            // var maxPos = (allChars.Length - _subEvaluator.ConsumesMinLength);
             for (int i = currentPosition; i <= maxPos; i++)
-            {               
+            {
 
                 var isMatch = _subEvaluator.IsMatch(allChars, i, out newPosition);
                 if (isMatch)

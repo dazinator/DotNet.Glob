@@ -141,7 +141,7 @@ namespace DotNet.Globbing.Generation
                     return (char)random.Next('0', start <= '9' ? start - 1 : '9');
 
                 }
-            
+
             }
 
             throw new ArgumentOutOfRangeException("Could not generate character outside range..");

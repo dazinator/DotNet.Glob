@@ -65,7 +65,7 @@ namespace DotNet.Glob.Benchmarks
                 result ^= _glob.IsMatch(testString);
             }
             return result;
-        }       
+        }
 
     }
 }

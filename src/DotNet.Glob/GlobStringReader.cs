@@ -151,12 +151,12 @@ namespace DotNet.Globbing
                 return NullChar;
             }
             return (char)Peek();
-        }      
+        }
 
         public bool IsBeginningOfRangeOrList
         {
             get { return CurrentChar == OpenBracketChar; }
-        }                
+        }
 
         public bool IsEndOfRangeOrList
         {

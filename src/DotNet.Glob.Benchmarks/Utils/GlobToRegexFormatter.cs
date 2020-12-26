@@ -33,9 +33,9 @@ namespace DotNet.Glob.Benchmarks.Utils
         public void Visit(WildcardDirectoryToken wildcardDirectoryToken)
         {
             _stringBuilder.Append(".*");
-            if(wildcardDirectoryToken.TrailingPathSeparator != null)
+            if (wildcardDirectoryToken.TrailingPathSeparator != null)
             {
-                _stringBuilder.Append(@"[/\\]");               
+                _stringBuilder.Append(@"[/\\]");
             }
         }
 

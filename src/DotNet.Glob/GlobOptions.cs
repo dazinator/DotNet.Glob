@@ -4,7 +4,7 @@
     {
         public GlobOptions()
         {
-            Evaluation = new EvaluationOptions();           
+            Evaluation = new EvaluationOptions();
         }
 
         public static GlobOptions Default = new GlobOptions();

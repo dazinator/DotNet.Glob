@@ -1,6 +1,6 @@
-using DotNet.Globbing.Token;
 using System;
 using System.Runtime.CompilerServices;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
@@ -11,7 +11,7 @@ namespace DotNet.Globbing.Evaluation
         private readonly char[] _charactersAsUpperInvariant;
 
         public CharacterListTokenEvaluatorCaseInsensitive(CharacterListToken token)
-        {           
+        {
             _token = token;
 
             _charactersAsUpperInvariant = new char[token.Characters.Length];

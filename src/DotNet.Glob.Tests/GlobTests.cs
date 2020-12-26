@@ -1,5 +1,5 @@
-﻿using DotNet.Globbing;
-using System;
+﻿using System;
+using DotNet.Globbing;
 using Xunit;
 
 namespace DotNet.Glob.Tests

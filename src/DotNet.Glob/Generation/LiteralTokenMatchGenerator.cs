@@ -1,7 +1,7 @@
-using System.Text;
-using DotNet.Globbing.Token;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Generation
 {

@@ -9,13 +9,13 @@ namespace DotNet.Glob.Tests
     {
         [Theory]
         [InlineData("path/hatstand", typeof(LiteralToken), typeof(PathSeparatorToken), typeof(LiteralToken))]
-        [InlineData("p*th/ha?s[stu][s-z]and[1-3]/[!a-z]![1234Z]", 
-            typeof(LiteralToken), typeof(WildcardToken), typeof(LiteralToken),typeof(PathSeparatorToken),
+        [InlineData("p*th/ha?s[stu][s-z]and[1-3]/[!a-z]![1234Z]",
+            typeof(LiteralToken), typeof(WildcardToken), typeof(LiteralToken), typeof(PathSeparatorToken),
             typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(CharacterListToken), typeof(LetterRangeToken), typeof(LiteralToken), typeof(NumberRangeToken), typeof(PathSeparatorToken),
             typeof(LetterRangeToken), typeof(LiteralToken), typeof(CharacterListToken))]
         [InlineData("p?th/*a[bcd]b[e-g]a[1-4][!wxyz][!a-c][!1-3].*",
             typeof(LiteralToken), typeof(AnyCharacterToken), typeof(LiteralToken), typeof(PathSeparatorToken),
-            typeof(WildcardToken), typeof(LiteralToken), typeof(CharacterListToken), 
+            typeof(WildcardToken), typeof(LiteralToken), typeof(CharacterListToken),
             typeof(LiteralToken), typeof(LetterRangeToken), typeof(LiteralToken),
             typeof(NumberRangeToken), typeof(CharacterListToken), typeof(LetterRangeToken),
             typeof(NumberRangeToken), typeof(LiteralToken),
@@ -37,6 +37,6 @@ namespace DotNet.Glob.Tests
                 var expectedToken = expectedTokens[i];
                 Assert.True(tokens[i].GetType() == expectedToken);
             }
-        }      
+        }
     }
 }

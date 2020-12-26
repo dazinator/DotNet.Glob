@@ -8,7 +8,7 @@ namespace DotNet.Globbing.Token
 
         public override void Accept(IGlobTokenVisitor Visitor)
         {
-           Visitor.Visit(this);
+            Visitor.Visit(this);
         }
     }
 }

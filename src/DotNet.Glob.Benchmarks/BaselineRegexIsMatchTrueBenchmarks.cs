@@ -12,7 +12,7 @@ namespace DotNet.Glob.Benchmarks
         private const int MaxResults = 10000;
 
         private string _pattern;
-       // private global::Glob.Glob _glob;
+        // private global::Glob.Glob _glob;
         private Regex _compiledRegex;
         private Globbing.Glob _dotnetGlob;
 
@@ -32,7 +32,7 @@ namespace DotNet.Glob.Benchmarks
             set
             {
                 _pattern = value;
-               // _glob = new global::Glob.Glob(_pattern);
+                // _glob = new global::Glob.Glob(_pattern);
                 _dotnetGlob = Globbing.Glob.Parse(_pattern);
                 _compiledRegex = CreateRegex(_dotnetGlob.Tokens, true);
                 base.InitialiseGlobTestData(value, MaxResults, 0);

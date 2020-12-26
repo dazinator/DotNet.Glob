@@ -1,6 +1,6 @@
-﻿using DotNet.Globbing.Token;
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {

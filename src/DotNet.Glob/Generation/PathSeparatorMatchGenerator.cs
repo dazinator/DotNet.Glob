@@ -1,6 +1,6 @@
+using System;
 using System.Text;
 using DotNet.Globbing.Token;
-using System;
 
 namespace DotNet.Globbing.Generation
 {

@@ -20,8 +20,8 @@ namespace DotNet.Glob.Tests
                 .PathSeparator(PathSeparatorKind.BackwardSlash)
                 .Wildcard()
                 .OneOf('a', 'b', 'c')
-                .NumberNotInRange('1', '3')              
-                .DirectoryWildcard(PathSeparatorKind.ForwardSlash, PathSeparatorKind.ForwardSlash)              
+                .NumberNotInRange('1', '3')
+                .DirectoryWildcard(PathSeparatorKind.ForwardSlash, PathSeparatorKind.ForwardSlash)
                 .Wildcard()
                 .Literal(".txt")
                 .Tokens;
@@ -34,7 +34,7 @@ namespace DotNet.Glob.Tests
             Assert.True(tokens[4] is WildcardToken);
             Assert.True(tokens[5] is CharacterListToken);
             Assert.True(tokens[6] is NumberRangeToken);
-            Assert.True(tokens[7] is WildcardDirectoryToken);           
+            Assert.True(tokens[7] is WildcardDirectoryToken);
             Assert.True(tokens[8] is WildcardToken);
             Assert.True(tokens[9] is LiteralToken);
         }

@@ -1,17 +1,17 @@
-using DotNet.Globbing.Token;
 using System;
 using System.Runtime.CompilerServices;
+using DotNet.Globbing.Token;
 
 namespace DotNet.Globbing.Evaluation
 {
     public class LiteralTokenEvaluator : IGlobTokenEvaluator
     {
-       
+
         private readonly LiteralToken _token;
 
         public LiteralTokenEvaluator(LiteralToken token)
         {
-            _token = token;           
+            _token = token;
         }
 
 #if SPAN
@@ -24,9 +24,9 @@ namespace DotNet.Globbing.Evaluation
             int counter = 0;
 
             while (newPosition < allChars.Length && counter < _token.Value.Length)
-            {               
+            {
                 var currentChar = allChars[newPosition];
-                if(!IsMatch(currentChar, counter))
+                if (!IsMatch(currentChar, counter))
                 {
                     return false;
                 }
@@ -39,7 +39,7 @@ namespace DotNet.Globbing.Evaluation
             {
                 return false;
             }
-          
+
             return true;
         }
 

@@ -392,6 +392,6 @@ namespace DotNet.Globbing.Evaluation
             this.MatchedTokens.Add(match);
             this.Success = true;
         }
-     
+
     }
 }

@@ -4,13 +4,13 @@
     {
         public CharacterListToken(char[] characters, bool isNegated)
         {
-            Characters = characters;              
+            Characters = characters;
             IsNegated = isNegated;
         }
 
-        public bool IsNegated { get; set; }      
+        public bool IsNegated { get; set; }
 
-        public char[] Characters { get; }       
+        public char[] Characters { get; }
 
         public void Accept(IGlobTokenVisitor Visitor)
         {
