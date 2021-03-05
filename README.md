@@ -1,6 +1,8 @@
 # DotNet.Glob
 A fast (probably the fastest) globbing library for .NET.
 
+![financial contributions](https://opencollective.com/dotnetglob/tiers/badge.svg) - [If you would like to say thanks](https://opencollective.com/dotnetglob#category-CONTRIBUTE)
+
 | Branch  | Build Status | NuGet |
 | ------------- | ------------- | ----- |
 | Master  |[![Build master](https://ci.appveyor.com/api/projects/status/yab1btvh7bvkkgva/branch/master?svg=true)](https://ci.appveyor.com/project/dazinator/dotnet-glob/branch/master) | [![NuGet](https://img.shields.io/nuget/v/DotNet.Glob.svg)](https://www.nuget.org/packages/DotNet.Glob/) |
