@@ -167,3 +167,8 @@ For example, given the glob pattern `/f?o/bar/**/*.txt` you could generate match
   }
 
 ```
+
+## Give Back
+
+If this library has helped you, even in a small way, please consider a small donation via https://opencollective.com/darrell-tunnell
+It really would be greatly appreciated.
