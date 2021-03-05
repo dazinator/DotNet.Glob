@@ -1,7 +1,7 @@
 # DotNet.Glob
 A fast (probably the fastest) globbing library for .NET.
 
-![financial contributions](https://opencollective.com/dotnetglob/tiers/badge.svg) - [If you would like to say thanks](https://opencollective.com/dotnetglob#category-CONTRIBUTE)
+[![say thanks](https://opencollective.com/dotnetglob/tiers/badge.svg)](https://opencollective.com/dotnetglob#category-CONTRIBUTE) - if you'd like this library enough please consider giving back with a small donation.
 
 | Branch  | Build Status | NuGet |
 | ------------- | ------------- | ----- |
