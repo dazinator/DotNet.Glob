@@ -128,7 +128,13 @@ namespace DotNet.Globbing.Evaluation
                     }
                 }
 
-                // Match until maxpos, is reached.              
+                // We may already be at max pos, if so sub evaluators need to match here in the string otherwise we fail.    
+                if (currentPosition == maxPos)
+                {
+                    isMatch = _subEvaluator.IsMatch(allChars, currentPosition, out newPosition);
+                    return isMatch;
+                }
+                
                 while (currentPosition <= maxPos)
                 {
                     // Test at current position which is either following a seperator, or at max pos.
@@ -144,7 +150,7 @@ namespace DotNet.Globbing.Evaluation
                     isMatch = _subEvaluator.IsMatch(allChars, currentPosition, out newPosition);
                     if (isMatch)
                     {
-                        return isMatch;
+                        return true;
                     }
 
                     if (currentPosition == maxPos) // didn't match, and can't go any further.
