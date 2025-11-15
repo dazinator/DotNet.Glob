@@ -1,12 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Columns;
-using BenchmarkDotNet.Attributes.Jobs;
 
 namespace DotNet.Glob.Benchmarks
 {
 
-    [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
+    [MemoryDiagnoser, MinColumn, MaxColumn]
     public class BaselineRegexIsMatchTrueBenchmarks : BaseGlobBenchMark
     {
         private const int MaxResults = 10000;

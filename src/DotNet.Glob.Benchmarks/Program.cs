@@ -1,7 +1,11 @@
-﻿using BenchmarkDotNet.Running;
+﻿using System;
+using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
 using BenchmarkDotNet.Exporters.Csv;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Environments;
+using BenchmarkDotNet.Toolchains.InProcess.Emit;
 
 namespace DotNet.Glob.Benchmarks
 {
@@ -10,8 +14,10 @@ namespace DotNet.Glob.Benchmarks
         public static void Main(string[] args)
         {
             var config = DefaultConfig.Instance
-                .With(HtmlExporter.Default)
-                .With(CsvExporter.Default);
+                .AddExporter(HtmlExporter.Default)
+                .AddExporter(CsvExporter.Default)
+                .AddJob(Job.Default
+                    .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1), true)));
 
             BenchmarkRunner.Run<BaselineRegexGlobCompileBenchmarks>(config);
             BenchmarkRunner.Run<BaselineRegexIsMatchTrueBenchmarks>(config);
