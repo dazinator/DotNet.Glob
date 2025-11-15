@@ -1,0 +1,44 @@
+name: Benchmarks
+
+on:
+  workflow_dispatch:  # Allow manual triggering
+  push:
+    branches: [ develop, master ]
+  pull_request:
+    branches: [ develop, master ]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET Core 2.1
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '2.1.x'
+    
+    - name: Setup .NET 8.0
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Disable broken NuGet source
+      run: dotnet nuget disable source gitversiontemp --configfile src/NuGet.Config
+    
+    - name: Restore dependencies
+      run: dotnet restore ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
+    
+    - name: Build benchmarks
+      run: dotnet build ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj -c Release --no-restore -p:SignAssembly=false
+    
+    - name: Run benchmarks
+      run: dotnet run --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj -c Release --no-build -p:SignAssembly=false --framework netcoreapp2.1
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: benchmark-results
+        path: BenchmarkDotNet.Artifacts/**/*
