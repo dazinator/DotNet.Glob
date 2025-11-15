@@ -39,6 +39,7 @@ jobs:
           -c Release --no-restore -p:SignAssembly=false
 
       - name: Run benchmarks
+        timeout-minutes: 30
         run: >
           dotnet run
           --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
