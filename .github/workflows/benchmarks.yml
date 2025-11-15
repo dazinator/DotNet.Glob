@@ -38,14 +38,50 @@ jobs:
           ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
           -c Release --no-restore -p:SignAssembly=false
 
-      - name: Run benchmarks
-        timeout-minutes: 10
+      - name: Run BaselineRegexGlobCompileBenchmarks
+        timeout-minutes: 5
         run: >
           dotnet run
           --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
           -c Release --no-build -p:SignAssembly=false
           --framework net8.0
           -- --filter "*BaselineRegexGlobCompileBenchmarks*" --job dry
+
+      - name: Run BaselineRegexIsMatchFalseBenchmarks
+        timeout-minutes: 5
+        run: >
+          dotnet run
+          --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
+          -c Release --no-build -p:SignAssembly=false
+          --framework net8.0
+          -- --filter "*BaselineRegexIsMatchFalseBenchmarks*" --job dry
+
+      - name: Run BaselineRegexIsMatchTrueBenchmarks
+        timeout-minutes: 5
+        run: >
+          dotnet run
+          --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
+          -c Release --no-build -p:SignAssembly=false
+          --framework net8.0
+          -- --filter "*BaselineRegexIsMatchTrueBenchmarks*" --job dry
+
+      - name: Run DotNetGlobBenchmarks
+        timeout-minutes: 5
+        run: >
+          dotnet run
+          --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
+          -c Release --no-build -p:SignAssembly=false
+          --framework net8.0
+          -- --filter "*DotNetGlobBenchmarks*" --job dry
+
+      - name: Run RegexGlobIsMatchBenchmarks
+        timeout-minutes: 5
+        run: >
+          dotnet run
+          --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
+          -c Release --no-build -p:SignAssembly=false
+          --framework net8.0
+          -- --filter "*RegexGlobIsMatchBenchmarks*" --job dry
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
