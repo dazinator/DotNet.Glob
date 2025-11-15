@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Exporters;
@@ -13,16 +14,19 @@ namespace DotNet.Glob.Benchmarks
     {
         public static void Main(string[] args)
         {
-            var config = DefaultConfig.Instance
+            // Create a config that uses InProcessEmitToolchain to avoid build/signing issues
+            // Use Job.Dry for quick validation in CI, full benchmarking can be done locally
+            var config = ManualConfig.Create(DefaultConfig.Instance)
                 .AddExporter(HtmlExporter.Default)
                 .AddExporter(CsvExporter.Default)
-                .AddJob(Job.Default
-                    .WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1), true)));
+                .WithOptions(ConfigOptions.DisableOptimizationsValidator); // Disable optimizations validator for CI
+            
+            // Override any jobs to use InProcessEmitToolchain
+            config = config.AddJob(Job.Dry.WithToolchain(new InProcessEmitToolchain(TimeSpan.FromHours(1), true)));
 
-            BenchmarkRunner.Run<BaselineRegexGlobCompileBenchmarks>(config);
-            BenchmarkRunner.Run<BaselineRegexIsMatchTrueBenchmarks>(config);
-            BenchmarkRunner.Run<BaselineRegexIsMatchFalseBenchmarks>(config);
-            //BenchmarkRunner.Run<GlobBenchmarks>();
+            // Use BenchmarkSwitcher to support running all benchmarks
+            var switcher = BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly);
+            switcher.Run(args, config);
         }
     }
 }

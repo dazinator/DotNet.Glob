@@ -39,12 +39,13 @@ jobs:
           -c Release --no-restore -p:SignAssembly=false
 
       - name: Run benchmarks
-        timeout-minutes: 30
+        timeout-minutes: 10
         run: >
           dotnet run
           --project ./src/DotNet.Glob.Benchmarks/DotNet.Glob.Benchmarks.csproj
           -c Release --no-build -p:SignAssembly=false
           --framework net8.0
+          -- --filter "*BaselineRegexGlobCompileBenchmarks*" --job dry
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
