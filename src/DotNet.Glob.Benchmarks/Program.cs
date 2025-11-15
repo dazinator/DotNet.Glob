@@ -1,4 +1,7 @@
 ﻿using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Exporters;
+using BenchmarkDotNet.Exporters.Csv;
 
 namespace DotNet.Glob.Benchmarks
 {
@@ -6,9 +9,13 @@ namespace DotNet.Glob.Benchmarks
     {
         public static void Main(string[] args)
         {
-            BenchmarkRunner.Run<BaselineRegexGlobCompileBenchmarks>();
-            BenchmarkRunner.Run<BaselineRegexIsMatchTrueBenchmarks>();
-            BenchmarkRunner.Run<BaselineRegexIsMatchFalseBenchmarks>();
+            var config = DefaultConfig.Instance
+                .With(HtmlExporter.Default)
+                .With(CsvExporter.Default);
+
+            BenchmarkRunner.Run<BaselineRegexGlobCompileBenchmarks>(config);
+            BenchmarkRunner.Run<BaselineRegexIsMatchTrueBenchmarks>(config);
+            BenchmarkRunner.Run<BaselineRegexIsMatchFalseBenchmarks>(config);
             //BenchmarkRunner.Run<GlobBenchmarks>();
         }
     }
