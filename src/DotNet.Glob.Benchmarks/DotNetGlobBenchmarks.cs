@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Columns;
-using BenchmarkDotNet.Attributes.Exporters;
-using BenchmarkDotNet.Attributes.Jobs;
+using BenchmarkDotNet.Exporters;
 using DotNet.Globbing;
 using DotNet.Globbing.Generation;
 
 namespace DotNet.Glob.Benchmarks
 {
 
-    [ClrJob, CoreJob, MemoryDiagnoser, MarkdownExporter, MinColumn, MaxColumn]
+    [MemoryDiagnoser, MarkdownExporter, MinColumn, MaxColumn]
     public class DotNetGlobBenchmarks
     {
 
@@ -18,7 +16,7 @@ namespace DotNet.Glob.Benchmarks
         private List<string> _testMatchingStringsList;
         private List<string> _testNonMatchingStringsList;
 
-        [Setup]
+        [GlobalSetup]
         public void SetupData()
         {
             _testMatchingStringsList = new List<string>(NumberOfMatches);

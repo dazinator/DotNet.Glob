@@ -1,14 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Attributes.Columns;
-using BenchmarkDotNet.Attributes.Jobs;
 using DotNet.Glob.Benchmarks.Utils;
 using DotNet.Globbing;
 
 namespace DotNet.Glob.Benchmarks
 {
 
-    [ClrJob, CoreJob, MemoryDiagnoser, MinColumn, MaxColumn]
+    [MemoryDiagnoser, MinColumn, MaxColumn]
     public class BaselineRegexGlobCompileBenchmarks : BaseGlobBenchMark
     {
         private Globbing.Glob _dotnetGlob;
