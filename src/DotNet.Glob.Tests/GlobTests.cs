@@ -6,6 +6,15 @@ namespace DotNet.Glob.Tests
 {
     public class GlobTests
     {
+        [Fact]
+        public void Null_Options_Use_Default_Evaluation()
+        {
+            var glob = Globbing.Glob.Parse("*.txt", options: null);
+
+            Assert.True(glob.IsMatch("report.txt"));
+            Assert.False(glob.IsMatch("REPORT.TXT"));
+        }
+
         [Theory]
         [InlineData("literal", "fliteral", "foo/literal", "literals", "literals/foo")]
         [InlineData("path/hats*nd", "path/hatsblahn", "path/hatsblahndt")]

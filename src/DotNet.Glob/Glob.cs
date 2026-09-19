@@ -22,7 +22,7 @@ namespace DotNet.Globbing
             Tokens = tokens;
             _options = options ?? GlobOptions.Default;
             _Formatter = new GlobTokenFormatter();
-            _isMatchEvaluator = new GlobTokenEvaluator(options.Evaluation, Tokens);
+            _isMatchEvaluator = new GlobTokenEvaluator(_options.Evaluation, Tokens);
         }
 
         public static Glob Parse(string pattern)
