@@ -28,7 +28,7 @@ The benchmarks use [BenchmarkDotNet](https://github.com/dotnet/BenchmarkDotNet) 
 You can also use the `GlobBuilder` class if you wish to build up a glob using a fluent syntax.
 This is also more efficient as it avoids having to parse the glob from a string pattern.
 
-So to build the following glob pattern: `/foo?\\*[abc][!1-3].txt`:
+So to build the following glob pattern: `/foo?\*[abc][!1-3].txt`:
 
 ```csharp
 
@@ -43,7 +43,7 @@ So to build the following glob pattern: `/foo?\\*[abc][!1-3].txt`:
                 .Literal(".txt")
                 .ToGlob();
 
-   var isMatch = glob.IsMatch(@"/fooa\\barrra4.txt"); // returns true.
+   var isMatch = glob.IsMatch(@"/fooa\barrra4.txt"); // returns true.
 
 ```
 
